@@ -1,0 +1,195 @@
+#!/usr/bin/perl -w
+#$Id: make_collection,v 1.10 2007/11/29 23:57:40 joshr Exp $
+
+# script to create random collections for swish-e from a file like /usr/dict/words (one word per line)
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use GetDictionaryWords;
+use NotRand qw(not_rand);
+
+my $prog = "make_collection";
+
+# Dict file with words. One word per line.
+my $dict='data/C020-words-txt/words-linux-fc1.txt';
+
+my $min_words_per_file=1;
+my $max_words_per_file=1;
+my $num_files=0;	# 0 means one file for each word in dictionary
+my $num_words;		# should be scalar(@words)
+my $base_dir = "";	# empty base_dir means be an -S prog external program
+my $randommode = 1;	
+	# in randommode, words are randomly chosen, otherwise words are sequential from the dict
+my $englishify = 0;	# insert commas, periods, and caps?
+my $filetype = "xml"; 	# type of file to create. can also be 'html' or 'txt'
+my $verbose = 0;
+my $progress = 1;
+my $lastprogresstime = 0;
+
+sub Usage {
+	return "make_collection: [--dict=words.txt] [--base_dir=/your/location]\n" .
+	       "[--min_words_per_file=#] [--max_words_per_file=#] [--num_files=#]\n" .
+		   "[--verbose] [--englishify] [--filetype=(txt|html|xml)] [--(no)randommode]\n" .
+	       "   Makes a set of (possibly random) xml, html, or txt files based on a dict.\n";
+}
+
+main();
+
+sub main { 
+    GetOptions(
+        "min_words_per_file=i" => \$min_words_per_file,
+        "max_words_per_file=i" => \$max_words_per_file,
+        "num_files=i" => \$num_files,
+        "base_dir=s" => \$base_dir,
+        "dict=s" => \$dict,
+        "englishify!" => \$englishify,
+        "randommode!" => \$randommode,
+        "filetype=s" => \$filetype,
+        "verbose!"    => \$verbose
+    ) || die "$prog: Couldn't parse options:\n" . Usage();
+
+
+    die "$prog: Error: Filetype '$filetype' not understood\n" . Usage() unless $filetype =~ /^(txt|xml|html?)$/i;
+    if ($verbose) {
+        warn "$prog: Warning: No --base_dir option, running as swish-e external program\n" unless $base_dir;
+    }
+
+    my $parser = choose_parser($filetype);
+
+    if ($max_words_per_file < $min_words_per_file) {
+        die "$prog: max_words_per_file must be larger than min_words_per_file";
+    }
+
+    # ref to wordlist, and ref to counthash
+    my ($words, $word_counts) = GetDictionaryWords::get_dictionary_words( $dict );
+
+    if ($num_files == 0) { 	
+        $num_files = scalar(@$words);
+        print STDERR "$prog: set num_files to $num_files\n" if $verbose;
+    }
+
+    my $wordcounter = 0;
+    print "Creating files...\n" if $verbose;
+    for(my $i = 0; $i < $num_files; $i++)
+    {
+        if ($progress && time() - $lastprogresstime >= 10) {
+            my $percent = sprintf("%1.1f", $i / $num_files * 100);
+            print STDERR "$prog: " . scalar(localtime(time())) . " on file $i of $num_files ($percent%)\n";
+            $lastprogresstime = time();
+        }
+        #if (($i+1) % 1000 == 0) { print STDERR "** working on file $i"; }
+        my $this_file_words = 	# choose how many words will be in the file
+            int( not_rand( $max_words_per_file - $min_words_per_file + 1 ) ) + $min_words_per_file;
+        my $doc ="";
+        my $toCap = 1;	# should we Capitalize the coming word?
+        for(my $j = 0; $j < $this_file_words; $j++, $wordcounter++)
+        {
+            my $toadd = $randommode ? $$words[ not_rand( scalar(@$words) ) ] : $$words[$wordcounter % scalar(@$words)];
+            # choose the next word, either randomly, or sequentially
+
+            if ($toCap) { $toadd = "\u$toadd"; $toCap = 0; }
+            if (!defined($toadd)) { next; }	
+            $doc .= $toadd;
+            if ($englishify) {
+                my $r = int(not_rand(10000));	# random number we use to plop in punctuation & line breaks
+                if ($j == $this_file_words-1 || $r % 9 == 0) { $doc .= ". "; $toCap = 1; }
+                elsif ($r % 7 == 0) { $doc .= ","; }
+                if (($j+$i+$r+1) % 5) { $doc  .= " "; } else { $doc .= "\n"; }
+            } else {
+                $doc .= ($j+1) % 7 ? " " : "\n";
+            }
+        }
+            
+        if ($filetype =~ /^xml$/i) {
+            $doc = simple_xmlify( $doc );
+        } elsif ($filetype =~ /^html$/i) {
+            $doc = simple_htmlify( extract_title($doc), $doc );	# title, content
+        } else {
+            $doc = simple_txtify( $doc );
+        }
+        if ($base_dir) {
+            my $path = "$base_dir/$i.$filetype";
+            open(OUTFILE, ">" . " $path") || die "$prog: Couldn't open $path";
+            print OUTFILE $doc;
+            close(OUTFILE) || die "$prog: Couldn't close $path";
+            print STDERR "$prog: created $path...\n" if ($verbose && $i % 1000 == 0);
+        } else {
+            # act like a swish-e external program
+            simple_swishe_progify($parser, "$i.$filetype", $doc, scalar(localtime(time())));
+        }
+    }
+}
+
+# one block of text in xml
+sub simple_xmlify {
+	return qq{<?xml version="1.0" encoding="ISO-8859-1"?>\n<swishdefault>\n} . 
+		$_[0] . "\n</swishdefault>\n\n"; 
+}
+
+# one block of text in txt
+sub simple_txtify {
+	return "$_[0]\n";
+}
+
+
+# one block of text, with a title, in html
+sub simple_htmlify {
+	my ($title, $content) = @_;
+	my $html = <<EOF;
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html" />
+<title>
+    $title
+</title>
+</head>
+<body>
+$content
+</body> 
+</html> 
+            
+EOF
+	return $html;
+}
+
+sub simple_swishe_progify {
+    #my ($parser, $path, $content, $lasttime) = @_;
+    my $length = length($_[2]);
+    my $header= <<EOF;
+Content-Length: $length
+Last-Mtime: $_[3]
+Path-Name: $_[1]
+Document-Type: $_[0]
+
+EOF
+    print $header, $_[2];
+}
+
+# given a document and a desired title length, 
+# return a title up to N characters based on the first 10 words.
+sub extract_title {
+	my $doc = shift;
+	my $maxtitlewords = 10;
+	my $maxtitlelen = 25;
+	my @w = split(' ', $doc, $maxtitlewords + 1);
+	my $title = "";	
+	for(my $i=0; $i < scalar(@w) && length($title)+length($w[$i]) <= $maxtitlelen; $i++) {
+		$title .= "$w[$i] ";
+	}
+	chop($title);	# remove the ' ', sloppy and simple
+	return $title;
+}
+
+# given an extension, choose a parser
+sub choose_parser {
+	my $ext = $_[0];
+	if ($ext =~ /^xml$/i) {
+		return "XML2";
+	} elsif ($ext =~ /^html?$/i) {
+		return "HTML2"; 
+	} 
+	return "TXT";
+}
+

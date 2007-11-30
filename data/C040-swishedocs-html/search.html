@@ -1,0 +1,746 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+   <title>SWISH-Enhanced:  search.cgi -- Example Perl program for searching with Swish-e and SWISH::API </title>
+   <link href="./style.css" rel=stylesheet type="text/css" title="refstyle">
+  </head>
+  <body>
+
+    <h1 class="banner">
+        <a href="http://swish-e.org"><img border=0 src="images/swish.gif" alt="Swish-E Logo"></a><br>
+        <img src="images/swishbanner1.gif"><br>
+        <img src="images/dotrule1.gif"><br>
+         search.cgi -- Example Perl program for searching with Swish-e and SWISH::API 
+    </h1>
+
+    <hr>
+
+    <p>
+    <div class="navbar">
+      <a href="./swish.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./spider.html">Next</a>
+    </div>
+    <p>
+
+    <div class="toc">
+      
+<A NAME="toc"></A>
+<P><B>Table of Contents:</B></P>
+
+<UL>
+
+	<LI><A HREF="#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="#REQUIREMENTS">REQUIREMENTS</A>
+	<LI><A HREF="#OVERVIEW">OVERVIEW</A>
+	<LI><A HREF="#INSTALLATION_EXAMPLE">INSTALLATION EXAMPLE</A>
+	<LI><A HREF="#Using_with_SpeedyCGI">Using with SpeedyCGI</A>
+	<LI><A HREF="#Using_with_MOD_PERL">Using with MOD_PERL</A>
+	<LI><A HREF="#SUPPORT">SUPPORT</A>
+	<LI><A HREF="#AUTHOR">AUTHOR</A>
+	<LI><A HREF="#LICENSE">LICENSE</A>
+	<LI><A HREF="#SEE_ALSO">SEE ALSO</A>
+</UL>
+
+    </div>
+
+    
+
+	    [ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+<P>
+<H1><A NAME="DESCRIPTION">DESCRIPTION</A></H1>
+<P>
+This is a very simple program that shows how to use the SWISH::API module
+in a CGI script or mod_perl handler using Template-Toolkit to generate
+output. This program is intended for programmers that want to create a
+custom search script.
+
+<P>
+Unlike <EM>swish.cgi</EM> this script does not have many features, and provides no external
+configuration (with the execption of a few config options under mod_perl).
+So don't ask why it doesn't do something. The point is that this script is
+used as a starting point that YOU customize.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="REQUIREMENTS">REQUIREMENTS</A></H1>
+<P>
+You must have swish-e and the SWISH::API module installed. See the README
+and INSTALL documents in the swish-e distribution. As of this writing
+SWISH::API is part of the swish-e distribution, but in the future may be
+provided as a separate package (provided on the CPAN). In either case
+SWISH::API is a separate installation procedure from installing swish-e.
+The Storable module is also required if using mod_perl.
+
+<P>
+This program does require that some modules are installed from CPAN. You
+will need Template-Toolkit and HTML::FillInForm (which depends on
+HTML::Parser). How those are installed depends on your computer's packaging
+system.
+
+<P>
+You will need a web server, obviously. The discussion below assumes Apache
+is used. If you are using MS IIS take note that IIS works differently in a
+number of ways.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="OVERVIEW">OVERVIEW</A></H1>
+<P>
+The <EM>search.cgi</EM> script and related templates are installed when swish-e is installed.
+<EM>search.cgi</EM> is installed in $prefix/lib/swish-e/ and templates are installed in
+$prefix/share/swish-e/templates/. <CODE>$prefix</CODE> is /usr/local by
+default but can be changed when running the swish-e <EM>configure</EM> script. Upon installation <EM>search.cgi</EM> is updated with correct paths to your perl binary and
+
+<P>
+When running as a CGI script <EM>search.cgi</EM> is copied or symlinked to the location of your CGI scripts (or any
+directory that allows CGI scripts). By default, the <EM>search.cgi</EM> script looks for the index <EM>index.swish-e</EM> in the current directory (that's what the web server considers the current
+directory). On Apache running mod-cgi that's the same place as the script.
+On IIS it's not. If your index is elsewhere you will need to modify the
+script.
+
+<P>
+The script works by parsing the query, calling SWISH::API to run the actual
+search, then calls Template-Toolkit to generate the ouput.
+
+<P>
+The script calls the <EM>search.tt</EM> template. This template generates the query form and the search results.
+The <EM>search.tt</EM> template uses a Template-Toolkit &quot;WRAPPER&quot; function to wrap the
+search form and results in your site's design. This design is in the <EM>page_layout</EM> template. The idea is if you use Template-Toolkit to manage your entire
+site then your entire site would be formatted by the same <EM>page_layout</EM> template. The <EM>page_layout</EM> template calls two other templates <EM>common_header</EM> and <EM>common_footer</EM> to generate a common header and footer for the site. Those are just
+demonstrating Template-Toolkit's features.
+
+<P>
+The <EM>page_layout</EM> page only defines the basic structure of the site. The true design of the
+site is managed by style sheets.  <EM>style.css</EM> defines the basic layout and <EM>markup.css</EM> sets fonts and colors.  
+
+<P>
+Note: these style sheets are included directly in the output of the CGI
+script. In production the style sheets would be stored as separate style
+sheet files and imported by the browser instead of directly included in the
+search results page.
+
+<P>
+See the section MOD_PERL below for more on templates.
+
+<P>
+Highlighting of search terms is provided by the SWISH::PhraseHighlight
+module. That is a very slow module, so you may wish to disable it if you
+expect a lot of traffic.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="INSTALLATION_EXAMPLE">INSTALLATION EXAMPLE</A></H1>
+<P>
+Enough talking, sometimes it's nice to see a complete example. Below
+swish-e is installed in the default location (/usr/local). The
+&quot;$&quot; is a normal user prompt, where &quot;#&quot; is a root
+prompt. Use ./configure --prefix to install in another location (e.g. if
+you do not have root access).
+
+<P>
+Download and install swish-e
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ wget -q <A HREF="http://swish-e.org/Download/latest.tar.gz">http://swish-e.org/Download/latest.tar.gz</A>
+    $ tar zxf latest.tar.gz
+    $ cd swish-e-2.x.x
+    $ (./configure &amp;&amp; make) &gt;/dev/null
+    $ make check
+    $ su
+    # make install
+    # exit</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Install SWISH::API
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ cd perl
+    $ perl Makefile.PL &amp;&amp; make &amp;&amp; make test
+    $ su
+    # make install
+    $ exit</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Install requried Perl modules. You can install via RPMs, Debs or directly
+from the CPAN or by using the CPAN shell.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # su
+    # perl -MCPAN -e 'install Template'
+    # perl -MCPAN -e 'install HTML::FillInForm'
+    # exit</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now setup the script in someplace that allows CGI scripts.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ cd $HOME/apache
+    $ ln -s /usr/local/lib/swish-e/search.cgi .
+    $ cat .htaccess
+    deny from all
+    &lt;files search.cgi&gt;
+        allow from all
+        SetHandler cgi-script
+        Options +ExecCGI
+    &lt;/files&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Create an index
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ cat swish.config
+    IndexOnly .htm .html
+    DefaultContents HTML*
+    StoreDescription HTML* &lt;body&gt;
+    metanames swishtitle swishdocpath</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ swish-e -c swish.config -i /usr/share/doc/apache-doc/manual</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Test the index and the CGI script:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ swish-e -w apache -m1 | grep hits
+    # Number of hits: 152</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ lynx -dump <A HREF="http://localhost/apache/search.cgi?query=apache">http://localhost/apache/search.cgi?query=apache</A> | grep hits
+        Showing page 1 (1 - 10 of 152 hits) [3]Next
+              'hits' =&gt; 152,</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now, the above isn't very helpful because the Apache documentation indexed
+is not in the web space. You would likely index content available on your
+web site.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Using_with_SpeedyCGI">Using with SpeedyCGI</A></H1>
+<P>
+Perl CGI script must be compiled for each request. SpeedyCGI is a tool to
+speed up scripts by running them persistently. To run <EM>search.cgi</EM> with SpeedyCGI install the program (you can Google, right?) and then change
+the first line of <EM>search.cgi</EM>
+to run the <EM>speedy</EM> program.
+
+<P>
+For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    #!/usr/bin/speedy -w</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Using_with_MOD_PERL">Using with MOD_PERL</A></H1>
+<P>
+This script can be run directly as a mod_perl handler, and the same code
+can be used to run multiple sites by using separate Location directives and
+passing in a &quot;site id.&quot; The script caches in memory different
+configurations based on this site id.
+
+<P>
+Below is a complete httpd.conf file. It requires an Apache httpd that has
+mod_perl compiled in statically. It runs mod_perl on a high port (port
+5000) listening to all interfaces.  
+
+<P>
+For testing I put this config file in a directory along with <EM>search.cgi</EM>, but that's just done to make the example simple (i.e. so I don't have to
+show any absolute paths). Normally the httpd.conf and the swish.cgi
+&quot;module&quot; would be in separate locations.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # httpd.conf -- test file for search.cgi as mod_perl handler</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;ifModule mod_so.c&gt;
+        LoadModule mime_module /usr/lib/apache/1.3/mod_mime.so
+    &lt;/IfModule&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ErrorLog swish_error_log
+    PidFile swish_httpd.pid</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Listen *:5000</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;perl&gt;
+        push @PerlSetVar, [
+            index  =&gt; Apache-&gt;server_root_relative( 'index.swish-e'),
+        ];
+        $DocumentRoot =  Apache-&gt;server_root_relative;
+        require &quot;search.cgi&quot;;
+    &lt;/perl&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    NameVirtualHost *:5000
+    &lt;VirtualHost *:5000&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        ServerName localhost</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        &lt;Location /search&gt;
+            SetHandler  perl-script
+            PerlHandler SwishAPISearch
+        &lt;/Location&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        &lt;Location /othersite&gt;
+            SetHandler perl-script
+            PerlHandler SwishAPISearch
+            # Define this site
+            PerlSetVar  site_id othersite
+            PerlSetVar  title &quot;Some other Site&quot;
+        &lt;/Location&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;/VirtualHost&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The server is started using this command:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ /usr/sbin/apache-perl -d $(pwd) -f $(pwd)/httpd.conf</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+which says to use the current directory as the ServerRoot. (See comments
+below.) Stop the server like:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $ kill `cat swish_httpd.pid`</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then access either:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://localhost:5000/search">http://localhost:5000/search</A>
+    <A HREF="http://localhost:5000/othersite">http://localhost:5000/othersite</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+A few Notes:
+
+<P>
+I like test configurations to not care where things are located. Thus, the
+above httpd.conf does a few tricks in the &quot;Perl Section&quot; shown.
+
+<P>
+First, mod_perl, unlike CGI, doesn't set the working directory. So, the
+index file name must be absolute. This is accomplished by a PerlSetVar
+entry building the index file name from the ServerRoot.
+
+<P>
+Second, the DocumentRoot is set to the same as the ServerRoot. The
+DocumentRoot needs to be set so search.cgi can figure out the path to the
+script (for creating next and previous links).
+
+<P>
+Third, the script is loaded by a <CODE>require</CODE> statement. This works only because the current directory &quot;.&quot; is
+in Perl's <CODE>@INC</CODE> path at Apache start up time and
+<EM>search.cgi</EM> is also in the current directory. Normally, set PERL5LIB on server startup
+or use a &quot;use lib&quot; line in your startup.pl file to point to the
+location of search.cgi.
+
+<P>
+The &quot;PerlSetVar&quot; lines pass config information into the script.
+Note that they can be set globally or specific to a given Location.
+
+<P>
+The following config options are currently available:
+
+<DL>
+<P><DT><STRONG><A NAME="item_site_id">site_id</A></STRONG><DD>
+<P>
+The site_id options allow caching of configurations on a per-site basis.
+It's overkill in this example, but normally you might have expensive
+configuration processes that you might want to do only once. But, since
+there is caching by this id it's a good id to set a site_id if using more
+than one Location directive.
+
+<P><DT><STRONG><A NAME="item_index">index</A></STRONG><DD>
+<P>
+This specifies the index file to use. The index file needs to be absolute
+as discussed above. Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PerlSetVar index /usr/share/swish/site.index</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_title">title</A></STRONG><DD>
+<P>
+This options sets the title that's passed into the template.
+
+<P><DT><STRONG><A NAME="item_template">template</A></STRONG><DD>
+<P>
+Sets the file name of the template use to generate the form. This might be
+useful if you want an &quot;advanced&quot; form, for example.
+
+<P><DT><STRONG><A NAME="item_template_path">template_path</A></STRONG><DD>
+<P>
+This can be used to update the path where templates are searched. Useful if
+you wish to override templates.
+
+<P><DT><STRONG><A NAME="item_page_size">page_size</A></STRONG><DD>
+<P>
+This allow changing the default number of results shown per page.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="SUPPORT">SUPPORT</A></H1>
+<P>
+Not much support is provided. But what support is provided is ONLY provided
+via the Swish-e discussion list.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://swish-e.org/">http://swish-e.org/</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="AUTHOR">AUTHOR</A></H1>
+<P>
+Bill Moseley
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="LICENSE">LICENSE</A></H1>
+<P>
+Copyright 2003, 2004 Bill Moseley. All rights reserved.
+
+<P>
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="SEE_ALSO">SEE ALSO</A></H1>
+<P>
+SWISH::API, Template, HTML::FillInForm
+
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+
+
+    <p>
+    <div class="navbar">
+      <a href="./swish.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./spider.html">Next</a>
+    </div>
+    <p>
+
+    <P ALIGN="CENTER">
+    <IMG ALT="" WIDTH="470" HEIGHT="10" SRC="images/dotrule1.gif"></P>
+    <P ALIGN="CENTER">
+
+    <div class="footer">
+        <BR>SWISH-E is distributed with <B>no warranty</B> under the terms of the
+        <A HREF="http://www.fsf.org/copyleft/gpl.html">GNU Public License</A>,<BR>
+        Free Software Foundation, Inc., 
+        59 Temple Place - Suite 330, Boston, MA  02111-1307, USA<BR> 
+        Public questions may be posted to 
+        the <A HREF="http://swish-e.org/Discussion/">SWISH-E Discussion</A>.
+    </div>
+
+</body>
+</html>

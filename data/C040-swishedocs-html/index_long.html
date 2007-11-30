@@ -1,0 +1,538 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+ 
+<html>
+<head>
+    <title>SWISH-Enhanced</title>
+    <link href="style.css" rel=stylesheet type="text/css" title="refstyle">
+</head>
+
+<body>
+
+    <h1 class="banner">
+        <a href="http://swish-e.org"><img border=0 src="images/swish.gif" alt="Swish-E Logo"></a><br>
+        <img src="images/swishbanner1.gif"><br>
+        <img src="images/dotrule1.gif"><br>
+        <img src="images/swish2.gif" alt="SwishE2 Logo">
+    </h1>
+
+    <center>
+        <A href="#toc">[ <A HREF="#toc">TOC</A> ] [ <A HREF="index.html">Dense TOC</A> ]</a>
+    </center>
+
+    <P>
+        SWISH-Enhanced is a fast, powerful, flexible, free, and easy to use system
+        for indexing collections of Web pages or other text files. Key features
+        include the ability to limit searches to certain HTML tags (META, TITLE,
+        comments, etc.). SWISH-E is an enhanced version of
+        <B>SWISH</B>, which was originally written by
+        Kevin Hughes
+        and modified and released with his permission.
+    </p>
+
+    <p>
+        <img src="images/swish2b.gif" alt="SwishE2 Logo"> is a new version with much of the code base
+        rewritten for additional features, increased speed of indexing and searching, and improved
+        security.  See the SWISH-E <a href="README.html">README</a> file for a list of features, downloading instructions,
+        documentation overview, and support information.
+    </p>
+        
+
+    <div align=center>
+        <big>Swish Version 2.4.3</big><br>
+        <small>Documentation created on Dec 20, 2004</small>
+    </div>
+ 
+
+    <!-- SEARCH -->
+
+    <table align=center width="70%">
+        <tr>
+            <td>
+                <a name="toc"></a>
+                <h3>
+                    <font color="#008B8B">
+                        Table of Contents:
+                    </font>
+                </h3>
+
+                <div class="toc">
+                    <ul>
+                        <LI><A HREF="README.html"><B><FONT SIZE=+1> The Swish-e README File </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="README.html#Upgrading_">Upgrading?</A>
+	<LI><A HREF="README.html#What_is_Swish_e_">What is Swish-e?</A>
+	<UL>
+
+		<LI><A HREF="README.html#Key_features">Key features</A>
+	</UL>
+
+	<LI><A HREF="README.html#Where_do_I_get_Swish_e_">Where do I get Swish-e?</A>
+	<LI><A HREF="README.html#How_Do_I_Install_Swish_e_">How Do I Install Swish-e?</A>
+	<LI><A HREF="README.html#The_Swish_e_Documentation">The Swish-e Documentation</A>
+	<LI><A HREF="README.html#Where_do_I_get_help_with_Swish_e_">Where do I get help with Swish-e?</A>
+	<LI><A HREF="README.html#Speling_mistakes">Speling mistakes</A>
+	<LI><A HREF="README.html#Swish_e_Development">Swish-e Development</A>
+	<LI><A HREF="README.html#Swish_e_s_History">Swish-e's History</A>
+	<LI><A HREF="README.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="INSTALL.html"><B><FONT SIZE=+1> INSTALL - Swish-e Installation Instructions </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="INSTALL.html#OVERVIEW">OVERVIEW</A>
+	<UL>
+
+		<LI><A HREF="INSTALL.html#Upgrading_from_previous_versions_of_Swish_e">Upgrading from previous versions of Swish-e</A>
+		<LI><A HREF="INSTALL.html#Windows_Users">Windows Users</A>
+	</UL>
+
+	<LI><A HREF="INSTALL.html#SYSTEM_REQUIREMENTS">SYSTEM REQUIREMENTS</A>
+	<UL>
+
+		<LI><A HREF="INSTALL.html#Software_Requirements">Software Requirements</A>
+		<LI><A HREF="INSTALL.html#Optional_but_Recommended_Packages">Optional but Recommended Packages</A>
+	</UL>
+
+	<LI><A HREF="INSTALL.html#INSTALLATION">INSTALLATION</A>
+	<UL>
+
+		<LI><A HREF="INSTALL.html#Building_Swish_e">Building Swish-e</A>
+		<LI><A HREF="INSTALL.html#Installing_without_root_access">Installing without root access</A>
+		<LI><A HREF="INSTALL.html#Run_time_paths">Run-time paths</A>
+		<LI><A HREF="INSTALL.html#Building_a_Debian_Package">Building a Debian Package</A>
+		<LI><A HREF="INSTALL.html#What_s_installed">What's installed</A>
+		<LI><A HREF="INSTALL.html#Documentation">Documentation</A>
+		<LI><A HREF="INSTALL.html#The_Swish_e_documentation_as_man_1_pages">The Swish-e documentation as man(1) pages</A>
+		<LI><A HREF="INSTALL.html#Join_the_Swish_e_discussion_list">Join the Swish-e discussion list</A>
+	</UL>
+
+	<LI><A HREF="INSTALL.html#QUESTIONS_AND_TROUBLESHOOTING">QUESTIONS AND TROUBLESHOOTING</A>
+	<UL>
+
+		<LI><A HREF="INSTALL.html#When_posting_please_provide_the_following_information_">When posting, please provide the following information:</A>
+	</UL>
+
+	<LI><A HREF="INSTALL.html#ADDITIONAL_INSTALLATION_OPTIONS">ADDITIONAL INSTALLATION OPTIONS</A>
+	<UL>
+
+		<LI><A HREF="INSTALL.html#The_SWISH_API_Perl_Module">The SWISH::API Perl Module</A>
+		<LI><A HREF="INSTALL.html#Creating_PDF_and_Postscript_documentation">Creating PDF and Postscript documentation</A>
+	</UL>
+
+	<LI><A HREF="INSTALL.html#GENERAL_CONFIGURATION_AND_USAGE">GENERAL CONFIGURATION AND USAGE</A>
+	<UL>
+
+		<LI><A HREF="INSTALL.html#Introduction_to_Indexing_and_Searching">Introduction to Indexing and Searching</A>
+		<LI><A HREF="INSTALL.html#Metanames_and_Properties">Metanames and Properties</A>
+		<LI><A HREF="INSTALL.html#Getting_Started_With_Swish_e">Getting Started With Swish-e</A>
+		<LI><A HREF="INSTALL.html#Step_1_Create_a_Configuration_File">Step 1: Create a Configuration File</A>
+		<LI><A HREF="INSTALL.html#Step_2_Index_your_Files">Step 2: Index your Files</A>
+		<LI><A HREF="INSTALL.html#Step_3_Search">Step 3: Search</A>
+		<LI><A HREF="INSTALL.html#Phrase_Searching">Phrase Searching</A>
+		<LI><A HREF="INSTALL.html#Boolean_Searching">Boolean Searching</A>
+		<LI><A HREF="INSTALL.html#Context_Searching">Context Searching</A>
+		<LI><A HREF="INSTALL.html#META_Tags">META Tags</A>
+		<LI><A HREF="INSTALL.html#Spidering_and_Searching_with_a_Web_form_">Spidering and Searching with a Web form.</A>
+	</UL>
+
+	<LI><A HREF="INSTALL.html#Indexing_Other_Types_of_Documents_Filtering">Indexing Other Types of Documents - Filtering</A>
+	<UL>
+
+		<LI><A HREF="INSTALL.html#Filtering_Overview">Filtering Overview</A>
+		<LI><A HREF="INSTALL.html#Filtering_Examples">Filtering Examples</A>
+	</UL>
+
+	<LI><A HREF="INSTALL.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="CHANGES.html"><B><FONT SIZE=+1> CHANGES - List of revisions </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="CHANGES.html#Revision_History">Revision History</A>
+	<UL>
+
+		<LI><A HREF="CHANGES.html#Version_2_4_3_December_9_2004">Version 2.4.3 December 9, 2004</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_3_pr1_Wed_Dec_1_09_52_50_PST_2004">Version 2.4.3-pr1 - Wed Dec  1 09:52:50 PST 2004</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_2_March_09_2004">Version 2.4.2 - March 09, 2004</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_1_December_17_2003">Version 2.4.1 - December 17, 2003</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_0_October_27_2003">Version 2.4.0 - October 27, 2003</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_0_Release_Candidate_4_September_26_2003">Version 2.4.0 (Release Candidate 4)  September 26, 2003</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_0_Release_Candidate_3_September_11_2003">Version 2.4.0 (Release Candidate 3)  September 11, 2003</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_0_Release_Candidate_2_September_10_2003">Version 2.4.0 (Release Candidate 2)  September 10, 2003</A>
+		<LI><A HREF="CHANGES.html#Version_2_4_0_Release_Candidate_1_May_21_2003">Version 2.4.0 (Release Candidate 1)  May 21, 2003</A>
+		<LI><A HREF="CHANGES.html#Version_2_2_3_December_11_2002">Version 2.2.3 - December 11, 2002</A>
+		<LI><A HREF="CHANGES.html#Version_2_2_2_November_14_2002">Version 2.2.2 - November 14, 2002</A>
+		<LI><A HREF="CHANGES.html#Version_2_2_1_September_26_2002">Version 2.2.1 - September 26, 2002</A>
+		<LI><A HREF="CHANGES.html#Version_2_2_September_18_2002">Version 2.2 - September 18, 2002</A>
+		<LI><A HREF="CHANGES.html#Version_2_2rc1_August_29_2002">Version 2.2rc1 - August 29, 2002</A>
+	</UL>
+
+</UL>
+<P>
+<LI><A HREF="SWISH-CONFIG.html"><B><FONT SIZE=+1> SWISH-CONFIG - Configuration File Directives </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="SWISH-CONFIG.html#Swish_e_CONFIGURATION_FILE">Swish-e CONFIGURATION FILE</A>
+	<UL>
+
+		<LI><A HREF="SWISH-CONFIG.html#Alphabetical_Listing_of_Directives">Alphabetical Listing of Directives</A>
+		<LI><A HREF="SWISH-CONFIG.html#Directives_that_Control_Swish">Directives that Control Swish</A>
+		<LI><A HREF="SWISH-CONFIG.html#Administrative_Headers_Directives">Administrative Headers Directives</A>
+		<LI><A HREF="SWISH-CONFIG.html#Document_Source_Directives">Document Source Directives</A>
+		<LI><A HREF="SWISH-CONFIG.html#Document_Contents_Directives">Document Contents Directives</A>
+		<LI><A HREF="SWISH-CONFIG.html#Directives_for_the_File_Access_method_only">Directives for the File Access method only</A>
+		<LI><A HREF="SWISH-CONFIG.html#Directives_for_the_HTTP_Access_Method_Only">Directives for the HTTP Access Method Only</A>
+		<LI><A HREF="SWISH-CONFIG.html#Directives_for_the_prog_Access_Method_Only">Directives for the prog Access Method Only</A>
+		<LI><A HREF="SWISH-CONFIG.html#Document_Filter_Directives">Document Filter Directives</A>
+		<UL>
+
+			<LI><A HREF="SWISH-CONFIG.html#Filtering_with_SWISH_Filter">Filtering with SWISH::Filter</A>
+			<LI><A HREF="SWISH-CONFIG.html#Filtering_with_the_FileFilter_feature">Filtering with the FileFilter feature</A>
+		</UL>
+
+	</UL>
+
+	<LI><A HREF="SWISH-CONFIG.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="SWISH-RUN.html"><B><FONT SIZE=+1> SWISH-RUN - Running Swish-e and Command Line Switches </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="SWISH-RUN.html#OVERVIEW">OVERVIEW</A>
+	<LI><A HREF="SWISH-RUN.html#INDEXING">INDEXING</A>
+	<UL>
+
+		<LI><A HREF="SWISH-RUN.html#Indexing_Command_Line_Arguments">Indexing Command Line Arguments</A>
+	</UL>
+
+	<LI><A HREF="SWISH-RUN.html#SEARCHING">SEARCHING</A>
+	<UL>
+
+		<LI><A HREF="SWISH-RUN.html#Searching_Command_Line_Arguments">Searching Command Line Arguments</A>
+	</UL>
+
+	<LI><A HREF="SWISH-RUN.html#OTHER_SWITCHES">OTHER SWITCHES</A>
+	<LI><A HREF="SWISH-RUN.html#Merging_Index_Files">Merging Index Files</A>
+	<LI><A HREF="SWISH-RUN.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="SWISH-SEARCH.html"><B><FONT SIZE=+1> SWISH-SEARCH - Swish-e Searching Instructions </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="SWISH-SEARCH.html#OVERVIEW">OVERVIEW</A>
+	<LI><A HREF="SWISH-SEARCH.html#Searching_Syntax_and_Operations">Searching Syntax and Operations</A>
+	<UL>
+
+		<LI><A HREF="SWISH-SEARCH.html#Boolean_Operators">Boolean Operators</A>
+		<LI><A HREF="SWISH-SEARCH.html#Truncation">Truncation</A>
+		<LI><A HREF="SWISH-SEARCH.html#Order_of_Evaluation">Order of Evaluation</A>
+		<LI><A HREF="SWISH-SEARCH.html#Meta_Tags">Meta Tags</A>
+		<LI><A HREF="SWISH-SEARCH.html#Phrase_Searching">Phrase Searching</A>
+		<LI><A HREF="SWISH-SEARCH.html#Context">Context</A>
+	</UL>
+
+	<LI><A HREF="SWISH-SEARCH.html#Searching_with_Perl">Searching with Perl</A>
+	<UL>
+
+		<LI><A HREF="SWISH-SEARCH.html#CGI_Danger_">CGI Danger!</A>
+		<LI><A HREF="SWISH-SEARCH.html#Perl_Modules">Perl Modules</A>
+	</UL>
+
+	<LI><A HREF="SWISH-SEARCH.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="SWISH-FAQ.html"><B><FONT SIZE=+1> The Swish-e FAQ - Answers to Common Questions </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="SWISH-FAQ.html#Frequently_Asked_Questions">Frequently Asked Questions</A>
+	<UL>
+
+		<LI><A HREF="SWISH-FAQ.html#General_Questions">General Questions</A>
+		<UL>
+
+			<LI><A HREF="SWISH-FAQ.html#What_is_Swish_e_">What is Swish-e?</A>
+			<LI><A HREF="SWISH-FAQ.html#So_is_Swish_e_a_search_engine_">So, is Swish-e a search engine?</A>
+			<LI><A HREF="SWISH-FAQ.html#Should_I_upgrade_if_I_m_already_running_a_previous_version">Should I upgrade if I'm already running a previous version</A>
+			<LI><A HREF="SWISH-FAQ.html#Are_there_binary_distributions_available_for_Swish_e_on_platform_foo_">Are there binary distributions available for Swish-e on platform foo?</A>
+			<LI><A HREF="SWISH-FAQ.html#Do_I_need_to_reindex_my_site_each_time_I_upgrade_to_a_new_Swish_e">Do I need to reindex my site each time I upgrade to a new Swish-e</A>
+			<LI><A HREF="SWISH-FAQ.html#What_s_the_advantage_of_using_the_libxml2_library_for_parsing_HTML_">What's the advantage of using the libxml2 library for parsing HTML?</A>
+			<LI><A HREF="SWISH-FAQ.html#Does_Swish_e_include_a_CGI_interface_">Does Swish-e include a CGI interface?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_secure_is_Swish_e_">How secure is Swish-e?</A>
+			<LI><A HREF="SWISH-FAQ.html#Should_I_run_Swish_e_as_the_superuser_root_">Should I run Swish-e as the superuser (root)?</A>
+			<LI><A HREF="SWISH-FAQ.html#What_files_does_Swish_e_write_">What files does Swish-e write?</A>
+			<LI><A HREF="SWISH-FAQ.html#Can_I_index_PDF_and_MS_Word_documents_">Can I index PDF and MS-Word documents?</A>
+			<LI><A HREF="SWISH-FAQ.html#Can_I_index_documents_on_a_web_server_">Can I index documents on a web server?</A>
+			<LI><A HREF="SWISH-FAQ.html#Can_I_implement_keywords_in_my_documents_">Can I implement keywords in my documents? </A>
+			<LI><A HREF="SWISH-FAQ.html#What_are_document_properties_">What are document properties?</A>
+			<LI><A HREF="SWISH-FAQ.html#What_s_the_difference_between_MetaNames_and_PropertyNames_">What's the difference between MetaNames and PropertyNames?</A>
+			<LI><A HREF="SWISH-FAQ.html#Can_Swish_e_index_multi_byte_characters_">Can Swish-e index multi-byte characters?</A>
+		</UL>
+
+		<LI><A HREF="SWISH-FAQ.html#Indexing">Indexing</A>
+		<UL>
+
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_pass_Swish_e_a_list_of_files_to_index_">How do I pass Swish-e a list of files to index?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_does_Swish_e_know_which_parser_to_use_">How does Swish-e know which parser to use?</A>
+			<LI><A HREF="SWISH-FAQ.html#Can_I_reindex_and_search_at_the_same_time_">Can I reindex and search at the same time?</A>
+			<LI><A HREF="SWISH-FAQ.html#Can_I_index_phrases_">Can I index phrases? </A>
+			<LI><A HREF="SWISH-FAQ.html#How_can_I_prevent_phrases_from_matching_across_sentences_">How can I prevent phrases from matching across sentences?</A>
+			<LI><A HREF="SWISH-FAQ.html#Swish_e_isn_t_indexing_a_certain_word_or_phrase_">Swish-e isn't indexing a certain word or phrase.</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_keep_Swish_e_from_indexing_numbers_">How do I keep Swish-e from indexing numbers?</A>
+			<LI><A HREF="SWISH-FAQ.html#Swish_e_crashes_and_burns_on_a_certain_file_What_can_I_do_">Swish-e crashes and burns on a certain file. What can I do?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_to_I_prevent_indexing_of_some_documents_">How to I prevent indexing of some documents?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_prevent_indexing_parts_of_a_document_">How do I prevent indexing parts of a document?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_modify_the_path_or_URL_of_the_indexed_documents_">How do I modify the path or URL of the indexed documents.</A>
+			<LI><A HREF="SWISH-FAQ.html#How_can_I_index_data_from_a_database_">How can I index data from a database?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_index_my_PDF_Word_and_compressed_documents_">How do I index my PDF, Word, and compressed documents?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_filter_documents_">How do I filter documents?</A>
+			<LI><A HREF="SWISH-FAQ.html#Eh_but_I_just_want_to_know_how_to_index_PDF_documents_">Eh, but I just want to know how to index PDF documents!</A>
+			<LI><A HREF="SWISH-FAQ.html#I_m_using_Windows_and_can_t_get_Filters_or_the_prog_input_method">I'm using Windows and can't get Filters or the prog input method</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_index_non_English_words_">How do I index non-English words?</A>
+			<LI><A HREF="SWISH-FAQ.html#Can_I_add_remove_files_from_an_index_">Can I add/remove files from an index?</A>
+			<LI><A HREF="SWISH-FAQ.html#I_run_out_of_memory_trying_to_index_my_files_">I run out of memory trying to index my files. </A>
+			<LI><A HREF="SWISH-FAQ.html#_too_many_open_files_when_indexing_with_e_option">&quot;too many open files&quot; when indexing with -e option</A>
+			<LI><A HREF="SWISH-FAQ.html#My_system_admin_says_Swish_e_uses_too_much_of_the_CPU_">My system admin says Swish-e uses too much of the CPU!</A>
+		</UL>
+
+		<LI><A HREF="SWISH-FAQ.html#Spidering">Spidering</A>
+		<UL>
+
+			<LI><A HREF="SWISH-FAQ.html#How_can_I_index_documents_on_a_web_server_">How can I index documents on a web server?</A>
+			<LI><A HREF="SWISH-FAQ.html#Why_does_swish_report_swishspider_not_found_">Why does swish report &quot;./swishspider: not found&quot;?</A>
+			<LI><A HREF="SWISH-FAQ.html#I_m_using_the_spider_pl_program_to_spider_my_web_site_but_some">I'm using the spider.pl program to spider my web site, but some</A>
+			<LI><A HREF="SWISH-FAQ.html#I_still_don_t_think_all_my_web_pages_are_being_indexed_">I still don't think all my web pages are being indexed.</A>
+			<LI><A HREF="SWISH-FAQ.html#Swish_is_not_spidering_Javascript_links_">Swish is not spidering Javascript links!</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_spider_other_websites_and_combine_it_with_my_own">How do I spider other websites and combine it with my own</A>
+		</UL>
+
+		<LI><A HREF="SWISH-FAQ.html#Searching">Searching</A>
+		<UL>
+
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_limit_searches_to_just_parts_of_the_index_">How do I limit searches to just parts of the index?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_is_ranking_calculated_">How is ranking calculated?</A>
+			<LI><A HREF="SWISH-FAQ.html#How_can_I_limit_searches_to_the_title_body_or_comment_">How can I limit searches to the title, body, or comment?</A>
+			<LI><A HREF="SWISH-FAQ.html#I_can_t_limit_searches_to_title_body_comment_">I can't limit searches to title/body/comment.</A>
+			<LI><A HREF="SWISH-FAQ.html#I_ve_tried_running_the_included_CGI_script_and_I_get_a_Internal">I've tried running the included CGI script and I get a &quot;Internal</A>
+			<LI><A HREF="SWISH-FAQ.html#When_I_try_to_view_the_swish_cgi_page_I_see_the_contents_of_the">When I try to view the swish.cgi page I see the contents of the</A>
+			<LI><A HREF="SWISH-FAQ.html#How_do_I_make_Swish_e_highlight_words_in_search_results_">How do I make Swish-e highlight words in search results?</A>
+			<LI><A HREF="SWISH-FAQ.html#Do_filters_effect_the_performance_during_search_">Do filters effect the performance during search?</A>
+		</UL>
+
+		<LI><A HREF="SWISH-FAQ.html#I_have_read_the_FAQ_but_I_still_have_questions_about_using_Swish_e_">I have read the FAQ but I still have questions about using Swish-e.</A>
+	</UL>
+
+	<LI><A HREF="SWISH-FAQ.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="SWISH-BUGS.html"><B><FONT SIZE=+1> SWISH-BUGS - List of bugs known in Swish-e </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="SWISH-BUGS.html#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="SWISH-BUGS.html#Bugs_in_Swish_e_version_2_4">Bugs in Swish-e version 2.4</A>
+	<LI><A HREF="SWISH-BUGS.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="SWISH-3.0.html"><B><FONT SIZE=+1> Proposed changes for Swish-e 3.0 </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="SWISH-3.0.html#Overview">Overview</A>
+	<LI><A HREF="SWISH-3.0.html#UTF_8_support">UTF-8 support</A>
+	<LI><A HREF="SWISH-3.0.html#drop_expat_based_parsers_require_libxml2">drop expat-based parsers, require libxml2</A>
+	<LI><A HREF="SWISH-3.0.html#Support_Incremental_Indexing">Support Incremental Indexing</A>
+	<LI><A HREF="SWISH-3.0.html#Split_code_into_Search_and_Indexing_code">Split code into Search and Indexing code</A>
+	<LI><A HREF="SWISH-3.0.html#Switch_to_Content_Types">Switch to Content-Types</A>
+	<LI><A HREF="SWISH-3.0.html#Enhanced_the_PropertyNames_directive">Enhanced the PropertyNames directive</A>
+	<LI><A HREF="SWISH-3.0.html#Apache_XML_style_configuration">Apache/XML style configuration</A>
+	<LI><A HREF="SWISH-3.0.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="SWISH-LIBRARY.html"><B><FONT SIZE=+1> SWISH-LIBRARY - Interface to the Swish-e C library </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="SWISH-LIBRARY.html#What_is_the_Swish_e_C_library_">What is the Swish-e C library?</A>
+	<LI><A HREF="SWISH-LIBRARY.html#Installing_the_Swish_e_library">Installing the Swish-e library</A>
+	<LI><A HREF="SWISH-LIBRARY.html#Library_Overview">Library Overview</A>
+	<LI><A HREF="SWISH-LIBRARY.html#Available_Functions">Available Functions</A>
+	<UL>
+
+		<LI><A HREF="SWISH-LIBRARY.html#Searching">Searching</A>
+		<LI><A HREF="SWISH-LIBRARY.html#Reading_Results">Reading Results</A>
+		<LI><A HREF="SWISH-LIBRARY.html#Accessing_the_Index_Header_Values">Accessing the Index Header Values</A>
+		<LI><A HREF="SWISH-LIBRARY.html#Accessing_Property_Meta_Data">Accessing Property Meta Data</A>
+		<LI><A HREF="SWISH-LIBRARY.html#Checking_for_Errors">Checking for Errors</A>
+		<LI><A HREF="SWISH-LIBRARY.html#Utility_Functions">Utility Functions</A>
+	</UL>
+
+	<LI><A HREF="SWISH-LIBRARY.html#Bug_Reports">Bug-Reports</A>
+	<LI><A HREF="SWISH-LIBRARY.html#Author">Author</A>
+	<LI><A HREF="SWISH-LIBRARY.html#Document_Info">Document Info</A>
+</UL>
+<P>
+<LI><A HREF="API.html"><B><FONT SIZE=+1> SWISH::API - Perl interface to the Swish-e C Library </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="API.html#SYNOPSIS">SYNOPSIS</A>
+	<LI><A HREF="API.html#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="API.html#DEPENDENCIES">DEPENDENCIES</A>
+	<LI><A HREF="API.html#OVERVIEW">OVERVIEW</A>
+	<LI><A HREF="API.html#METHODS">METHODS</A>
+	<UL>
+
+		<LI><A HREF="API.html#SWISH_API_Swish_Handle_Object">SWISH::API - Swish Handle Object</A>
+		<UL>
+
+			<LI><A HREF="API.html#Error_Handling">Error Handling</A>
+			<LI><A HREF="API.html#Generating_Search_and_Result_Objects">Generating Search and Result Objects</A>
+		</UL>
+
+		<LI><A HREF="API.html#SWISH_API_Search_Search_Objects">SWISH::API::Search - Search Objects</A>
+		<LI><A HREF="API.html#SWISH_API_Results_Generating_and_accessing_results">SWISH::API::Results - Generating and accessing results</A>
+		<LI><A HREF="API.html#Results_Methods">Results Methods</A>
+		<LI><A HREF="API.html#SWISH_API_Result_Result_Methods">SWISH::API::Result - Result Methods</A>
+		<LI><A HREF="API.html#Utility_Methods">Utility Methods</A>
+	</UL>
+
+	<LI><A HREF="API.html#NOTES">NOTES</A>
+	<LI><A HREF="API.html#COPYRIGHT">COPYRIGHT</A>
+	<LI><A HREF="API.html#AUTHOR">AUTHOR</A>
+	<LI><A HREF="API.html#SUPPORT">SUPPORT</A>
+</UL>
+<P>
+<LI><A HREF="swish.html"><B><FONT SIZE=+1> swish.cgi -- Example Perl script for searching with the SWISH-E search engine. </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="swish.html#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="swish.html#REQUIREMENTS">REQUIREMENTS</A>
+	<LI><A HREF="swish.html#INSTALLATION">INSTALLATION</A>
+	<LI><A HREF="swish.html#CONFIGURATION">CONFIGURATION</A>
+	<LI><A HREF="swish.html#DEBUGGING">DEBUGGING</A>
+	<LI><A HREF="swish.html#Frequently_Asked_Questions">Frequently Asked Questions</A>
+	<UL>
+
+		<LI><A HREF="swish.html#How_do_I_change_the_way_the_output_looks_">How do I change the way the output looks?</A>
+		<LI><A HREF="swish.html#How_do_I_use_a_templating_system_with_swish_cgi_">How do I use a templating system with swish.cgi?</A>
+		<LI><A HREF="swish.html#Why_are_there_three_different_highlighting_modules_">Why are there three different highlighting modules?</A>
+		<LI><A HREF="swish.html#My_ISP_doesn_t_provide_access_to_the_web_server_logs">My ISP doesn't provide access to the web server logs</A>
+		<LI><A HREF="swish.html#Why_does_the_output_show_NULL_">Why does the output show (NULL)?</A>
+		<LI><A HREF="swish.html#How_do_I_use_the_SWISH_API_perl_module_with_swish_cgi_">How do I use the SWISH::API perl module with swish.cgi?</A>
+		<LI><A HREF="swish.html#Why_does_the_Run_time_differ_when_using_the_SWISH_API_module">Why does the &quot;Run time&quot; differ when using the SWISH::API module</A>
+	</UL>
+
+	<LI><A HREF="swish.html#MOD_PERL">MOD_PERL</A>
+	<LI><A HREF="swish.html#SpeedyCGI">SpeedyCGI</A>
+	<LI><A HREF="swish.html#Spidering">Spidering</A>
+	<LI><A HREF="swish.html#Stemmed_Indexes">Stemmed Indexes</A>
+	<LI><A HREF="swish.html#DISCLAIMER">DISCLAIMER</A>
+	<LI><A HREF="swish.html#SUPPORT">SUPPORT</A>
+	<LI><A HREF="swish.html#LICENSE">LICENSE</A>
+	<LI><A HREF="swish.html#AUTHOR">AUTHOR</A>
+</UL>
+<P>
+<LI><A HREF="search.html"><B><FONT SIZE=+1> search.cgi -- Example Perl program for searching with Swish-e and SWISH::API </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="search.html#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="search.html#REQUIREMENTS">REQUIREMENTS</A>
+	<LI><A HREF="search.html#OVERVIEW">OVERVIEW</A>
+	<LI><A HREF="search.html#INSTALLATION_EXAMPLE">INSTALLATION EXAMPLE</A>
+	<LI><A HREF="search.html#Using_with_SpeedyCGI">Using with SpeedyCGI</A>
+	<LI><A HREF="search.html#Using_with_MOD_PERL">Using with MOD_PERL</A>
+	<LI><A HREF="search.html#SUPPORT">SUPPORT</A>
+	<LI><A HREF="search.html#AUTHOR">AUTHOR</A>
+	<LI><A HREF="search.html#LICENSE">LICENSE</A>
+	<LI><A HREF="search.html#SEE_ALSO">SEE ALSO</A>
+</UL>
+<P>
+<LI><A HREF="spider.html"><B><FONT SIZE=+1> spider.pl - Example Perl program to spider web servers </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="spider.html#SYNOPSIS">SYNOPSIS</A>
+	<LI><A HREF="spider.html#DESCRIPTION">DESCRIPTION</A>
+	<UL>
+
+		<LI><A HREF="spider.html#Running_the_spider">Running the spider</A>
+		<LI><A HREF="spider.html#Robots_Exclusion_Rules_and_being_nice">Robots Exclusion Rules and being nice</A>
+		<LI><A HREF="spider.html#Duplicate_Documents">Duplicate Documents</A>
+		<LI><A HREF="spider.html#Broken_relative_links">Broken relative links</A>
+		<LI><A HREF="spider.html#Compression">Compression</A>
+	</UL>
+
+	<LI><A HREF="spider.html#REQUIREMENTS">REQUIREMENTS</A>
+	<LI><A HREF="spider.html#CONFIGURATION_FILE">CONFIGURATION FILE</A>
+	<LI><A HREF="spider.html#CONFIGURATION_OPTIONS">CONFIGURATION OPTIONS</A>
+	<LI><A HREF="spider.html#CALLBACK_FUNCTIONS">CALLBACK FUNCTIONS</A>
+	<UL>
+
+		<LI><A HREF="spider.html#More_on_setting_flags">More on setting flags</A>
+	</UL>
+
+	<LI><A HREF="spider.html#SIGNALS">SIGNALS</A>
+	<LI><A HREF="spider.html#CHANGES">CHANGES</A>
+	<UL>
+
+		<LI><A HREF="spider.html#Thu_Sep_30_2004_changes_for_Swish_e_2_4_3">Thu Sep 30 2004 - changes for Swish-e 2.4.3</A>
+	</UL>
+
+	<LI><A HREF="spider.html#TODO">TODO</A>
+	<LI><A HREF="spider.html#COPYRIGHT">COPYRIGHT</A>
+	<LI><A HREF="spider.html#SUPPORT">SUPPORT</A>
+</UL>
+<P>
+<LI><A HREF="Filter.html"><B><FONT SIZE=+1> SWISH::Filter - Perl extension for filtering documents with Swish-e </FONT></B></A></LI><P>
+<UL>
+
+	<LI><A HREF="Filter.html#SYNOPSIS">SYNOPSIS</A>
+	<LI><A HREF="Filter.html#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="Filter.html#METHODS">METHODS</A>
+	<UL>
+
+		<LI><A HREF="Filter.html#SWISH_Filter_new_Options">SWISH::Filter-&gt;new Options</A>
+	</UL>
+
+	<LI><A HREF="Filter.html#WRITING_FILTERS">WRITING FILTERS</A>
+	<LI><A HREF="Filter.html#SWISH_Filter_document_Methods">SWISH::Filter::document Methods</A>
+	<UL>
+
+		<LI><A HREF="Filter.html#Methods_used_by_end_users_and_filter_authors">Methods used by end-users and filter authors</A>
+		<LI><A HREF="Filter.html#Methods_used_by_filter_authors">Methods used by filter authors</A>
+	</UL>
+
+	<LI><A HREF="Filter.html#SWISH_Filters_BASE">SWISH::Filters::_BASE</A>
+	<LI><A HREF="Filter.html#TESTING">TESTING</A>
+	<LI><A HREF="Filter.html#SUPPORT">SUPPORT</A>
+	<LI><A HREF="Filter.html#Bugs_todo_items_and_other_notes">Bugs, todo items, and other notes</A>
+	<LI><A HREF="Filter.html#AUTHOR">AUTHOR</A>
+	<LI><A HREF="Filter.html#COPYRIGHT">COPYRIGHT</A>
+</UL>
+<P>
+                    </ul>
+                </div>
+
+            </td>
+        </tr>
+
+    </table>
+
+    <p>
+
+    <div class="navbar">
+            [ <A HREF="#toc">TOC</A> ] [ <A HREF="index.html">Dense TOC</A> ]
+    </div>
+
+    <P ALIGN="CENTER">
+    <IMG ALT="" WIDTH="470" HEIGHT="10" SRC="images/dotrule1.gif"></P>
+    <P ALIGN="CENTER">
+
+    <div class="footer">
+        <BR>SWISH-E is distributed with <B>no warranty</B> under the terms of the
+        <A HREF="http://www.fsf.org/copyleft/gpl.html">GNU Public License</A>,<BR>
+        Free Software Foundation, Inc., 
+        59 Temple Place - Suite 330, Boston, MA  02111-1307, USA<BR> 
+        Public questions may be posted to 
+        the <A HREF="http://swish-e.org/Discussion/">SWISH-E Discussion</A>.
+    </div>
+
+  </body>
+</html>
+

@@ -1,0 +1,5744 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+   <title>SWISH-Enhanced:  SWISH-CONFIG - Configuration File Directives </title>
+   <link href="./style.css" rel=stylesheet type="text/css" title="refstyle">
+  </head>
+  <body>
+
+    <h1 class="banner">
+        <a href="http://swish-e.org"><img border=0 src="images/swish.gif" alt="Swish-E Logo"></a><br>
+        <img src="images/swishbanner1.gif"><br>
+        <img src="images/dotrule1.gif"><br>
+         SWISH-CONFIG - Configuration File Directives 
+    </h1>
+
+    <hr>
+
+    <p>
+    <div class="navbar">
+      <a href="./CHANGES.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./SWISH-RUN.html">Next</a>
+    </div>
+    <p>
+
+    <div class="toc">
+      
+<A NAME="toc"></A>
+<P><B>Table of Contents:</B></P>
+
+<UL>
+
+	<LI><A HREF="#Swish_e_CONFIGURATION_FILE">Swish-e CONFIGURATION FILE</A>
+	<UL>
+
+		<LI><A HREF="#Alphabetical_Listing_of_Directives">Alphabetical Listing of Directives</A>
+		<LI><A HREF="#Directives_that_Control_Swish">Directives that Control Swish</A>
+		<LI><A HREF="#Administrative_Headers_Directives">Administrative Headers Directives</A>
+		<LI><A HREF="#Document_Source_Directives">Document Source Directives</A>
+		<LI><A HREF="#Document_Contents_Directives">Document Contents Directives</A>
+		<LI><A HREF="#Directives_for_the_File_Access_method_only">Directives for the File Access method only</A>
+		<LI><A HREF="#Directives_for_the_HTTP_Access_Method_Only">Directives for the HTTP Access Method Only</A>
+		<LI><A HREF="#Directives_for_the_prog_Access_Method_Only">Directives for the prog Access Method Only</A>
+		<LI><A HREF="#Document_Filter_Directives">Document Filter Directives</A>
+		<UL>
+
+			<LI><A HREF="#Filtering_with_SWISH_Filter">Filtering with SWISH::Filter</A>
+			<LI><A HREF="#Filtering_with_the_FileFilter_feature">Filtering with the FileFilter feature</A>
+		</UL>
+
+	</UL>
+
+	<LI><A HREF="#Document_Info">Document Info</A>
+</UL>
+
+    </div>
+
+    
+
+	    [ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+<P>
+<H1><A NAME="Swish_e_CONFIGURATION_FILE">Swish-e CONFIGURATION FILE</A></H1>
+<P>
+What files Swish-e indexes and how they are indexed, and where the index is
+written can be controlled by a configuration file.
+
+<P>
+The configuration file is a text file composed of comments, blank lines,
+and <STRONG>configuration directives</STRONG>. The order of the directives is not important. Some directives may be used
+more than once in the configuration file, while others can only be used
+once (e.g. additional directives will overwrite preceding directives). Case
+of the directive is not important -- you may use upper, lower, or mixed
+case.
+
+<P>
+Comments are any line that begin with a &quot;#&quot;.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # This is a comment</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+As of 2.4.3 lines may be continued by placing a backslas as the last
+character on the line:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreWords \
+        am \
+        the \
+        foo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Directives may take more than one parameter. Enclose single parameters that
+include whitespace in quotes (single or double). Inside of quotes the
+backslash escapes the next character.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ReplaceRules append &quot;foo bar&quot;   &lt;- define &quot;foo bar&quot; as a single parameter</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If you need to include a quote character in the value either use a
+backslash to escape it, or enclose it in quotes of the other type.
+
+<P>
+For example, under unix you can use quotes to include white space in a
+single parameter. Here, to protect against path names (%p) that might have
+white space embedded use single quotes (this also protects against shell
+expansion or metacharacters):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilter .foo foofilter &quot;'%p'&quot;  &lt;- parameter passed through the shell in single quotes
+    FileFilter .foo foofilter '&quot;%p&quot;'  &lt;- windows uses double-quotes
+    FileFilter .foo foofilter '\'%p\''&lt;- silly example</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Backslashes also have special meaning in regular expressions.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch pdftotext &quot;'%p' -&quot; /\.pdf$/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This says that the dot is a real dot (instead of matching any character).
+If you place the regular expression in quotes then you must use
+double-backslashes.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch pdftotext &quot;'%p' -&quot; &quot;/\\.pdf$/&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Swish-e will convert the double backslash into a single backslash before
+passing the parameter to the regular expression compiler.
+
+<P>
+Commented example configuration files are included in the <EM>conf</EM>
+directory of the Swish-e distribution.
+
+<P>
+Some command line arguments can override directives specified in the
+configuration file. Please see also the <A HREF="././SWISH-RUN.html">SWISH-RUN</A> for instructions on running Swish-e, and the <A HREF="././SWISH-SEARCH.html">SWISH-SEARCH</A> page for information and examples on how to search your index.
+
+<P>
+The configuration file is specified to Swish-e by the <CODE>-c</CODE> switch. For example,
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -c myconfig.conf</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You may also split your directives up into different configuration files.
+This allows you to have a master configuration file used for many different
+indexes, and smaller configuration files for each separate index. You can
+specify the different configuration files when running from the command
+line with the <CODE>-c</CODE>
+switch (see <A HREF="././SWISH-RUN.html">SWISH-RUN</A>), or you may include other Configuration file with the <STRONG>IncludeConfigFile</STRONG> directive below.
+
+<P>
+Typically, in a configuration file the directives are grouped together in
+some logical order -- that is, directives that control the source of the
+documents would be grouped together first, and directives that control how
+each document is filtered or its words index in another group of
+directives. (The directives listed below are grouped in this order).
+
+<P>
+The configuration file directives are listed below in these groups:    
+
+<UL>
+<P><LI>
+<P>
+<A HREF="#Administrative_Headers_Directives">Administrative Headers Directives</A> -- You may add administrative information to the header of the index file.
+
+<P><LI>
+<P>
+<A HREF="#Document_Source_Directives">Document Source Directives</A> -- Directives for selecting the source documents and the location of the
+index file.
+
+<P><LI>
+<P>
+<A HREF="#Document_Contents_Directives">Document Contents Directives</A> -- Directives that control how a document content is indexed.
+
+<P><LI>
+<P>
+<A HREF="#Directives_for_the_File_Access_method_only">Directives for the File Access method only</A> -- These directives are only applicable to the File Access indexing method.
+
+<P><LI>
+<P>
+<A HREF="#Directives_for_the_HTTP_Access_Method_Only">Directives for the HTTP Access Method Only</A> -- Likewise, these only apply to the HTTP Access method.
+
+<P><LI>
+<P>
+<A HREF="#Directives_for_the_prog_Access_Method_Only">Directives for the prog Access Method Only</A> -- These only apply to the prog Access method.
+
+<P><LI>
+<P>
+<A HREF="#Document_Filter_Directives">Document Filter Directives</A> -- This is a special section that describes using document filters with
+Swish-e.
+
+</UL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Alphabetical_Listing_of_Directives">Alphabetical Listing of Directives</A></H2>
+<UL>
+<P><LI>
+<P>
+<A HREF="#item_AbsoluteLinks">AbsoluteLinks</A> [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_BeginCharacters">BeginCharacters</A> <CODE>*string</CODE> of characters*
+
+<P><LI>
+<P>
+<A HREF="#item_BumpPositionCounterCharacters">BumpPositionCounterCharacters</A> *string*
+
+<P><LI>
+<P>
+<A HREF="#item_Buzzwords">Buzzwords</A> [*list of buzzwords*|File: path]
+
+<P><LI>
+<P>
+<A HREF="#item_ConvertHTMLEntities">ConvertHTMLEntities</A> [YES|no]
+
+<P><LI>
+<P>
+<A HREF="#item_DefaultContents">DefaultContents</A> [TXT|HTML|XML|TXT2|HTML2|XML2|TXT*|HTML*|XML*]
+
+<P><LI>
+<P>
+<A HREF="#item_Delay">Delay</A> *seconds*
+
+<P><LI>
+<P>
+<A HREF="#item_DontBumpPositionOnEndTags">DontBumpPositionOnEndTags</A> <CODE>*list</CODE> of names*
+
+<P><LI>
+<P>
+<A HREF="#item_DontBumpPositionOnStartTags">DontBumpPositionOnStartTags</A> <CODE>*list</CODE> of names*
+
+<P><LI>
+<P>
+<A HREF="#item_EnableAltSearchSyntax">EnableAltSearchSyntax</A>  [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_EndCharacters">EndCharacters</A> <CODE>*string</CODE> of characters*
+
+<P><LI>
+<P>
+<A HREF="#item_EquivalentServer">EquivalentServer</A> <CODE>*server</CODE> alias*
+
+<P><LI>
+<P>
+<A HREF="#item_ExtractPath">ExtractPath</A> *metaname* [replace|remove|prepend|append|regex]
+
+<P><LI>
+<P>
+<A HREF="#item_FileFilter">FileFilter</A> *suffix* *program* [options]
+
+<P><LI>
+<P>
+<A HREF="#item_FileFilterMatch">FileFilterMatch</A> *program* *options* *regex* [*regex* ...]
+
+<P><LI>
+<P>
+<A HREF="#item_FileInfoCompression">FileInfoCompression</A> [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_FileMatch">FileMatch</A> [contains|is|regex] <CODE>*regular</CODE> expression*
+
+<P><LI>
+<P>
+<A HREF="#item_FileRules">FileRules</A> [contains|is|regex] <CODE>*regular</CODE> expression*
+
+<P><LI>
+<P>
+<A HREF="#item_FuzzyIndexingMode">FuzzyIndexingMode</A> [NONE|Stemming|Soundex|Metaphone|DoubleMetaphone]
+
+<P><LI>
+<P>
+<A HREF="#item_FollowSymLinks">FollowSymLinks</A> [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_HTMLLinksMetaName">HTMLLinksMetaName</A> *metaname*
+
+<P><LI>
+<P>
+<A HREF="#item_IgnoreFirstChar">IgnoreFirstChar</A> <CODE>*string</CODE> of characters*
+
+<P><LI>
+<P>
+<A HREF="#item_IgnoreLastChar">IgnoreLastChar</A> <CODE>*string</CODE> of characters*
+
+<P><LI>
+<P>
+<A HREF="#item_IgnoreLimit">IgnoreLimit</A> <CODE>*integer</CODE> integer*
+
+<P><LI>
+<P>
+<A HREF="#item_IgnoreMetaTags">IgnoreMetaTags</A> <CODE>*list</CODE> of names*
+
+<P><LI>
+<P>
+<A HREF="#item_IgnoreNumberChars">IgnoreNumberChars</A> <CODE>*list</CODE> of characters*
+
+<P><LI>
+<P>
+<A HREF="#item_IgnoreTotalWordCountWhenRanking">IgnoreTotalWordCountWhenRanking</A> [YES|no]
+
+<P><LI>
+<P>
+<A HREF="#item_IgnoreWords">IgnoreWords</A> [*list of stop words*|File: path]
+
+<P><LI>
+<P>
+<A HREF="#item_ImageLinksMetaName">ImageLinksMetaName</A> *metaname*
+
+<P><LI>
+<P>
+<A HREF="#item_IncludeConfigFile">IncludeConfigFile</A>
+
+
+
+<P><LI>
+<P>
+<A HREF="#item_IndexAdmin">IndexAdmin</A> *text*
+
+<P><LI>
+<P>
+<A HREF="#item_IndexAltTagMetaName">IndexAltTagMetaName</A> *tagname*|as-text
+
+<P><LI>
+<P>
+<A HREF="#item_IndexComments">IndexComments</A> [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_IndexContents">IndexContents</A> [TXT|HTML|XML|TXT2|HTML2|XML2|TXT*|HTML*|XML*] <CODE>*file</CODE>
+extensions*
+
+<P><LI>
+<P>
+<A HREF="#item_IndexDescription">IndexDescription</A> *text*
+
+<P><LI>
+<P>
+<A HREF="#item_IndexDir">IndexDir</A> [URL|directories or files]
+
+<P><LI>
+<P>
+<A HREF="#item_IndexFile">IndexFile</A> *path*
+
+<P><LI>
+<P>
+<A HREF="#item_IndexName">IndexName</A> *text*
+
+<P><LI>
+<P>
+<A HREF="#item_IndexOnly">IndexOnly</A> <CODE>*list</CODE> of file suffixes*
+
+<P><LI>
+<P>
+<A HREF="#item_IndexPointer">IndexPointer</A> *text*
+
+<P><LI>
+<P>
+<A HREF="#item_IndexReport">IndexReport</A> [0|1|2|3]
+
+<P><LI>
+<P>
+<A HREF="#item_MaxDepth">MaxDepth</A> *integer*
+
+<P><LI>
+<P>
+<A HREF="#item_MaxWordLimit">MaxWordLimit</A> *integer*
+
+<P><LI>
+<P>
+<A HREF="#item_MetaNameAlias">MetaNameAlias</A> <CODE>*meta</CODE> name* <CODE>*list</CODE> of aliases*
+
+<P><LI>
+<P>
+<A HREF="#item_MetaNames">MetaNames</A> <CODE>*list</CODE> of names*
+
+<P><LI>
+<P>
+<A HREF="#item_MinWordLimit">MinWordLimit</A> *integer*
+
+<P><LI>
+<P>
+<A HREF="#item_NoContents">NoContents</A> <CODE>*list</CODE> of file suffixes*
+
+<P><LI>
+<P>
+<A HREF="#item_obeyRobotsNoIndex">obeyRobotsNoIndex</A> [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_ParserWarnLevel">ParserWarnLevel</A> [0|1|2|3]
+
+<P><LI>
+<P>
+<A HREF="#item_PreSortedIndex">PreSortedIndex</A> <CODE>*list</CODE> of property names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropCompressionLevel">PropCompressionLevel</A> [0-9]
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNameAlias">PropertyNameAlias</A> <CODE>*property</CODE> name* <CODE>*list</CODE> of aliases*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNames">PropertyNames</A> <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNamesCompareCase">PropertyNamesCompareCase</A> <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNamesIgnoreCase">PropertyNamesIgnoreCase</A> <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNamesNoStripChars">PropertyNamesNoStripChars</A> <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNamesDate">PropertyNamesDate</A> <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNamesNumeric">PropertyNamesNumeric</A> <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNamesMaxLength">PropertyNamesMaxLength</A> integer <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_PropertyNamesSortKeyLength">PropertyNamesSortKeyLength</A> integer <CODE>*list</CODE> of meta names*
+
+<P><LI>
+<P>
+<A HREF="#item_ReplaceRules">ReplaceRules</A> [replace|remove|prepend|append|regex]
+
+<P><LI>
+<P>
+<A HREF="#item_ResultExtFormatName">ResultExtFormatName</A>  name -x format string
+
+<P><LI>
+<P>
+<A HREF="#item_SpiderDirectory">SpiderDirectory</A> *path*
+
+<P><LI>
+<P>
+<A HREF="#item_StoreDescription">StoreDescription</A> [XML &lt;tag&gt;|HTML &lt;meta&gt;|TXT size]
+
+<P><LI>
+<P>
+<A HREF="#item__SwishProgParameters">&quot;SwishProgParameters</A> <CODE>*list</CODE> of parameters*
+
+<P><LI>
+<P>
+<A HREF="#item_SwishSearchDefaultRule">SwishSearchDefaultRule</A>   [&lt;AND-WORD&gt;|&lt;or-word&gt;]
+
+<P><LI>
+<P>
+<A HREF="#item_SwishSearchOperators">SwishSearchOperators</A> &lt;and-word&gt; &lt;or-word&gt; &lt;not-word&gt;
+
+<P><LI>
+<P>
+<A HREF="#item_TmpDir">TmpDir</A> *path*
+
+<P><LI>
+<P>
+<A HREF="#item_TranslateCharacters">TranslateCharacters</A> [*string1 string2*|:ascii7:]
+
+<P><LI>
+<P>
+<A HREF="#item_TruncateDocSize">TruncateDocSize</A> <CODE>*number</CODE> of characters*
+
+<P><LI>
+<P>
+<A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A> [error|ignore|INDEX|auto]
+
+<P><LI>
+<P>
+<A HREF="#item_UndefinedXMLAttributes">UndefinedXMLAttributes</A> [DISABLE|error|ignore|index|auto]
+
+<P><LI>
+<P>
+<A HREF="#item_UseStemming">UseStemming</A> [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_UseSoundex">UseSoundex</A> [yes|NO]
+
+<P><LI>
+<P>
+<A HREF="#item_UseWords">UseWords</A> [*list of words*|File: path]
+
+<P><LI>
+<P>
+<A HREF="#item_WordCharacters">WordCharacters</A> <CODE>*string</CODE> of characters*
+
+<P><LI>
+<P>
+<A HREF="#item_XMLClassAttributes">XMLClassAttributes</A> <CODE>*list</CODE> of XML attribute names*
+
+</UL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Directives_that_Control_Swish">Directives that Control Swish</A></H2>
+<P>
+These configuration directives control the general behavior of Swish-e.
+
+<DL>
+<P><DT><STRONG><A NAME="item_IncludeConfigFile">IncludeConfigFile *path to config file*</A></STRONG><DD>
+<P>
+This directive can be used to include configuration directives located in
+another file.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IncludeConfigFile /usr/local/swish/conf/site_config.config</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_IndexReport">IndexReport [0|1|2|3]</A></STRONG><DD>
+<P>
+This is how detailed you want reporting while indexing. You can specify
+numbers 0 to 3. 0 is totally silent, 3 is the most verbose. The default is
+1.
+
+<P>
+This may be overridden from the command line via the <CODE>-v</CODE> switch (see
+<A HREF="././SWISH-RUN.html">SWISH-RUN</A>).
+
+<P><DT><STRONG><A NAME="item_ParserWarnLevel">ParserWarnLevel [0|1|2|3]</A></STRONG><DD>
+<P>
+Sets the error level when using the libxml2 parser for XML and HTML.
+libxml2 will point out structural errors in your documents.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    0 = no report
+    1 = fatal errors
+    2 = errors
+    3 = warnings</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The exception to this is UTF-8 to Latin-1 conversion errors are reported at
+level 1. This is because words may be indexed incorrectly in these cases.
+
+<P>
+Note that unlike other errors generated by Swish-e, these errors are sent
+to stderr.
+
+<P><DT><STRONG><A NAME="item_IndexFile">IndexFile *path*</A></STRONG><DD>
+<P>
+Index file specifies the location of the generated index file. If not
+specified, Swish-e will create the file <EM>index.swish-e</EM> in the current directory.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexFile /usr/local/swish/site.index</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_obeyRobotsNoIndex">obeyRobotsNoIndex [yes|NO]</A></STRONG><DD>
+<P>
+When enabled, Swish-e will not index any HTML file that contains:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The default is to ignore these meta tags and index the document. This tag
+is described at <A
+HREF="http://www.robotstxt.org/wc/exclusion.html.">http://www.robotstxt.org/wc/exclusion.html.</A>
+
+
+<P>
+Note: This feature is only available with the libxml2 HTML parser.
+
+<P>
+Also, if you are using the libxml2 parser (HTML2 and XML2) then you can use
+the following comments in your documents to prevent indexing:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>       &lt;!-- SwishCommand noindex --&gt;
+       &lt;!-- SwishCommand index --&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and/or these may be used also:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>       &lt;!-- noindex --&gt;
+       &lt;!-- index --&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+For example, these are very helpful to prevent indexing of common headers,
+footers, and menus.
+
+</DL>
+<P>
+<STRONG>NOTE</STRONG>: This following items are currently not available. These items require
+Swish-e to parse the configuration file while searching.
+
+<DL>
+<P><DT><STRONG><A NAME="item_EnableAltSearchSyntax">EnableAltSearchSyntax [yes|NO]</A></STRONG><DD>
+<P>
+<STRONG>NOTE</STRONG>: This following item is currently not available.
+
+<P>
+Enable alternate search syntax. Allows the usage of a basic
+&quot;Altavista(c)&quot;, &quot;Lycos(c)&quot;, etc. like search syntax.
+This means a search query can contain &quot;+&quot; and &quot;-&quot; as
+syntax parameter.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w &quot;+word1 +word2 -word3  word4 word5&quot;
+    &quot;+&quot;  = following word has to be in all found documents
+    &quot;-&quot;  = following word may not be in any document found
+    &quot; &quot;  = following word will be searched in documents</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_SwishSearchOperators">SwishSearchOperators &lt;and-word&gt; &lt;or-word&gt; &lt;not-word&gt;</A></STRONG><DD>
+<P>
+<STRONG>NOTE</STRONG>: This following item is currently not available.
+
+<P>
+Using this config directive you can change the boolean search operators of
+Swish-e, e.g. to adapt these to your language. The default is: AND OR NOT
+
+<P>
+Example (german):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SwishSearchOperators   UND  ODER  NICHT</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_SwishSearchDefaultRule">SwishSearchDefaultRule   [&lt;AND-WORD&gt;|&lt;or-word&gt;]</A></STRONG><DD>
+<P>
+<STRONG>NOTE</STRONG>: This following item is currently not available.
+
+<P>
+<A HREF="#item_SwishSearchDefaultRule">SwishSearchDefaultRule</A> defines the default Boolean operator to use if none is specified between
+words or phrases. The default is <CODE>AND</CODE>.
+
+<P>
+The word you specify must match one of the available <A HREF="#item_SwishSearchOperators">SwishSearchOperators</A>.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SwishSearchOperators   UND  ODER  NICHT
+    # Make it act like a web search engine
+    SwishSearchDefaultRule ODER</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_ResultExtFormatName">ResultExtFormatName name -x format string</A></STRONG><DD>
+<P>
+<STRONG>NOTE</STRONG>: This following item is currently not available.
+
+<P>
+The output of Swish-e can be defined by specifying a format string with the
+<CODE>-x</CODE> command line argument. Using <A HREF="#item_ResultExtFormatName">ResultExtFormatName</A> you can assign a predefined format string to a name.
+
+<P>
+Examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ResultExtFormatName  moreinfo   &quot;%c|%r|%t|%p|&lt;author&gt;|&lt;publishyear&gt;\n&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then when searching you can specify the format string's name
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e   ...  -x moreinfo  ...</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+See the <CODE>-x</CODE> switch in <A HREF="././SWISH-RUN.html">SWISH-RUN</A> for more information about output formats.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Administrative_Headers_Directives">Administrative Headers Directives</A></H2>
+<P>
+Swish-e stores configuration information in the header of the index file.
+This information can be retrieved while searching or by functions in the
+Swish-e C library. There are a number of fields available for your own use.
+None of these fields are required:
+
+<DL>
+<P><DT><STRONG><A NAME="item_IndexName">IndexName *text*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_IndexDescription">IndexDescription *text*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_IndexPointer">IndexPointer *text*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_IndexAdmin">IndexAdmin *text*</A></STRONG><DD>
+<P>
+These variables specify information that goes into index files to help
+users and administrators. IndexName should be the name of your index, like
+a book title. IndexDescription is a short description of the index or a URL
+pointing to a more full description. IndexPointer should be a pointer to
+the original information, most likely a URL. IndexAdmin should be the name
+of the index maintainer and can include name and email information. These
+values should not be more than 70 or so characters and should be contained
+in quotes. Note that the automatically generated date in index files is in
+D/M/Y and 24-hour format.
+
+<P>
+Examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexName &quot;Linux Documentation&quot;
+    IndexDescription &quot;This is an index of /usr/doc on our Linux machine.&quot; 
+    IndexPointer <A HREF="http://localhost/swish/linux/index.html">http://localhost/swish/linux/index.html</A>
+    IndexAdmin webmaster</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    </DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Document_Source_Directives">Document Source Directives</A></H2>
+<P>
+These directives control <EM>what</EM> documents are indexed and <EM>how</EM> they are accessed. See also <A HREF="#Directives_for_the_File_Access_method_only">Directives for the File Access method only</A> and <A HREF="#Directives_for_the_HTTP_Access_Method_Only">Directives for the HTTP Access Method Only</A> for directives that are specific to those access methods.
+
+<DL>
+<P><DT><STRONG><A NAME="item_IndexDir">IndexDir [directories or files|URL|external program]</A></STRONG><DD>
+<P>
+IndexDir defines the source of the documents for Swish-e. Swish-e currently
+supports three file access methods: <STRONG>File system</STRONG>, <STRONG>HTTP</STRONG>
+(also called <STRONG>spidering</STRONG>), and <STRONG>prog</STRONG> for reading files from an external program.
+
+<P>
+The <CODE>-S</CODE> command line argument is used to select the file access method.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -c swish.config -S fs    - file system
+    swish-e -c swish.config -S http  - internal http spider
+    swish-e -c swish.config -S prog  - external program of any type</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+For the <STRONG>fs</STRONG> method of access <STRONG>IndexDir</STRONG> is a space-separated list of files and directories to index. Use a forward
+slash as the path separator in MS Windows.
+
+<P>
+For the <STRONG>http</STRONG> method the <STRONG>IndexDir</STRONG> setting is a list of space-separated URLs.
+
+<P>
+For the <STRONG>prog</STRONG> method the <STRONG>IndexDir</STRONG> setting is a list of space-separated programs to run (which generate
+documents for swish to index).
+
+<P>
+You may specify more than one <STRONG>IndexDir</STRONG> directive.
+
+<P>
+Any sub-directories of any listed directory will also be indexed.
+
+<P>
+Note: While <EM>processing</EM> directories, Swish-e will ignore any files or directories that begin with a
+dot (&quot;.&quot;). You may index files or directories that begin with a
+dot by specifying their name with <A HREF="#item_IndexDir">IndexDir</A> or <CODE>-i</CODE>.
+
+<P>
+Examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Index this directory an any subdirectories
+    IndexDir /usr/local/home/http</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Index the docs directory in current directory
+    IndexDir ./docs</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Index these files in the current directory
+    IndexDir ./index.html ./page1.html ./page2.html
+    # and index this directory, too
+    IndexDir ../public_html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+For the <STRONG>HTTP</STRONG> method of access specify the URL's from which you want the spidering to
+begin.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexDir <A HREF="http://www.my-site.com/index.html">http://www.my-site.com/index.html</A>
+    IndexDir <A HREF="http://localhost/index.html">http://localhost/index.html</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Obviously, using the <STRONG>HTTP</STRONG> method to index is <STRONG>much</STRONG> slower than indexing local files. Be well aware that some sites do not
+appreciate spidering and may block your IP address. You may wish to contact
+the remote site before spidering their web site. More information about
+spidering can be found in
+<A HREF="#Directives_for_the_HTTP_Access_Method_Only">Directives for the HTTP Access Method Only</A> below.
+
+<P>
+For the <A HREF="././SWISH-RUN.html#item_prog">prog</A> method of access <STRONG>IndexDir</STRONG> specifies the path to the <CODE>program(s)</CODE> to execute. The external
+program must correctly format the documents being passed back to Swish-e.
+Examples of external programs are provided in the <EM>prog-bin</EM> directory.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexDir ./myprogram.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+See <A HREF="././SWISH-RUN.html#item_prog">prog</A> for details.
+
+<P>
+Note: Not all directives work with all methods.
+
+<P><DT><STRONG><A NAME="item_NoContents">NoContents *list of file suffixes*</A></STRONG><DD>
+<P>
+Files with these suffixes will <STRONG>not</STRONG> have their contents indexed, but will have their path name (file name)
+indexed instead.
+
+<P>
+If the file's type is HTML or HTML2 (as set by <A HREF="#item_IndexContents">IndexContents</A> or
+<A HREF="#item_DefaultContents">DefaultContents</A>) then the file will be parsed for a HTML title and that title will be
+indexed. Note that you must set the file's type with
+<A HREF="#item_IndexContents">IndexContents</A> or <A HREF="#item_DefaultContents">DefaultContents</A>: <CODE>.html</CODE> and <CODE>.htm</CODE> are NOT type HTML by default. For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   IndexContents HTML* .htm .html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If a title is found, it will still be checked for <CODE>FileRules title</CODE>, and the file will be skipped if a match is found. See <A HREF="#item_FileRules">FileRules</A>.
+
+<P>
+If the file's type is not HTML, or it is HTML and no title is found, then
+the file's path will be indexed.
+
+<P>
+For example, this will allow searching by image file name.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    NoContents .gif .xbm .au .mov .mpg .pdf .ps</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: Using this directive will <STRONG>not</STRONG> cause files with those suffixes to be indexed. That is, if you use <A HREF="#item_IndexOnly">IndexOnly</A> to limit the types of files that are indexed, then you must specify in <A HREF="#item_IndexOnly">IndexOnly</A> the same suffixes listed in
+<A HREF="#item_NoContents">NoContents</A>.
+
+<P>
+This does <STRONG>not</STRONG> work:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Wrong!
+    IndexOnly .htm .html
+    NoContents .gif .xbm .au .mov .mpg .pdf .ps</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+A <CODE>-S prog</CODE> program may set the <A HREF="#item_No_Contents_">No-Contents:</A> header to enable this feature for a specific document (although it would be
+smarter for the <CODE>-S prog</CODE>
+program to simply only send the pathname or title to be indexed.
+
+<P><DT><STRONG><A NAME="item_ReplaceRules">ReplaceRules [replace|remove|prepend|append|regex]</A></STRONG><DD>
+<P>
+ReplaceRules allows you to make changes to file pathnames before they're
+indexed. These changed file names or URLs will be returned in search
+results.
+
+<P>
+For example, you may index your files locally (with the File system
+indexing method), yet return a URL in search results. This directive can be
+used to map the file names to their respective URLs on your web server.
+
+<P>
+There are five operations you can specify: <STRONG>replace</STRONG>, <STRONG>append</STRONG>,
+<STRONG>remove</STRONG>, <STRONG>prepend</STRONG>, and <STRONG>regex</STRONG> They will parse the pathname in the order you've typed these commands.
+
+<P>
+This directive uses C library regex.h regular expressions.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   replace &quot;the string you want replaced&quot; &quot;what to change it to&quot;
+   remove &quot;a string to remove&quot;   
+   prepend &quot;a string to add before the result&quot;
+   append &quot;a string to add after the result&quot;
+   regex  &quot;/search string/replace string/options&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Remember, quotes are needed if an expression contains white space, and
+backslashes have special meaning.
+
+<P>
+Regex is an Extended Regular Expression. The first character found is the
+delimiter (but it's not smart enough to use matched chars such as [], (),
+and {}).
+
+<P>
+The <STRONG>replace</STRONG> string may use substitution variables:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $0      the entire matched (sub)string
+    $1-$9   returns patterns captured in &quot;(&quot; &quot;)&quot; pairs
+    $`      the string before the matched pattern
+    $'      the string after the matched pattern</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <STRONG>options</STRONG> change the behavior of expression:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    i       ignore the case when matching
+    g       repeat the substitution for the entire pattern</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ReplaceRules replace testdir/ anotherdir/
+    ReplaceRules replace [a-z_0-9]*_m.*\.html index.html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ReplaceRules remove testdir/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ReplaceRules prepend <A HREF="http://localhost/">http://localhost/</A>
+    ReplaceRules append .html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ReplaceRules regex  !^/web/(.+)/!<A HREF="http://">http://</A>$1.domain.com/!
+    replaces a file path:
+        /web/search/foo/index.html
+    with
+        <A HREF="http://search.domain.com/foo/index.html">http://search.domain.com/foo/index.html</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ReplaceRules regex  #^#<A HREF="http://localhost/www#">http://localhost/www#</A>
+    ReplaceRules prepend <A HREF="http://localhost/www">http://localhost/www</A>  (same thing)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Remove all extensions from C source files
+    ReplaceRules remove .c     # ERROR! That &quot;.&quot; is *any char*
+    ReplaceRules remove \.c    # much better...</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ReplaceRules remove &quot;\\.c&quot; # if in quotes you need double-backslash!  
+    ReplaceRules remove &quot;\.c&quot;  # ERROR! &quot;\.&quot; -&gt; &quot;.&quot; and is *any char*</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_IndexContents">IndexContents [TXT|HTML|XML|TXT2|HTML2|XML2|TXT*|HTML*|XML*]  *file extensions*</A></STRONG><DD>
+<P>
+The <A HREF="#item_IndexContents">IndexContents</A> directive assigns one of Swish-e's document parsers to a document, based on
+the its extension. Swish-e currently knows how to parse TXT, HTML, and XML
+documents.
+
+<P>
+The XML2, HTML2, and TXT2 parsers are currently only available when Swish-e
+is configured to use libxml2.
+
+<P>
+You may use XML*, HTML*, and TXT* to select the parser automatically. If
+libxml2 is installed then it will be used to parse the content. Otherwise,
+Swish-e's internal parsers will be used.
+
+<P>
+Documents that are not assigned a parser with <A HREF="#item_IndexContents">IndexContents</A> will, by default, use the HTML2 parser if libxml2 is installed, otherwise
+will use Swish-e's internal HTML parser. The <A HREF="#item_DefaultContents">DefaultContents</A> directive may be used to assign a parser to documents that do not match a
+file extension defined with the <A HREF="#item_IndexContents">IndexContents</A> directive.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexContents HTML* .htm .html .shtml
+    IndexContents TXT*  .txt .log .text
+    IndexContents XML*  .xml</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+HTML* is the default type for all files, unless otherwise specified (and
+this default can be changed by the <STRONG>DefaultContents</STRONG> directive. Swish-e parses titles from HTML files, if available, and keeps
+track of the context of the text for context searching (see <CODE>-t</CODE> in <A HREF="././SWISH-RUN.html">SWISH-RUN</A>).
+
+<P>
+If using filters (with the <A HREF="#item_FileFilter">FileFilter</A> directive) to convert documents you should include those extensions, too.
+For example, if using a filter to convert .pdf to .html, you need to tell
+Swish-e that .pdf should be indexed by the internal HTML parser:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilter  .pdf   pdf2html
+    IndexContent  HTML  .pdf</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+See also <A HREF="#Document_Filter_Directives">Document Filter Directives</A>.
+
+<P>
+<STRONG>Note:</STRONG> Some of this may be changed in the future to use content-types instead of
+file extensions. See <A HREF="././SWISH-3.0.html">SWISH-3.0</A>
+
+
+
+<P><DT><STRONG><A NAME="item_DefaultContents">DefaultContents [TXT|HTML|XML|TXT2|HTML2|XML2|TXT*|HTML*|XML*]</A></STRONG><DD>
+<P>
+This sets the default parser for documents that are not specified in
+<STRONG>IndexContents</STRONG>. If not specified the default is HTML.
+
+<P>
+The XML2, HTML2, and TXT2 parsers are currently only available when Swish-e
+is configured to use libxml2.
+
+<P>
+You may use XML*, HTML*, and TXT* to select the parser automatically. If
+libxml2 is installed then it will be used to parse the content. Otherwise,
+Swish-e's internal parsers will be used.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    DefaultContents HTML</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <A HREF="#item_DefaultContents">DefaultContents</A> directive <EM>should</EM> be used when spidering, as HTML files may be returned without a file
+extension (such as when requesting a directory and the default index.html
+is returned).
+
+<P><DT><STRONG><A NAME="item_FileInfoCompression">FileInfoCompression [yes|NO]</A></STRONG><DD>
+<P>
+** This directive is currently not supported **
+
+<P>
+Setting <STRONG>FileInfoCompression</STRONG> to <CODE>yes</CODE> will compress the index file to save disk space. This may result in longer
+indexing times. The default is <CODE>no</CODE>.
+
+<P>
+Also see the <CODE>-e</CODE> switch in <A HREF="././SWISH-RUN.html">SWISH-RUN</A> for saving RAM during indexing.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Document_Contents_Directives">Document Contents Directives</A></H2>
+<P>
+These directives control what information is extracted from your source
+documents, and how that information is made available during searching.
+
+<DL>
+<P><DT><STRONG><A NAME="item_ConvertHTMLEntities">ConvertHTMLEntities [YES|no]</A></STRONG><DD>
+<P>
+ASCII <EM>entities</EM> can be converted automatically while indexing documents of type HTML (not
+for HTML2). For performance reasons you may wish to set this to
+<CODE>no</CODE> if your documents do not contain HTML entities. The default is <CODE>yes</CODE>.
+
+<P>
+If <A HREF="#item_ConvertHTMLEntities">ConvertHTMLEntities</A> is set <CODE>no</CODE> the entities will be indexed without conversion.
+
+<P>
+<STRONG>NOTE:</STRONG> Entities within XML files and files parsed with libxml2 (HTML2) are
+converted regardless of this setting.
+
+<P><DT><STRONG><A NAME="item_MetaNames">MetaNames *list of names*</A></STRONG><DD>
+<P>
+META names are a way to define &quot;fields&quot; in your XML and HTML
+documents. You can use the META names in your queries to limit the search
+to just the words contained in that META name of your document. For
+example, you might have a META tagged field in your documents called <CODE>subjects</CODE> and then you can search your documents for the word &quot;foo&quot; but
+only return documents where &quot;foo&quot; is within the <CODE>subjects</CODE> META tag.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w subjects=foo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+(See also the <CODE>-t</CODE> switch in <A HREF="././SWISH-RUN.html">SWISH-RUN</A> for information about
+<EM>context</EM> searching in HTML documents.)
+
+<P>
+The <STRONG>MetaNames</STRONG> directive is a space separated list. For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MetaNames meta1 meta2 keywords subjects</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You may also use <A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A> to specify automatic extraction of meta names from your HTML and XML
+documents, and also to ignore indexing content of meta tags.
+
+<P>
+META tags can have two formats in your <STRONG>HTML</STRONG> source documents:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;META NAME=&quot;meta1&quot; CONTENT=&quot;some content&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and (if using the HTML2/libxml2 parser)
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;meta1&gt;
+        some content
+    &lt;/meta1&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+But this second version is invalid HTML, and will generate a warning if
+ParserWarningLevel is set (libxml2 only).
+
+<P>
+And in <STRONG>XML</STRONG> documents, use the format:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;meta1&gt;
+        Some Content
+    &lt;/meta1&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then you can limit your search to just META <STRONG>meta1</STRONG> like this:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w 'meta1=(apples or oranges)'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You may nest the XML and the start/end tag versions:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;keywords&gt;
+        &lt;tag1&gt;
+            some content
+        &lt;/tag1&gt;
+        &lt;tag2&gt;
+            some other content
+        &lt;/tag2&gt;
+    &lt;keywords&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then you can search in both tag2 and tag2 with:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w 'keywords=(query words)'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Swish-e indexes all text as some metaname. The default is <CODE>swishdefault</CODE>, so these two queries are the same:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w foo
+    swish-e -w swishdefault=foo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+When indexing HTML Swish-e indexes the HTML title as default text, so when
+searching Swish-e will find matches in both the HTML body and the HTML
+title. Swish also, by default, indexes content of meta tags. So:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w foo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+will find &quot;foo&quot; in the body, the title, or any meta tags.
+
+<P>
+Currently, there's no way to prevent Swish-e from indexing the title
+contents along with the body contents, but see <A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A> for how to control the indexing of meta tags.
+
+<P>
+If you would like to search just the title text, you may use:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MetaNames swishtitle</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This will index the title text separately under the built-in swish internal
+meta name &quot;swishtitle&quot;. You may then search like
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w foo  -- search for &quot;foo&quot; in title, body (and undefined meta tags)
+    swish-e -w swishtitle=foo -- search for &quot;foo&quot; in title only</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+In addition to swishtitle, you can limit searches to documents' path with:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   MetaNames swishdocpath</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then to search for &quot;foo&quot; but also limit searches to documents
+that include &quot;manual&quot; or &quot;tutorial&quot; in their path:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   swish-e -w foo swishdocpath=(manual or tutorial)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+See also <A HREF="#item_ExtractPath">ExtractPath</A>.
+
+<P><DT><STRONG><A NAME="item_MetaNameAlias">MetaNameAlias *meta name* *list of aliases*</A></STRONG><DD>
+<P>
+MetaNameAlias assigns aliases for a meta name. For example, if your
+documents contain meta tags &quot;description&quot;, &quot;summary&quot;,
+and &quot;overview&quot; that all give a summary of your documents you
+could do this:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MetaNames summary
+    MetaNameAlias summary description overview</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then all three tags will get indexed as meta tag &quot;summary&quot;. You
+can then search all the fields as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w summary=foo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The Alias work at search time, too. So these will also limit the search to
+the &quot;summary&quot; meta name.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w description=foo
+    -w overview=foo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_MetaNamesRank">MetaNamesRank integer *list of meta names*</A></STRONG><DD>
+<P>
+You can assign a bias to metanames that will affect how ranking is
+calculated. The range of values is from -10 to +10, with zero being no
+bias.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MetaNamesRank 4 subject
+    MetaNamesRank 3 swishdefault
+    MetaNamesRank 2 author publisher
+    MetaNamesRank -5 wrongwords</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This feature is still considered experimental. If you use it, please send
+feedback to the discussion list.
+
+<P><DT><STRONG><A NAME="item_HTMLLinksMetaName">HTMLLinksMetaName *metaname*</A></STRONG><DD>
+<P>
+Allows indexing of HTML links. Normally, HTML links (href tags) are not
+indexed by Swish-e. This directive defines a metaname, and links will be
+indexed under this meta name.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    HTMLLinksMetaName links</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now, to limit searches to files with a link to &quot;home.html&quot; do
+this:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w links='&quot;home.html&quot;'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The double quotes force a phrase search.    
+
+<P>
+To make Swish-e index links as normal text, you may use:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    HTMLLinksMetaName swishdefault</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This feature is only available with the libxml2 HTML parser.    
+
+<P><DT><STRONG><A NAME="item_ImageLinksMetaName">ImageLinksMetaName *metaname*</A></STRONG><DD>
+<P>
+Allows indexing of image links under a metaname. Normally, image URLs are
+not indexed.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ImagesLinksMetaName images</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now, if you would like to find pages that include a nice image of a beach:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w images='beach'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+To make Swish-e index links as normal text, you may use:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ImageLinksMetaName swishdefault</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This feature is only available with the libxml2 HTML parser.
+
+<P><DT><STRONG><A NAME="item_IndexAltTagMetaName">IndexAltTagMetaName *tagname*|as-text</A></STRONG><DD>
+<P>
+Allows indexing of images &lt;IMG&gt; ALT tag text. Specify either a tag
+name which will be used as a metaname, or the special text
+&quot;as-text&quot; which says to index the ALT text as if it were plain
+text at the current location.
+
+<P>
+For example, by specifying a tag name:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   IndexAltTagMetaName bar</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+would make this markup:   
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;foo&gt;
+        &lt;img src=&quot;/someimage.png&quot; alt=&quot;Alt text here&quot;&gt;
+    &lt;/foo&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+appear like
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;foo&gt;
+        &lt;bar&gt;Alt text here&lt;/bar&gt;
+    &lt;/foo&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then the normal rules (<A HREF="#item_MetaNames">MetaNames</A> and <A HREF="#item_PropertyNames">PropertyNames</A>) apply to how that text is indexed.
+
+<P>
+If you use the special tag &quot;as-text&quot; then
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;foo&gt;
+        &lt;img src=&quot;/someimage.png&quot; alt=&quot;Alt text here&quot;&gt;
+    &lt;/foo&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+simply becomes
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;foo&gt;
+        Alt text here
+    &lt;/foo&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This feature is only available when using the libxml2 parser (HTML2 and
+XML2).    
+
+<P><DT><STRONG><A NAME="item_AbsoluteLinks">AbsoluteLinks [yes|NO]</A></STRONG><DD>
+<P>
+If this is set true then Swish-e will attempt to convert relative URIs
+extracted from HTML documents for use with <A HREF="#item_HTMLLinksMetaName">HTMLLinksMetaName</A> and
+<A HREF="#item_ImageLinksMetaName">ImageLinksMetaName</A> into absolute URIs. Swish-e will use any &lt;BASE&gt; tag found in the document, otherwise it will use the file's
+pathname. The pathname used will be the pathname *after* <A HREF="#item_ReplaceRules">ReplaceRules</A> has been applied to the document's pathname.
+
+<P>
+For example, say you wish to index image links under the metaname
+&quot;images&quot;.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ImageLinksMetaName images</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If an image is located in <A
+HREF="http://localhost/vacations/france/index.html">http://localhost/vacations/france/index.html</A>
+and
+<A HREF="#item_AbsoluteLinks">AbsoluteLinks</A> is set to no, then a image within that document:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>     &lt;img src=&quot;beach.jpeg&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+will only index &quot;beach.jpeg&quot;.
+
+<P>
+But, if you want more detail when searching, you can enable <A HREF="#item_AbsoluteLinks">AbsoluteLinks</A>
+and Swish-e will index
+&quot;http://localhost/vacations/france/beach.jpeg&quot;. You can then look
+for images of beaches, but only in France:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w images=(beach and france)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This also means you can search for any images within France:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w images=(france)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This feature is only available with the libxml2 HTML parser.    
+
+<P><DT><STRONG><A NAME="item_UndefinedMetaTags">UndefinedMetaTags [error|ignore|INDEX|auto]</A></STRONG><DD>
+<P>
+This directive defines the behavior of Swish-e during indexing when a meta
+name is found but is <STRONG>not</STRONG> listed in <STRONG>MetaNames</STRONG>. There are four choices:
+
+<DL>
+<P><DT><STRONG>UndefinedMetaTags error</STRONG><DD>
+<P>
+If a meta name is found that is not listed in <STRONG>MetaNames</STRONG>
+then indexing will be halted and an error reported.
+
+<P><DT><STRONG>UndefinedMetaTags ignore</STRONG><DD>
+<P>
+The contents of the meta tag are ignored and <STRONG>not</STRONG> indexed unless a metaname has been defined with the <A HREF="#item_MetaNames">MetaNames</A> directive.
+
+<P><DT><STRONG>UndefinedMetaTags index</STRONG><DD>
+<P>
+The contents of the meta tag are indexed, but placed in the main index
+unless there's an enclosing metatag already in force. This is the default.
+
+<P><DT><STRONG>UndefinedMetaTags auto</STRONG><DD>
+<P>
+This method create meta tags automatically for HTML meta names and XML
+elements. Using this is the same as specifying all the meta names
+explicitly in a <STRONG>MetaNames</STRONG> directive.
+
+</DL>
+<P><DT><STRONG><A NAME="item_UndefinedXMLAttributes">UndefinedXMLAttributes [DISABLE|error|ignore|index|auto]</A></STRONG><DD>
+<P>
+This is similar to <A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A>, but only applies to XML documents (parsed with libxml2). This allows
+indexing of attribute content, and provides a way to index the content
+under a metaname. For example,
+<A HREF="#item_UndefinedXMLAttributes">UndefinedXMLAttributes</A> can make
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;person age=&quot;23&quot;&gt;
+          John Doe
+    &lt;/person&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+look like the following to swish:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;person&gt;
+        &lt;person.age&gt;
+            23
+        &lt;/person.age&gt;
+        John Doe
+    &lt;/person&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+What happens to the text &quot;23&quot; will depend on the setting of
+<A HREF="#item_UndefinedXMLAttributes">UndefinedXMLAttributes</A>:    
+
+<DL>
+<P><DT><STRONG><A NAME="item_disable">disable</A></STRONG><DD>
+<P>
+XML attributes are not parsed and not indexed. This is the default.
+
+<P><DT><STRONG><A NAME="item_error">error</A></STRONG><DD>
+<P>
+If the concatenated meta name (e.g. person.age) is not listed in
+<STRONG>MetaNames</STRONG> then indexing will be halted and an error reported.
+
+<P><DT><STRONG><A NAME="item_ignore">ignore</A></STRONG><DD>
+<P>
+The contents of the meta tag are ignored and <STRONG>not</STRONG> indexed unless a metaname has been defined with the <A HREF="#item_MetaNames">MetaNames</A> directive.
+
+<P><DT><STRONG><A NAME="item_index">index</A></STRONG><DD>
+<P>
+The contents of the meta tag are indexed, but placed in the main index
+unless there's an enclosing metatag already in force.
+
+<P><DT><STRONG><A NAME="item_auto">auto</A></STRONG><DD>
+<P>
+This method will create meta tags from the combined element and attributes
+(and XML Class name) This options should be used with caution as it can
+generate a lot of metaname entries.
+
+<P>
+See also the example below <CODE>XMLClassAttribues</CODE>.
+
+</DL>
+<P><DT><STRONG><A NAME="item_XMLClassAttributes">XMLClassAttributes *list of XML attribute names*</A></STRONG><DD>
+<P>
+Combines an XML class name with the element name to make up a metaname. For
+example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    XMLClassAttributes class</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;person class=&quot;first&quot;&gt;
+        John
+    &lt;/person&gt;
+    &lt;person class=&quot;last&quot;&gt;
+        Doe
+    &lt;/person&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Will appear to Swish-e as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;person&gt;
+        &lt;person.first&gt;
+        John
+        &lt;/person.first&gt;
+    &lt;/person&gt;
+    &lt;person&gt;
+        &lt;person.last&gt;
+        Doe
+        &lt;/person.last&gt;
+    &lt;/person&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+How the data is indexed depends on <A HREF="#item_MetaNames">MetaNames</A> and <A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A>.
+
+<P>
+Here's an example using the following configuration which combines the two
+directives <A HREF="#item_XMLClassAttributes">XMLClassAttributes</A> and <A HREF="#item_UndefinedXMLAttributes">UndefinedXMLAttributes</A>.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    XMLClassAttributes class
+    UndefinedMetaTags auto
+    UndefinedXMLAttributes auto
+    IndexContents XML2 .xml</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The source XML file looks like:    
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;xml&gt; &lt;person class=&quot;student&quot; phone=&quot;555-1212&quot; age=&quot;102&quot;&gt; John &lt;/person&gt;
+    &lt;person greeting=&quot;howdy&quot;&gt;Bill&lt;/person&gt; &lt;/xml&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Swish-e parses as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./swish-e -c 2 -i 1.xml -T parsed_tags  parsed_text  -v 0
+    Indexing Data Source: &quot;File-System&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;xml&gt; (MetaName)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        &lt;person&gt; (MetaName)
+            &lt;person.student&gt; (MetaName)
+                &lt;person.student.phone&gt; (MetaName)
+                    555-1212
+                &lt;/person.student.phone&gt; 
+                &lt;person.student.age&gt; (MetaName)
+                    102
+                &lt;/person.student.age&gt; 
+                John
+        &lt;/person&gt; </pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        &lt;person&gt; (MetaName)
+            &lt;person.greeting&gt; (MetaName)
+                howdy
+            &lt;/person.greeting&gt; 
+            Bill
+        &lt;/person&gt; </pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;/xml&gt; 
+    Indexing done!</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+One thing to note is that the first &lt;person&gt; block finds a class name
+&quot;student&quot; so all metanames that are created from attributes use
+the combined name &quot;person.student&quot;. The second &lt;person&gt;
+block doesn't contain a &quot;class&quot; so, the attribute name is
+combined directly with the element name (e.g. &quot;person.greeting&quot;).
+
+<P><DT><STRONG><A NAME="item_ExtractPath">ExtractPath *metaname* [replace|remove|prepend|append|regex]</A></STRONG><DD>
+<P>
+This directive can be used to index extracted parts of a document's path. A
+common use would be to limit searches to specific areas of your file tree.
+
+<P>
+The extracted string will be indexed under the specified meta name.
+
+<P>
+See <A HREF="#item_ReplaceRules">ReplaceRules</A> for a description of the various pattern replacement methods, but you will
+use the <EM>regex</EM> method.
+
+<P>
+For example, say your file system (or web tree) was organized into
+departments:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    /web/sales/foo...
+    /web/parts/foo...
+    /web/accounting/foo...</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And you wanted a way to limit searches to just documents under
+&quot;sales&quot;.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ExtractPath department regex !^/web/([^/]+)/.*$!$1!</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Which says, extract out the department name (as substring $1) and index it
+as meta name <CODE>department</CODE>. Then to limit a search to the sales department:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w foo AND department=sales</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note that the <CODE>regex</CODE> method uses a substitution pattern, so to index only a sub-string match the <EM>entire</EM> document path in the regular expression, as shown above. Otherwise any part
+that is not matched will end up in the substitution pattern.
+
+<P>
+See the <A HREF="#item_ExtractPathDefault">ExtractPathDefault</A> option for a way to set a value if not patterns match.
+
+<P>
+Although unlikely, you may use more than one <A HREF="#item_ExtractPath">ExtractPath</A> directive. More than one directive of the <EM>same</EM> meta name will operate successively (in order listed in the configuration
+file) on the path. This allows you to use regular expressions on the
+results of the previous pattern substitution (as if piping the output from
+one expression to the patter of the next).
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ExtractPath foo regex !^(...).+$!$1!
+    ExtractPath foo regex !^.+(.)$!$1!</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+So, the third letter is indexed as meta name &quot;foo&quot; if both
+patterns match.    
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ExtractPath foo regex !^X(...).+$!$1!
+    ExtractPath foo regex !^.+(.)$!$1!</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now (not the &quot;X&quot;), if the first pattern doesn't match, the last
+character of the path name is indexed. You must be clear on this behavior
+if you are using more than one <A HREF="#item_ExtractPath">ExtractPath</A> directive with the same metaname.
+
+<P>
+The document path operated on is the real path swish used to access the
+document. That is, the <A HREF="#item_ReplaceRules">ReplaceRules</A> directive has no effect on the path used with <A HREF="#item_ExtractPath">ExtractPath</A>.
+
+<P>
+The full path is used for each meta name if more than one <A HREF="#item_ExtractPath">ExtractPath</A>
+directive is used. That is, changes to the path used in <CODE>ExtractPath foo</CODE> do not affect the path used by <CODE>ExtractPath bar</CODE>.
+
+<P><DT><STRONG><A NAME="item_ExtractPathDefault">ExtractPathDefault *metaname* default_value</A></STRONG><DD>
+<P>
+This can be used with <A HREF="#item_ExtractPath">ExtractPath</A> to set a default string to index under the given metaname if none of the <A HREF="#item_ExtractPath">ExtractPath</A> patterns match.
+
+<P>
+For example, say your want to index each document with a metaname
+&quot;department&quot; based on the following path examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    /web/sales/foo...
+    /web/parts/foo...
+    /web/accounting/foo...</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+But you are also indexing documents that do not follow that pattern and you
+want to search those separately, too.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ExtractPath department regex !^/web/([^/]+)/.*$!$1!
+    ExtractPathDefault department other</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now, you may search like this:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w foo department=(sales)      - limit searches to the sales documents
+    -w foo department=(parts)      - limit searches to the parts documents
+    -w foo department=(accounting) - limit searches to the accounting documents
+    -w foo department=(other)      - everything but sales, parts, and accounting.</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This basically is a shortcut for:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w foo not department=(sales or parts or accounting)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+but you don't need to keep track of what was extracted.    
+
+<P><DT><STRONG><A NAME="item_PropertyNames">PropertyNames *list of meta names*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_PropertyNamesCompareCase">PropertyNamesCompareCase *list of meta names*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_PropertyNamesIgnoreCase">PropertyNamesIgnoreCase *list of meta names*</A></STRONG><DD>
+<P>
+Swish-e allows you to specify certain META tags that can be used as <STRONG>document
+properties</STRONG>. The contents of any META tag that has been identified as a document
+property can be returned as part of the search results along with the rank,
+file name, title, and document size (see the <CODE>-p</CODE> and <CODE>-x</CODE> switches in
+<A HREF="././SWISH-RUN.html">SWISH-RUN</A>).
+
+<P>
+Properties are useful for returning additional data from documents in
+search results -- this saves the effort of reading and parsing the source
+files while reading Swish-e search results, and is especially useful when
+the source documents are no longer available or slow to access (e.g. over
+http).
+
+<P>
+Another feature of properties is that Swish-e can use the PropertyNames for
+sorting the search results (see the <CODE>-s</CODE> switch).
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNames author subjects</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Two variations are available.  <A HREF="#item_PropertyNamesCompareCase">PropertyNamesCompareCase</A> and
+<A HREF="#item_PropertyNamesIgnoreCase">PropertyNamesIgnoreCase</A>. These tell Swish-e to either ignore or compare case when sorting results.
+The default for <A HREF="#item_PropertyNames">PropertyNames</A> is to ignore the case.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNamesIgnoreCase subject
+    PropertyNamesCompareCase keyword</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The defaults for &quot;internal&quot; properties are:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swishtitle          --  ignore the case
+    swishdocpath        --  compare case
+    swishdescription    --  compare case</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+These can be overridden with <A HREF="#item_PropertyNamesCompareCase">PropertyNamesCompareCase</A> and
+<A HREF="#item_PropertyNamesIgnoreCase">PropertyNamesIgnoreCase</A>.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNamesCompareCase swishtitle    </pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Use of PropertyNames will increase the size of your index files, sometimes
+significantly. Properties will be compressed if Swish-e is compiled with
+zlib as described in the <A HREF="././INSTALL.html">INSTALL</A> manual page.
+
+<P>
+If Swish-e finds more than one property of the same name in a document the
+property's contents will be concatinated for strings, and a warning issues
+for numeric (or date) properties.
+
+<P><DT><STRONG><A NAME="item_PropertyNamesNoStripChars">PropertyNamesNoStripChars</A></STRONG><DD>
+<P>
+PropertyNamesNoStripChars specifies that the listed properties should not
+have strings of low ASCII characters replaced with a space character.
+Properties will be stored as found in the document.
+
+<P>
+When printing properties with the swish-e binary newlines are replaced with
+a space character. Use the swish-e library (or SWISH::API perl module) to
+fetch properties without newlines replaced.
+
+<P><DT><STRONG><A NAME="item_PropertyNamesNumeric">PropertyNamesNumeric</A></STRONG><DD>
+<P>
+This directive is similar to <A HREF="#item_PropertyNames">PropertyNames</A>, but it flags the property as being a string of digits (integer value)
+that will be stored as binary data instead of a string. This allows sorting
+with <CODE>-s</CODE> and limiting with <CODE>-L</CODE> to sort and limit the property correctly.
+
+<P>
+Swish-e uses <CODE>strtoul(3)</CODE> to convert the string into an unsigned long integer. Therefore, only
+positive integers can be stored.
+
+<P>
+Future versions of Swish-e may be able to store different property types
+(such as negative integers and real numbers). This directive may change in
+future releases of Swish.
+
+<P><DT><STRONG><A NAME="item_PropertyNamesDate">PropertyNamesDate</A></STRONG><DD>
+<P>
+This directive is exactly like <A HREF="#item_PropertyNamesNumeric">PropertyNamesNumeric</A>, but it also flags the number as a machine timestamp (seconds since
+Epoch), and will print a formatted date when returning this property. See <CODE>-x</CODE> in <A HREF="././SWISH-RUN.html">SWISH-RUN</A>.
+
+<P>
+Swish-e will not parse dates when indexing; you must use a timestamp.
+
+<P><DT><STRONG><A NAME="item_PropertyNameAlias">PropertyNameAlias  *property name* *list of aliases*</A></STRONG><DD>
+<P>
+This allows aliases for a property name. For example, if you are indexing
+HTML files, plus XML files that are written in English, German, and Spanish
+and thus use the tags &quot;title&quot;, &quot;titel&quot;, and
+&quot;título&quot; you can use:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNameAlias swishtitle title titel título titulo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note that &quot;swishtitle&quot; is the built-in property used to store the
+title of a document, and therefore you do not need to specify it as a
+PropertyName before use.
+
+<P><DT><STRONG><A NAME="item_PropertyNamesMaxLength">PropertyNamesMaxLength  integer *list of meta names*</A></STRONG><DD>
+<P>
+This option will set the max length of the text stored in a property. You
+must specify a number between 0 and the max integer size on your platform,
+and a list of properties. The properties specified must not be aliases.
+
+<P>
+If any of the property names do not exist they will be created (e.g. you do
+not need to define the property with PropertyNames first).
+
+<P>
+In general, this feature will only be useful when parsing HTML or XML with
+the libxml2 parser.
+
+<P>
+For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNamesMaxLength 1000 swishdescription
+    PropertyNameAlias swishdescription body</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Is somewhat like
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    StoreDescription HTML &lt;body&gt; 1000
+    StoreDescription XML &lt;body&gt; 1000
+    StoreDescription HTML2 &lt;body&gt; 1000
+    StoreDescription XML2 &lt;body&gt; 1000</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+but StoreDescription allows setting the tag for each parser type.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNamesMaxLength 1000 headings
+    PropertyNameAlias headings h1 h2 h3 h4</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+collects all the heading text into a single property called
+&quot;headings&quot;, not to exceed 1000 characters.
+
+<P><DT><STRONG><A NAME="item_PropertyNamesSortKeyLength">PropertyNamesSortKeyLength  integer *list of meta names*</A></STRONG><DD>
+<P>
+Sets the length of the string used when sorting. The default is 100
+characters. The -T metanames debugging option will list the current values
+for an index.
+
+<P>
+This setting is used when sorting during indexing, and perhaps when sorting
+while searching. It also effects the order when limiting to a range of
+values with the -L option.
+
+<P><DT><STRONG><A NAME="item_PreSortedIndex">PreSortedIndex *list of property names*</A></STRONG><DD>
+<P>
+By default Swish-e generates presorted tables while indexing for each
+property name. This allows faster sorting when generating results. On large
+document collections this presorting may add to the indexing time, and also
+adds to the total size of the index. This directive can be used to
+customize exactly which properties will be presorted.
+
+<P>
+If <A HREF="#item_PreSortedIndex">PreSortedIndex</A> it is <EM>not</EM> present in the config file (default action), all the properties will be
+presorted at indexing time. If it is present without any parameter, no
+properties will be presorted. Otherwise, only the property names specified
+will be presorted.
+
+<P>
+For example, if you only wish to sort results by a property called <CODE>title</CODE>:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNames title age time
+    PreSortedIndex  title</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_StoreDescription">StoreDescription [XML &lt;tag&gt; size|HTML &lt;meta&gt; size|TXT size]</A></STRONG><DD>
+<P>
+<STRONG>StoreDescription</STRONG> allows you to store a document description in the index file. This
+description can be returned in your search results when the <CODE>-x</CODE>
+switch is used to include the <EM>swishdescription</EM> for extended results, or by using <CODE>-p swishdescription</CODE>.
+
+<P>
+The document type (XML, HTML and TXT) must match the document type
+currently being indexed as set by <A HREF="#item_IndexContents">IndexContents</A> or <A HREF="#item_DefaultContents">DefaultContents</A>. See those directives for possible values. A common problem is using <A HREF="#item_StoreDescription">StoreDescription</A>
+yet not setting the document's type with <A HREF="#item_IndexContents">IndexContents</A> or
+<A HREF="#item_DefaultContents">DefaultContents</A>. Another problem is different types:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexContents HTML2 .html
+    StoreDescription HTML &lt;body&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then .html documents are assigned a type of HTML2 (and parsed by the
+libxml2 parser), but the description will not be stored since it is type
+HTML instead of HTML2.
+
+<P>
+For text documents you specify the type TXT (or TXT2 or TXT*) and the
+number of <EM>characters</EM> to capture.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    StoreDescription TXT 20</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The above stores only the first twenty characters from the text file in the
+Swish-e index file.
+
+<P>
+For HTML, and XML file types, specify the tag to use for the description,
+and optionally the number of characters to capture. If not specified will
+capture the entire contents of the tag.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    StoreDescription HTML &lt;body&gt; 20000
+    StoreDescription XML  &lt;desc&gt; 40</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Again, note that documents must be assigned a document type with
+<A HREF="#item_IndexContents">IndexContents</A> or <A HREF="#item_DefaultContents">DefaultContents</A> to use this feature.
+
+<P>
+Swish-e will compress the descriptions (or any other large property) if
+compiled to use zlib (see <A HREF="././INSTALL.html">INSTALL</A>). This is recommended when using StoreDescription and a large number of
+documents. Compression of 30% to 50% is not uncommon with HTML files.
+
+<P><DT><STRONG><A NAME="item_PropCompressionLevel">PropCompressionLevel [0-9]</A></STRONG><DD>
+<P>
+This directive sets the compression level used when storing properties to
+disk. A setting of zero is no compression, and a setting of nine is the
+most compression.
+
+<P>
+The default depends on the default setting compiled with zlib, but is
+typically six.
+
+<P>
+This option is useful when using <A HREF="#item_StoreDescription">StoreDescription</A> to store a large amount text in properties (or if using <A HREF="#item_PropertyNames">PropertyNames</A> with large property sizes).
+
+<P>
+Properties must be over a value defined in <EM>config.h</EM> (100 is the default) before compression will be attempted. Swish-e will
+never store the results of the compression if the compressed data is larger
+than the original data.
+
+<P>
+This option is only available when Swish-e is compiled with zlib support.
+
+<P><DT><STRONG><A NAME="item_TruncateDocSize">TruncateDocSize *number of characters*</A></STRONG><DD>
+<P>
+TruncateDocSize limits the size of a document while indexing documents
+and/or using filters. This config directive truncates the numbers of read
+bytes of a document to the specified size. This means: if a document is
+larger, read only the specified numbers of bytes of the document.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    TruncateDocSize    10000000</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The default is zero, which means read all data.
+
+<P>
+Warning: If you use TruncateDocSize, use it with care! TruncateDocSize is a
+safety belt only, to limit e.g. filteroutput, when accessing databases, or
+to limit &quot;runnaway&quot; filters. Truncating doc input may destroy
+document structures for Swish-e (e.g. swish may miss closing tags for XML
+or HTML documents).
+
+<P>
+TruncateDocSize does not currently work with the <CODE>prog</CODE> input source method.
+
+<P><DT><STRONG><A NAME="item_FuzzyIndexingMode">FuzzyIndexingMode NONE|Stemming|Soundex|Metaphone|DoubleMetaphone</A></STRONG><DD>
+<P>
+Selects the type of index to create. Only one type of index may be created.
+
+<P>
+It's a good idea to create both a normal index and a fuzzy index and allow
+your search interface select which index to use. Many people find the fuzzy
+searches to be too fuzzy.
+
+<P>
+The available fuzzy indexing options can be displayed by running
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   swish-e -T LIST_FUZZY_MODES</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Available options include:
+
+<DL>
+<P><DT><STRONG><A NAME="item_None">None</A></STRONG><DD>
+<P>
+Words are stored in the index without any conversion. This is the default.
+
+<P><DT><STRONG><A NAME="item_Stemming_">Stemming_*</A></STRONG><DD>
+<P>
+This options uses one of the installed Snowball stemmers
+(http://snowball.tartarus.org/).
+
+<P>
+The installed stemmers can be viewed by running
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   swish-e -T LIST_FUZZY_MODES</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+For example, to use the Spanish stemming module:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   FuzzyIndexingMode Stemming_es</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_Stem">Stem or Stemming_en</A></STRONG><DD>
+<P>
+Selects the legacy Swish-e English stemmer.
+
+<P>
+This is deprecated in favor of the Snowball English stemmers (Stemming_en1,
+Stemming_en2). Future versions of Swish-e will likely use the Stemming_en2
+stemmer by default.
+
+<P>
+Words are converted using the Porter stemming algorithm.
+
+<P>
+From: <A
+HREF="http://www.tartarus.org/~martin/PorterStemmer/">http://www.tartarus.org/~martin/PorterStemmer/</A>
+
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    The Porter stemming algorithm (or ‘Porter stemmer’) is a
+    process for removing the commoner morphological and inflexional
+    endings from words in English. Its main use is as part of a
+    term normalisation process that is usually done when setting up
+    Information Retrieval systems.</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This will help a search for &quot;running&quot; to also find
+&quot;run&quot; and &quot;runs&quot;, for example.
+
+<P>
+The stemming function does not convert words to their root, rather
+programmatically removes endings on words in an attempt to make similar
+words with different endings stem to the same string of characters. It's
+not a perfect system, and searches on stemmed indexes often return curious
+results. For example, two entirely different words may stem to the same
+word.
+
+<P>
+Stemming also can be confusing when used with a wildcard (truncation). For
+example, you might expect to find the word &quot;running&quot; by searching
+for &quot;runn*&quot;. But this fails when using a stemmed index, as
+&quot;running&quot; stems to &quot;run&quot;, yet searching for
+&quot;runn*&quot; looks for words that start with &quot;runn&quot;.
+
+<P><DT><STRONG><A NAME="item_Soundex">Soundex</A></STRONG><DD>
+<P>
+Soundex was developed in the 1880s so records for people with similar
+sounding names could be found more readily. Soundex is a coded surname
+based on the way a surname sounds rather than spelling. Surnames that sound
+similar, like Smith and Smyth, are filed together under the same Soundex
+code. This is mostly useful for US English.
+
+<P>
+Soundex should not be used to search for sound-alike words. Metaphone would
+be more appropriate for generic sound matching of words. Soundex should
+only be used where you need to search multiple documents for proper names
+which sound similar. This is primarily used for indexing genealogical
+records. This may be useful for indexing other collections of data
+consisting mostly of names. Many common name variations are matched by
+Soundex. The only notable exception is the first letter of the name. The
+first letter is not matched for sound.
+
+<P><DT><STRONG><A NAME="item_Metaphone">Metaphone and DoubleMetaphone</A></STRONG><DD>
+<P>
+Words are transformed into a short series of letters representing the sound
+of the word (in English). Metaphone algorithms are often used for looking
+up mis-spelled words in dictionary programs.
+
+<P>
+From: <A
+HREF="http://aspell.sourceforge.net/metaphone/">http://aspell.sourceforge.net/metaphone/</A>
+
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Lawrence Philips' Metaphone Algorithm is an algorithm which returns
+    the rough approximation of how an English word sounds.</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <CODE>DoubleMetaphone</CODE> mode will sometimes generate two different metaphones for the same word.
+This is supposed to be useful when a word may be pronounced more than one
+way.
+
+<P>
+A metaphone index should give results somewhere in between Soundex and
+Stemming.    
+
+</DL>
+<P><DT><STRONG><A NAME="item_UseStemming">UseStemming [yes|NO]</A></STRONG><DD>
+<P>
+Put yes to apply word stemming algorithm during indexing, else no.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    UseStemming no
+    UseStemming yes</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+When UseStemming is set to <CODE>yes</CODE> every word is stemmed before placing it in to the index.
+
+<P>
+This option is deprecated. It has been superceded by <A HREF="#item_FuzzyIndexingMode">FuzzyIndexingMode</A>.
+
+<P><DT><STRONG><A NAME="item_UseSoundex">UseSoundex [yes|NO]</A></STRONG><DD>
+<P>
+When UseSoundex is set to <CODE>yes</CODE> every word is converted to a Soundex code before placing it in to the
+index.
+
+<P>
+This option is deprecated. It has been superceded by <A HREF="#item_FuzzyIndexingMode">FuzzyIndexingMode</A>.
+
+<P><DT><STRONG><A NAME="item_IgnoreTotalWordCountWhenRanking">IgnoreTotalWordCountWhenRanking [YES|no]</A></STRONG><DD>
+<P>
+Put yes to ignore the total number of words in the file when calculating
+ranking. Often better with merges and small files. Default is yes.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreTotalWordCountWhenRanking no</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The default was changed from no to yes in version 2.2.
+
+<P>
+<STRONG>NOTE:</STRONG> must be set to <STRONG>no</STRONG> if you intend to use the -R 1 option when searching.
+
+<P><DT><STRONG><A NAME="item_MinWordLimit">MinWordLimit *integer*</A></STRONG><DD>
+<P>
+Set the minimum length of an word. Shorter words will not be indexed. The
+default is 1 (as defined in <EM>src/config.h</EM>).
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MinWordLimit 5</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_MaxWordLimit">MaxWordLimit *integer*</A></STRONG><DD>
+<P>
+Set the maximum length of an indexable word. Every longer word will not be
+indexed. The Default is 40 (as defined in <EM>src/config.h</EM>).
+
+<P><DT><STRONG><A NAME="item_WordCharacters">WordCharacters *string of characters*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_IgnoreFirstChar">IgnoreFirstChar *string of characters*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_IgnoreLastChar">IgnoreLastChar *string of characters*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_BeginCharacters">BeginCharacters *string of characters*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_EndCharacters">EndCharacters *string of characters*</A></STRONG><DD>
+<P>
+These settings define what a word consists of to the Swish-e indexing
+engine. Compiled in defaults are in <EM>src/config.h</EM>.
+
+<P>
+When indexing Swish-e uses <STRONG>WordCharacters</STRONG> to split up the document into words. Words are defined by any string of
+non-blank characters that contain only the characters listed in
+WordCharacters. If a string of characters includes a character that is not
+in WordCharacters then the word will be spit into two or more separate
+words.
+
+<P>
+For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    WordCharacters abde</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Would turn &quot;abcde&quot; into two words &quot;ab&quot; and
+&quot;de&quot;.
+
+<P>
+Next, of these words, any characters defined in <STRONG>IgnoreFirstChar</STRONG> are stripped off the start of the word, and <STRONG>IgnoreLastChar</STRONG> characters are stripped off the end of the word. This allows, for example,
+periods within a word (www.slashdot.com), but not at the end of a word.
+Characters in IgnoreFirstChar and IgnoreLastChar must be in WordCharacters.
+
+<P>
+Finally, the resulting words MUST begin with one of the characters listed
+in <STRONG>BeginCharacters</STRONG> and end with one of the characters listed in
+<STRONG>EndCharacters</STRONG>. BeginCharacters and EndCharacters must be a subset of the characters in
+WordCharacters. Often, WordCharacters, BeginCharacters and EndCharacters
+will all be the same.
+
+<P>
+Note that the same process applies to the query while searching.
+
+<P>
+Getting these settings correct will take careful consideration and
+practice. It's helpful to create an index of a single test file, and then
+look at the words that are placed in the index (see the <CODE>-v 4</CODE>, <CODE>-D</CODE> and <CODE>-k</CODE> searching switches).
+
+<P>
+Currently there is only support for eight-bit characters.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    WordCharacters  .abcdefghijklmnopqrstuvwxyz
+    BeginCharacters abcdefghijklmnopqrstuvwxyz
+    EndCharacters   abcdefghijklmnopqrstuvwxyz
+    IgnoreFirstChar .
+    IgnoreLastChar  .</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+So the string
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Please visit <A HREF="http://www.example.com/path/to/file.html.">http://www.example.com/path/to/file.html.</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+will be indexed as the following words:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    please
+    visit
+    http
+    www.example.com
+    path
+    to
+    file.html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Which means that you can search for <CODE>www.example.com</CODE> as a single word, but searching for just <CODE>example</CODE> will not find the document.
+
+<P>
+Note: when indexing HTML documents HTML entities are converted to their
+character equivalents before being processed with these directives. This is
+a change from previous versions of Swish-e where you were required to
+include the characters <CODE>0123456789&amp;#;</CODE> to index entities. See also <A HREF="#item_ConvertHTMLEntities">ConvertHTMLEntities</A>
+
+
+
+<P><DT><STRONG><A NAME="item_Buzzwords">Buzzwords [*list of buzzwords*|File: path]</A></STRONG><DD>
+<P>
+The Buzzwords option allows you to specify words that will be indexed
+regardless of WordCharacters, BeginCharacters, EndCharacters, stemming,
+soundex and many of the other checks done on words while indexing.
+
+<P>
+Buzzwords are case insensitive.
+
+<P>
+Buzzwords should be separated by spaces and may span multiple directives.
+If the special format <CODE>File:filename</CODE> is used then the Buzzwords will be read from an external file during
+indexing.
+
+<P>
+Examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Buzzwords C++ TCP/IP</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Buzzwords File: ./buzzwords.lst</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If a Buzzword contains search operator characters they must be backslashed
+when searching. For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Buzzwords C++ TCP/IP web=http</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./swish-e -w 'web\=http'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Buzzwords are found by splitting the text on whitespace, removing
+<A HREF="#item_IgnoreFirstChar">IgnoreFirstChar</A> and <A HREF="#item_IgnoreLastChar">IgnoreLastChar</A> characters from the word, and then comparing with the list of <A HREF="#item_Buzzwords">Buzzwords</A>. Therefore, if adding <A HREF="#item_Buzzwords">Buzzwords</A> to an index you will probably want to define <A HREF="#item_IgnoreFirstChar">IgnoreFirstChar</A> and
+<A HREF="#item_IgnoreLastChar">IgnoreLastChar</A> settings.
+
+<P>
+Note: Buzzwords specific settings for <A HREF="#item_IgnoreFirstChar">IgnoreFirstChar</A> and <A HREF="#item_IgnoreLastChar">IgnoreLastChar</A>
+may be used in the future.
+
+<P><DT><STRONG><A NAME="item_IgnoreWords">IgnoreWords [*list of stop words*|File: path]</A></STRONG><DD>
+<P>
+The IgnoreWords option allows you to specify words to ignore, called
+<EM>stopwords</EM>. The default is to not use any stopwords.
+
+<P>
+Words should be separated by spaces and may span multiple directives. If
+the special format <CODE>File:filename</CODE> is used then the stop words will be read from an external file during
+indexing.
+
+<P>
+In previous versions of Swish-e you could use the directive
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreWords swishdefault - obsolete!</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+to include a default list of compiled in stopwords. This keyword is no
+longer supported.
+
+<P>
+Examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreWords www http a an the of and or</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreWords File: ./stopwords.de</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_UseWords">UseWords [*list of words*|File: path]</A></STRONG><DD>
+<P>
+UseWords defines the words that Swish-e will index.  <STRONG>Only</STRONG> the words listed will be indexed.
+
+<P>
+You can specify a list of words following the directive (you may specify
+more than one <A HREF="#item_UseWords">UseWords</A> directive in a config file), and/or use the <CODE>File:</CODE> form to specify a path to a file containing the words:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    UseWords perl python pascal fortran basic cobal php
+    UseWords File: /path/to/my/wordlist</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Please drop the Swish-e list a note if you actually use this feature. It
+may be removed from future versions.
+
+<P><DT><STRONG><A NAME="item_IgnoreLimit">IgnoreLimit *integer integer*</A></STRONG><DD>
+<P>
+This automatically omits words that appear too often in the files (these
+words are called stopwords). Specify a whole percentage and a number, such
+as &quot;80 256&quot;. This omits words that occur in over 80% of the files
+and appear in over 256 files. Comment out to turn off auto-stopwording.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreLimit 50 1000</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Swish-e must do extra processing to adjust the entire index when this
+feature is used. It is recommended that instead of using this feature that
+you decided what words are stopwords and add them to <STRONG>IngoreWords</STRONG>
+in your configuration file. To do this, use IgnoreLimit one time and note
+the stop words that are found while indexing. Add this list to IgnoreWords,
+and then remove IgnoreLimit from the configuration file.
+
+<P><DT><STRONG><A NAME="item_IgnoreMetaTags">IgnoreMetaTags *list of names*</A></STRONG><DD>
+<P>
+<A HREF="#item_IgnoreMetaTags">IgnoreMetaTags</A> defines a list of metatags to ignore while indexing XML files (and HTML
+files if using libxml2 for parsing HTML). All text within the tags will be
+ignored -- both for indexing (<A HREF="#item_MetaNames">MetaNames</A>) and properties (<A HREF="#item_PropertyNames">PropertyNames</A>). To still parse properties, yet do not index the text, see
+<A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A>.
+
+<P>
+This option is useful to avoid indexing specific data from a file. For
+example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;person&gt;
+        &lt;first_name&gt;
+            William
+        &lt;/first_name&gt; &lt;last_name&gt;
+            Shakespeare
+        &lt;/last_name&gt; &lt;updated_date&gt;
+            April 25, 1999
+        &lt;/updated_date&gt;
+    &lt;/person&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+In the above example you might <STRONG>not</STRONG> want to index the updated date, and therefore prevent finding this record
+by searching
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w 'person=(April)'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This is solved by:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreMetaTags updated_date</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+See also <A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A>.
+
+<P><DT><STRONG><A NAME="item_IgnoreNumberChars">IgnoreNumberChars *list of characters*</A></STRONG><DD>
+<P>
+Experimental Feature
+
+<P>
+This experimental feature can be used to define a set of characters that
+describe a number. If a word is found to contain only those characters it
+will not be indexed. The characters listed must be part of <A HREF="#item_WordCharacters">WordCharacters</A>
+settings. In other words, the &quot;word&quot; checked is a word that
+Swish-e would otherwise index.
+
+<P>
+For example,
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreNumberChars 0123456789$.,</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then Swish-e would not index the following:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    123
+    123,456.78
+    $123.45</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You might be tempted to avoid indexing hex numbers with:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IgnoreNumberChars 0123456789abcdef</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+which will not index 0D31, but will also not index the word
+&quot;bad&quot;.
+
+<P>
+This is an experimental feature that may change in future versions. One
+possible change is to use regular expressions instead.
+
+<P><DT><STRONG><A NAME="item_IndexComments">IndexComments [NO|yes]</A></STRONG><DD>
+<P>
+This option allows the user decide if to index the contents of HTML
+comments. Default is no. Set to yes if comment indexing is required.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexComments yes</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: This is a change in the default behavior prior to version 2.2.
+
+<P><DT><STRONG><A NAME="item_TranslateCharacters">TranslateCharacters [*string1 string2*|:ascii7:]</A></STRONG><DD>
+<P>
+The TranslateCharacters directive maps the characters in string1 to the
+characters listed in string2.
+
+<P>
+For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # This will index a_b as a-b and ámo as amo
+    TranslateCharacters _á -a</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+<CODE>TranslateCharacters :ascii7:</CODE> is a predefined set of characters that will translate eight bit characters
+to ascii7 characters. Using the :ascii7: rule will translate
+&quot;Ääç&quot; to &quot;aac&quot;. This means: searching
+&quot;Çelik&quot;, &quot;çelik&quot; or &quot;celik&quot; will all match
+the same word.
+
+<P>
+TranslateCharacters is done early in the indexing process, after converting
+HTML entities but before splitting the input text into words based on <STRONG>WordCharacters</STRONG>. So characters you are translating <EM>from</EM>
+do not need to be listed in word characters.
+
+<P>
+The same character translations take place when searching.
+
+<P><DT><STRONG><A NAME="item_BumpPositionCounterCharacters">BumpPositionCounterCharacters *string*</A></STRONG><DD>
+<P>
+When indexing Swish-e assigns a word position to each word. This enables
+phrase searching. There may be cases where you would like to prevent phrase
+matching. The BumpPositionCounterCharacters directive allows you to specify
+a set of characters that when found in the text will increment the word
+position -- effectively preventing phrase matches across that character.
+
+<P>
+For example, if you have a tag:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;subjects&gt;
+        computer programming | apple computers
+    &lt;/subjects&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You might want to prevent matching &quot;programming apple&quot; in that
+meta name.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    BumpPositionCounterCharacters |</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+There is no default, and you may list a string of characters.
+
+<P><DT><STRONG><A NAME="item_DontBumpPositionOnEndTags">DontBumpPositionOnEndTags *list of names*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_DontBumpPositionOnStartTags">DontBumpPositionOnStartTags *list of names*</A></STRONG><DD>
+<P>
+Since metatags are typically separate data fields, the word position
+counter is automatically bumped between metatags (actually, bumped when a
+start tag is found and when an end tag is found). This prevents matching a
+phrase that spans more than one metaname.  <A HREF="#item_DontBumpPositionOnEndTags">DontBumpPositionOnEndTags</A> and
+<A HREF="#item_DontBumpPositionOnStartTags">DontBumpPositionOnStartTags</A> disables this feature for the listed metanames.
+
+<P>
+For example,
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;person&gt;
+        &lt;first_name&gt;
+            William
+        &lt;/first_name&gt;
+        &lt;last_name&gt;
+            Shakespeare
+        &lt;/last_name&gt;
+        &lt;updated_date&gt;
+            April 25, 1999
+        &lt;/updated_date&gt;
+    &lt;/person&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+In the configuration file:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    DontBumpPositionOnEndTags first_name
+    DontBumpPositionOnStartTags last_name</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This configuration allows this phrase search
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w 'person=(&quot;william shakespeare&quot;)'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+but this phrase search will fail
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    -w 'person=(&quot;shakespeare april&quot;)'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    </DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Directives_for_the_File_Access_method_only">Directives for the File Access method only</A></H2>
+<P>
+Some directives have different uses depending on the source of the
+documents. These directives are only valid when using the <STRONG>File system</STRONG>
+method of indexing.
+
+<DL>
+<P><DT><STRONG><A NAME="item_IndexOnly">IndexOnly *list of file suffixes*</A></STRONG><DD>
+<P>
+This directive specifies the allowable file suffixes (extensions) while
+indexing. The default is to index all files specified in <STRONG>IndexDir</STRONG>.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Only index .html .htm and .q files
+    IndexOnly .html .htm .q</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+<A HREF="#item_IndexOnly">IndexOnly</A> checks that the file end in the characters listed. It does not check
+&quot;extensions&quot;.  <A HREF="#item_IndexOnly">IndexOnly</A> is tested right before <A HREF="#item_FileRules">FileRules</A> is processed.
+
+<P><DT><STRONG><A NAME="item_FollowSymLinks">FollowSymLinks [yes|NO]</A></STRONG><DD>
+<P>
+Put &quot;yes&quot; to follow symbolic links in indexing, else
+&quot;no&quot;. Default is no.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FollowSymLinks no
+    FollowSymLinks yes</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note that when set to <CODE>no</CODE> extra <CODE>stat(2)</CODE> system calls must be made for each file. For
+large number of files you may see a small reduction in indexing time by
+setting this to <CODE>yes</CODE>.
+
+<P>
+See also the <CODE>-l</CODE> switch in <A HREF="././SWISH-RUN.html">SWISH-RUN</A>.
+
+<P><DT><STRONG><A NAME="item_FileRules">FileRules [type] [contains|is|regex] *regular expression*</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item_FileMatch">FileMatch [type] [contains|is|regex] *regular expression*</A></STRONG><DD>
+<P>
+FileRules and FileMatch are used to, respectively, exclude and include
+files and directories to index. Since, by default, Swish-e indexes all
+files and recurses all directories (but see also <A HREF="#item_FollowSymLinks">FollowSymLinks</A>) you will typically only use <A HREF="#item_FileRules">FileRules</A> to exclude files or directories.  <A HREF="#item_FileMatch">FileMatch</A> is useful in a few cases, for example, to override the behavior of <A HREF="#item_IndexOnly">IndexOnly</A>. Some examples are included below.
+
+<P>
+Except for <CODE>FileRules title ...</CODE>, this feature is only available for file access method (-S fs), which is
+the default indexing mode. Also, any pathname modification with <A HREF="#item_ReplaceRules">ReplaceRules</A> happens after the check for <A HREF="#item_FileRules">FileRules</A>. (It's unlikely that you would exclude files with <A HREF="#item_FileRules">FileRules</A> based on text you added with <A HREF="#item_ReplaceRules">ReplaceRules</A>!)
+
+<P>
+The regular expression is a C regex.h extended regular expression. You may
+supply more than one regular expression per line, or use separate
+directives. Preceding the regular expression with the word &quot;not&quot;
+negates the match.
+
+<P>
+The regular expression is compared against <STRONG>[type]</STRONG> as described below.
+
+<P>
+For historical reasons, you can specify <CODE>contains</CODE> or <CODE>is</CODE>.  <CODE>is</CODE> simply forces the regular expression to match at the start and end of the
+string (by internally prepending &quot;^&quot; and appending &quot;$&quot;
+to the regular expression).
+
+<P>
+The <CODE>regex</CODE> option requires delimiter characters:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules title regex /^private/i</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The only advantage of <CODE>regex</CODE> is if you want to do case insensitive matches, or simply like your regular
+expressions to look like perl regular expressions. You must use matching
+delimiters; (), {}, and [], are not currently supported for no good reason
+other than laziness.
+
+<P>
+Use quotes (&quot; or ') around a pattern if it contains any white space.
+Note that the backslash character becomes the escape character within
+quotes.
+
+<P>
+For example, these sets generate the same regular expressions.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules title is hello
+    FileRules title contains ^hello$
+    FileRules title regex /^hello$/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+These all need quotes due to the included space character
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules title is &quot;hello there&quot;
+    FileRules title contains &quot;^hello there$&quot;
+    FileRules title regex &quot;!^hello there$!&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+These show how the backslash must be doubled inside of quotes. Swish-e
+converts a double-backslash into a single backslash, and then passes that
+single onto the regular expression compiler.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules filename regex /\.pdf/
+    FileRules filename regex &quot;/\\.pdf/&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules filename regex !hello\\there!     # need double for real backslash 
+    FileRules filename regex &quot;!hello\\\\there!&quot; # need double-double inside of quotes</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+<STRONG>Matching Types</STRONG>
+
+
+
+<P>
+The following types of match strings my be supplied:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules pathname
+    FileRules dirname
+    FileRules filename
+    FileRules directory
+    FileRules title</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileMatch pathname
+    FileMatch filename
+    FileMatch dirname
+    FileMatch directory</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+<STRONG>pathname</STRONG> matches the regular expression against the current pathname. The pathname
+may or may not be absolute depending on what you supplied to
+<A HREF="#item_IndexDir">IndexDir</A>.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Don't index paths that contain private or hidden
+    FileRules pathname contains (private|hidden)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Same thing
+    FileRules pathname regex /(private|hidden)/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Don't index exe files
+    FileRules pathname contains \.exe$</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+<STRONG>dirname</STRONG> and <STRONG>filename</STRONG> split the path name by the last delimiter character into a directory name,
+and a file name. Then these are compared against the patterns supplied.
+Directory names do <STRONG>not</STRONG> have a trailing slash. All path names use the forward slash as a delimiter
+within Swish-e.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Same as last example - don't index *.exe files.
+    FileRules filename contains \.exe$</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Don't index any file called test.html files
+    FileRules filename contains ^test\.html$</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Same thing
+    FileRules filename is test\.html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Don't index any directories that contain &quot;old&quot;  (/usr/local/myold/docs)
+    FileRules dirname contains old</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Don't index any directories that contain the path segment &quot;old&quot; (/usr/local/old/foo)
+    FileRules dirname contains /old/  </pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Index only .htm, .html, plus any all-digit file names
+    IndexOnly .htm .html
+    FileMatch filename contains ^\d+$</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Same as previous, but maybe a little slower
+    FileRules filename regex not !\.(htm|html)$!
+    FileMatch filename contains ^\d+$</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Swish-e checks these settings in the order of <CODE>pathname</CODE>, <CODE>dirname</CODE>, and
+<CODE>filename</CODE>, and <A HREF="#item_FileMatch">FileMatch</A> patterns are checked before <A HREF="#item_FileRules">FileRules</A>, in general. This allows you to exclude most files with <A HREF="#item_FileRules">FileRules</A>, yet allow in a few special cases with <A HREF="#item_FileMatch">FileMatch</A>. For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Exclude all files of .exe, .bin, and .bat
+    FileRules filename contains \.(exe|bin|bat)$
+    # But, let these two in
+    FileMatch filename is baseball\.bat incoming_mail\.bin</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Same, but as a single pattern
+    FileMatch filename is (baseball\.bat|incoming_mail\.bin)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <CODE>directory</CODE> type is somewhat unique. When Swish-e recurses into a directory it will
+compare all the <EM>files</EM> in the directory with the pattern and then decide if that entire directory
+should or should not be indexed (or recursed). Note that you are matching
+against file names in a directory -- and some of those names may be
+directory names.
+
+<P>
+A <CODE>FileRules directory</CODE> match will cause Swish-e to ignore all files and sub-directories in the
+current directory.
+
+<P>
+Warning: A match with <CODE>FileMatch directory</CODE> says to index <STRONG>everything</STRONG> in the *current* directory and <STRONG>ignore</STRONG> any FileRules for this directory.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Don't index any directories (and sub directories) that contain
+    # a file (or sub-directory) called &quot;index.skip&quot;
+    FileRules directory contains ^index\.skip$</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Don't index directories that contain a .htaccess file.
+    FileRules directory contains ^\.htaccess</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: While <EM>processing</EM> directories, Swish-e will ignore any files or directories that begin with a
+dot (&quot;.&quot;). You may index files or directories that begin with a
+dot by specifying their name with <A HREF="#item_IndexDir">IndexDir</A> or <CODE>-i</CODE>.
+
+<P>
+<CODE>title</CODE> checks for a pattern match in an HTML title.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules title contains construction example pointers</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # This example says to ignore case
+    FileRules title regex &quot;/^Internal document/i&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: <CODE>FileRules title</CODE> works for any input method (fs, prog, or http) that is parsed as HTML, and
+where a title was found in the document.
+
+<P>
+In case all this seems a bit confusing, processing a directory happens in
+the following order.
+
+<P>
+First the directory name is checked:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules dirname - reject entire directory if matches</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Next the directory is scanned and each file name (which might be the name
+of a sub-directory) is checked:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules directory - reject entire dir if *any* files match
+    FileMatch directory - accept entire dir if *any* files match</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then, unless <CODE>FileMatch directory</CODE> matched, each file is tested with FileMatch. A match says to index the file
+without further testing (i.e. overrides FileRules and IndexOnly):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileMatch pathname  \
+    FileMatch dirname   - file is accepted if any match
+    FileMatch filename  /</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+otherwise    
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexOnly - file is checked for the correct file extension</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules pathname  \
+    FileRules dirname   - file is rejected if any match
+    FileRules filename  /</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+finally, the file is indexed.
+
+<P>
+Files (not directories) listed with <A HREF="#item_IndexDir">IndexDir</A> or <CODE>-i</CODE> are processed in a similar way:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileMatch pathname  \
+    FileMatch dirname   - file is accepted if any match
+    FileMatch filename  /</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+otherwise, the file is rejected if it doesn't have the correct extension or
+a FileRules matches.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexOnly - file is checked for the correct file extension</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileRules pathname  \
+    FileRules dirname   - file is rejected if any match
+    FileRules filename  /</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: If things are not indexing as you expect, create a directory with
+some test files and use the <CODE>-T regex</CODE> trace option to see how file names are checked. Start with very simple
+tests!
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Directives_for_the_HTTP_Access_Method_Only">Directives for the HTTP Access Method Only</A></H2>
+<P>
+The HTTP Access method is enabled by the &quot;-S http&quot; switch when
+indexing. It works by running a Perl program called SwishSpider which
+fetches documents from a web server.
+
+<P>
+Only text files (content-type of &quot;text/*&quot;) are indexed with the
+HTTP Access Method. Other document types (e.g. PDF or MSWord) may be
+indexed as well. The SwishSpider will attempt to make use of the
+SWISH::Filter module (included with the Swish-e distribution) to convert
+documents into a format that Swish-e can index.
+
+<P>
+Note: The -S prog method of spidering (using spider.pl) can be a
+replacement for the -S http method. It offers more configuration options
+and better spidering speed.
+
+<P>
+These directives below are available when using the HTTP Access Method of
+indexing.
+
+<DL>
+<P><DT><STRONG><A NAME="item_MaxDepth">MaxDepth *integer*</A></STRONG><DD>
+<P>
+MaxDepth defines how many links the spider should follow before stopping. A
+value of 0 configures the spider to traverse all links. The default is
+MaxDepth 0.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MaxDepth 5</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: The default was changed from 5 to 0 in release 2.4.0
+
+<P><DT><STRONG><A NAME="item_Delay">Delay *seconds*</A></STRONG><DD>
+<P>
+The number of seconds to wait between issuing requests to a server. This
+setting allows for more friendly spidering of remote sites. The default is
+5 seconds.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Delay 1</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: The default was changed from 60 to 5 seconds in release 2.4.0
+
+<P><DT><STRONG><A NAME="item_TmpDir">TmpDir *path*</A></STRONG><DD>
+<P>
+The location of a writable temp directory on your system. The HTTP access
+method tells the Perl helper to place its files in this location, and the <CODE>-e</CODE>
+switch causes Swish-e to use this directory while indexing. There is no
+default.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    TmpDir /tmp/swish</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If this directory does not exist or is not writable Swish-e will fail with
+an error during indexing.
+
+<P>
+Note, the environment variables of <CODE>TMPDIR</CODE>, <CODE>TMP</CODE>, and <CODE>TEMP</CODE> (in that order) will <STRONG>override</STRONG> this setting.
+
+<P><DT><STRONG><A NAME="item_SpiderDirectory">SpiderDirectory *path*</A></STRONG><DD>
+<P>
+The location of the Perl helper script called <EM>swishspider</EM>. If you use a relative directory, it is relative to your directory when
+you run Swish-e, not to the directory that Swish-e is in. The default is
+the location swishspider was installed. Normally this does not need to be
+set.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SpiderDirectory /usr/local/swish</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_EquivalentServer">EquivalentServer *server alias*</A></STRONG><DD>
+<P>
+Often times the same site may be referred to by different names. A common
+example is that often <A
+HREF="http://www.some-server.com">http://www.some-server.com</A> and <A
+HREF="http://some-server.com">http://some-server.com</A> are the same. Each
+line should have a list of all the method/names that should be considered
+equivalent. Multiple EquivalentServer directives may be used. Each
+directive defines its own set of equivalent servers.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    EquivalentServer <A HREF="http://library.berkeley.edu">http://library.berkeley.edu</A> <A HREF="http://www.lib.berkeley.edu">http://www.lib.berkeley.edu</A>
+    EquivalentServer <A HREF="http://sunsite.berkeley.edu:2000">http://sunsite.berkeley.edu:2000</A> <A HREF="http://sunsite.berkeley.edu">http://sunsite.berkeley.edu</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    </DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Directives_for_the_prog_Access_Method_Only">Directives for the prog Access Method Only</A></H2>
+<P>
+This section details the directives that are only available for the
+&quot;prog&quot; document source feature of Swish-e. The &quot;prog&quot;
+access method runs an external program that &quot;feeds&quot; documents to
+Swish-e. This allows indexing and filtering of documents from any source.
+
+<P>
+See <A HREF="././SWISH-RUN.html#item_prog">prog - general purpose access method</A> in the SWISH-RUN man page for more information.
+
+<P>
+A number of example programs for use with the &quot;prog&quot; access
+method are provided in the <EM>prog-bin</EM> directory. Please see those example if you have questions about
+implementing a &quot;prog&quot; input program.
+
+<DL>
+<P><DT><STRONG><A NAME="item_SwishProgParameters">SwishProgParameters *list of parameters*</A></STRONG><DD>
+<P>
+This is a list of parameters that will be sent to the external program when
+running with the &quot;prog&quot; document source method.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SwishProgParameters /path/to/config hello there
+    IndexDir /path/to/program.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then running:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -c config -S prog</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Swish-e will execute <CODE>/path/to/program.pl</CODE> and pass <CODE>/path/to/config hello
+there</CODE> as three command line arguments to the program. This directive makes it
+easy to pass settings from the Swish-e configuration file to the external
+program.
+
+<P>
+For example, the <CODE>spider.pl</CODE> program (included in the <CODE>prog-bin</CODE> directory) uses the <A HREF="#item_SwishProgParameters">SwishProgParameters</A> to specify what file to read for configuration information.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SwishProgParameters spider.config
+    IndexDir ./spider.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <CODE>spider.pl</CODE> program also has a default action so you can avoid using a configuration
+file:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SwishProgParameters default <A HREF="http://www.swishe.org/">http://www.swishe.org/</A> <A HREF="http://some.other.site/">http://some.other.site/</A>
+    IndexDir ./spider.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And the spider program will use default settings for spidering those sites.
+
+<P>
+Swish-e can read documents from standard input, so another way to run an
+external program with parameters is:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl spider.conf | ./swish-e -S prog -i stdin</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    </DL>
+<P>
+<STRONG>Notes when using MS Windows</STRONG>
+
+
+
+<P>
+You should use unix style path separators to specify your external program.
+Swish will convert forward slashes to backslashes before calling the
+external program. This is only true for the program name specified with <A HREF="#item_IndexDir">IndexDir</A> or the <CODE>-i</CODE> command line option.
+
+<P>
+In addition, Swish-e will make sure the program specified actually exists,
+which means you need to use the full name of the program.
+
+<P>
+For example, to run the perl spider program <EM>spider.pl</EM> you would need a Swish-e configuration file such as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexDir e:/perl/bin/perl.exe
+    SwishProgParameters prog-bin/spider.pl default <A HREF="http://swish-e.org">http://swish-e.org</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and run indexing with the command:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -c swish.cfg -S prog -v 9</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <A HREF="#item_IndexDir">IndexDir</A> command tells Swish-e the name of the program to run. Under unix you can
+just specify the name of the script, since unix will figure out the program
+from the first line of the script.
+
+<P>
+The <A HREF="#item_SwishProgParameters">SwishProgParameters</A> are the parameters passed to the program specified by <A HREF="#item_IndexDir">IndexDir</A> (perl.exe in this case). The first parameter is the perl script to run (<EM>prog-bin/spider.pl</EM>). Perl passes the rest of the parameters directly to the perl script. The
+second parameter <EM>default</EM> tells the
+<EM>spider.pl</EM> program to use default settings for spidering (or you could specify a
+spider config file -- see <CODE>perldoc spider.pl</CODE> for details), and lastly, the URL is passed into the spider program.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Document_Filter_Directives">Document Filter Directives</A></H2>
+<P>
+Internally, Swish-e knows how to parse only text, HTML, and XML documents.
+With &quot;filters&quot; you can index other types of documents. For
+example, if all your web pages are in gzip format a filter can uncompress
+these on the fly for indexing.
+
+<P>
+You may wish to read the Swish-e FAQ question on filtering before
+continuing here.  <A HREF="././SWISH-FAQ.html#How_Do_I_filter_documents_">How Do I filter documents?</A>
+
+
+
+<P>
+There are two suggested methods for filtering.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Filtering_with_SWISH_Filter">Filtering with SWISH::Filter</A></H3>
+<P>
+The Swish-e distribution includes a Perl module called SWISH::Filter and
+individual filters located in the <EM>filters</EM> directory. This system uses plug-in filters to extend the types of
+documents that Swish-e can index. The plug-in filters do not actually do
+the filtering, but rather provide a standard interface for accessing
+programs that can filter or convert documents. The programs that do the
+filtering are not part of the Swish-e distribution; they must be downloaded
+and installed separately.
+
+<P>
+The advantage of this method is that new filtering methods can be installed
+easily.
+
+<P>
+This system is designed to work with the -S http and -prog methods, but may
+also be used with the <A HREF="#item_FileFilter">FileFilter</A> feature and -S fs indexing method. See
+<EM>$prefix/share/doc/swish-e/examples/filter-bin/swish_filter.pl</EM> for an example.
+
+<P>
+See the <EM>filters/README</EM> file for more information.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Filtering_with_the_FileFilter_feature">Filtering with the FileFilter feature</A></H3>
+<P>
+A filter is an external program that Swish-e executes while processing a
+document of a given type. Swish-e will execute the filter program for each
+file that matches the file suffix (extension) set in the
+<STRONG>FileFilter</STRONG> or <STRONG>FileFilterMatch</STRONG> directives.  <STRONG>FileFilterMatch</STRONG>
+matches using regular expressions and is described below.
+
+<P>
+Filters may be used with any type of input method (i.e. -S fs, -S http, or
+-S prog). But because
+
+<P>
+Swish-e calls the external program passing as <STRONG>default</STRONG> arguments:
+
+<DL>
+<P><DT><STRONG><A NAME="item__0">$0</A></STRONG><DD>
+<P>
+the name of the filter program
+
+<P><DT><STRONG><A NAME="item__1">$1</A></STRONG><DD>
+<P>
+the physical path name of the file to read. This may be a temporary file
+location if indexing by the http method.
+
+<P><DT><STRONG><A NAME="item__2">$2</A></STRONG><DD>
+<P>
+When indexing under the file system this will be the same as
+<CODE>$1</CODE> (the path to the source file), but when indexing under the
+http method this will be the URL of the source document.
+
+</DL>
+<P>
+Swish-e can also pass other parameters to the filter program. These
+parameters can be defined using the <STRONG>FileFilter</STRONG> or <STRONG>FileFilterMatch</STRONG>
+directives. See Filter Options below.
+
+<P>
+The filter program must open the file, process its contents, and return it
+to Swish-e by printing to STDOUT.
+
+<P>
+Note that this can add a significant amount of time to the indexing process
+if your external program is a perl or shell script. If you have many files
+to filter you should consider writing your filter in C instead of a shell
+or perl script, or using the &quot;prog&quot; Access Method.
+
+<DL>
+<P><DT><STRONG><A NAME="item_FilterDir">FilterDir  *path-to-directory*</A></STRONG><DD>
+<P>
+This is the path to a directory where the filter programs are stored.
+Swish-e looks in this directory to find the filter specified in the
+<STRONG>FileFilter</STRONG> directive. If this directive is omitted, you have to specify the full path
+to the filterscript on each FileFilter directive.
+
+<P>
+This feature does *not* apply to the <A HREF="#item_FileFilterMatch">FileFilterMatch</A> directive.
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FilterDir /usr/local/swish/filters</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_FileFilter">FileFilter   *suffix*   &quot;filter-prog&quot;   [&quot;filter-options&quot;]</A></STRONG><DD>
+<P>
+This maps file suffix (extension) to a filter program. If <EM>filter-prog</EM>
+starts with a directory delimiter (absolute path), Swish-e doesn't use the
+FilterDir settings, but uses the given <EM>filter-prog</EM> path directly.
+
+<P>
+Filter options:
+
+<P>
+Filter options are a string passed as arguments to the <EM>filter-prog</EM>. Filter options can contain variables, replaced by Swish-e. If you omit
+<EM>filter-options</EM> Swish-e will use default parameters for the options listed above.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Default:      &quot;'%p' '%P'&quot;
+    Which means:  pass   &quot;workfile path&quot; and &quot;documentfile path&quot; to filter (each quoted).</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Variables in filter options:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    %%   =  %
+    %P   =  Full document pathname (e.g. URL, or path on filesystem)  
+    %p   =  Full pathname to work file (maybe a tmpfile or the real document path on filesystem)
+    %F   =  Filename stripped from full document pathname
+    %f   =  Filename stripped from &quot;work&quot; pathname
+    %D   =  Directoryname stripped from full document pathname
+    %d   =  Directoryname stripped from full &quot;work&quot; pathname</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Examples of strings passed:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    %P =  document pathname:  <A HREF="http://myserver/path1/mydoc.txt">http://myserver/path1/mydoc.txt</A>
+    %p =  work pathname:      /tmp/tmp.1234.mydoc.txt
+    %F =     mydoc.txt
+    %f =     tmp.1234.mydoc.txt
+    %D =     <A HREF="http://myserver/path1">http://myserver/path1</A>
+    %d =     /tmp</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Important hint for security:
+
+<P>
+When using variable substitution, use quotes to ensure filename integrity.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        e.g. &quot;'%f'&quot;  --&gt;  'file name with spaces.doc'.</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If you don't use this, your system security may be compromised, or
+filtering may not work for these files.
+
+<P>
+<STRONG>Notes when using MS Windows</STRONG>
+
+
+
+<P>
+Windows uses double quotes to escape shell metacharacters, so reverse the
+quotes in the examples above. e.g.:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        '&quot;%f&quot;' --&gt; &quot;file name with spaced.doc&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You can specify the filter program using forward slashes (unix style).
+Swish will convert the slashes to backslashes before running your program.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilter .mydoc     c:/some/path/mydocfilter.exe  '-d &quot;%d&quot; -example -url &quot;%P&quot; &quot;%f&quot;'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Examples of filters:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilter .doc       /usr/local/bin/catdoc &quot;-s8859-1 -d8859-1 '%p'&quot;
+    FileFilter .pdf       pdftotext   &quot;'%p' -&quot;
+    FileFilter .html.gz   gzip  &quot;-c '%p'&quot;
+    FileFilter .mydoc     &quot;/some/path/mydocfilter&quot;  &quot;-d '%d' -example -url '%P' '%f'&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The above examples are running a <EM>binary</EM> filter program. For more complicated filtering needs you may use a
+scripting language such as Perl or a shell script. Here's some examples of
+calling a shell and perl script:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilter .pdf       pdf2html.sh
+    FileFilter .ps        ghostscript-filter.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Using a scripting language (or any language that has a large startup cost)
+can
+<STRONG>greatly increase the indexing time</STRONG>. For small indexing jobs, this may not be an issue, but for large
+collections of files that require processing by a scripting language, you
+may be better off using the <CODE>-S prog</CODE> access method where the script will only be compiled once, instead of for
+each document.
+
+<P>
+Filters are probably easier to write than a <CODE>-S prog</CODE> program. Which you decide to use depends on your requirements. Examples of
+filter scripts can be found in the <EM>filter-bin</EM> directory, and examples of <CODE>-S prog</CODE> programs can be found in the <EM>prog-bin</EM> directory.
+
+<P><DT><STRONG><A NAME="item_FileFilterMatch">FileFilterMatch   *filter-prog*   *filter-options*  *regex* [*regex* ...]</A></STRONG><DD>
+<P>
+This is similar to <A HREF="#item_FileMatch">FileMatch</A> except uses regular expressions to match against the file name.
+*filter-prog* is the path to the program. Unlike
+<A HREF="#item_FileFilter">FileFilter</A> this does <STRONG>not</STRONG> use the <A HREF="#item_FilterDir">FilterDir</A> option. Also unlike
+<A HREF="#item_FileFilter">FileFilter</A> you <STRONG>must</STRONG> specify the *filter-options*.
+
+<P>
+Examples:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch ./pdftotext &quot;'%p' -&quot; /\.pdf$/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note that will also match a file called &quot;.pdf&quot;, so you may want
+to use something that requires a filename that has more than just an
+extension. For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch ./pdftotext &quot;'%p' -&quot; /.\.pdf$/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+To specify more than one extension:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch ./check_title.pl &quot;%p&quot; /\.html$/  /\.htm$/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Or a few ways to do the same thing:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch ./check_title.pl %p /\.(html|html)$/
+    FileFilterMatch ./check_title.pl %p /\.html?$/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And to ignore case:    
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch ./check_title.pl %p /\.html?$/i</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You may also precede an expression with &quot;not&quot; to negate regular
+expression that follow. For example, to match files that do not have an
+extension:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilterMatch ./convert &quot;%p %P&quot; not /\..+$/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    </DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Document_Info">Document Info</A></H1>
+<P>
+$Id: SWISH-CONFIG.html,v 1.1 2005/04/12 14:23:44 joshr Exp $
+
+<P>
+.
+
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+
+
+    <p>
+    <div class="navbar">
+      <a href="./CHANGES.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./SWISH-RUN.html">Next</a>
+    </div>
+    <p>
+
+    <P ALIGN="CENTER">
+    <IMG ALT="" WIDTH="470" HEIGHT="10" SRC="images/dotrule1.gif"></P>
+    <P ALIGN="CENTER">
+
+    <div class="footer">
+        <BR>SWISH-E is distributed with <B>no warranty</B> under the terms of the
+        <A HREF="http://www.fsf.org/copyleft/gpl.html">GNU Public License</A>,<BR>
+        Free Software Foundation, Inc., 
+        59 Temple Place - Suite 330, Boston, MA  02111-1307, USA<BR> 
+        Public questions may be posted to 
+        the <A HREF="http://swish-e.org/Discussion/">SWISH-E Discussion</A>.
+    </div>
+
+</body>
+</html>

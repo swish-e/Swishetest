@@ -1,0 +1,1173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+   <title>SWISH-Enhanced:  SWISH::API - Perl interface to the Swish-e C Library </title>
+   <link href="./style.css" rel=stylesheet type="text/css" title="refstyle">
+  </head>
+  <body>
+
+    <h1 class="banner">
+        <a href="http://swish-e.org"><img border=0 src="images/swish.gif" alt="Swish-E Logo"></a><br>
+        <img src="images/swishbanner1.gif"><br>
+        <img src="images/dotrule1.gif"><br>
+         SWISH::API - Perl interface to the Swish-e C Library 
+    </h1>
+
+    <hr>
+
+    <p>
+    <div class="navbar">
+      <a href="./SWISH-LIBRARY.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./swish.html">Next</a>
+    </div>
+    <p>
+
+    <div class="toc">
+      
+<A NAME="toc"></A>
+<P><B>Table of Contents:</B></P>
+
+<UL>
+
+	<LI><A HREF="#SYNOPSIS">SYNOPSIS</A>
+	<LI><A HREF="#DESCRIPTION">DESCRIPTION</A>
+	<LI><A HREF="#DEPENDENCIES">DEPENDENCIES</A>
+	<LI><A HREF="#OVERVIEW">OVERVIEW</A>
+	<LI><A HREF="#METHODS">METHODS</A>
+	<UL>
+
+		<LI><A HREF="#SWISH_API_Swish_Handle_Object">SWISH::API - Swish Handle Object</A>
+		<UL>
+
+			<LI><A HREF="#Error_Handling">Error Handling</A>
+			<LI><A HREF="#Generating_Search_and_Result_Objects">Generating Search and Result Objects</A>
+		</UL>
+
+		<LI><A HREF="#SWISH_API_Search_Search_Objects">SWISH::API::Search - Search Objects</A>
+		<LI><A HREF="#SWISH_API_Results_Generating_and_accessing_results">SWISH::API::Results - Generating and accessing results</A>
+		<LI><A HREF="#Results_Methods">Results Methods</A>
+		<LI><A HREF="#SWISH_API_Result_Result_Methods">SWISH::API::Result - Result Methods</A>
+		<LI><A HREF="#Utility_Methods">Utility Methods</A>
+	</UL>
+
+	<LI><A HREF="#NOTES">NOTES</A>
+	<LI><A HREF="#COPYRIGHT">COPYRIGHT</A>
+	<LI><A HREF="#AUTHOR">AUTHOR</A>
+	<LI><A HREF="#SUPPORT">SUPPORT</A>
+</UL>
+
+    </div>
+
+    
+
+	    [ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+<P>
+<H1><A NAME="SYNOPSIS">SYNOPSIS</A></H1>
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    use SWISH::API;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my $swish = SWISH::API-&gt;new( 'index.swish-e' );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $swish-&gt;AbortLastError
+        if $swish-&gt;Error;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # A short-cut way to search</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my $results = $swish-&gt;Query( &quot;foo OR bar&quot; );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Or more typically
+    my $search = $swish-&gt;New_Search_Object;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # then in a loop
+    my $results = $search-&gt;Execute( $query );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # always check for errors (but aborting is not always necessary)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $swish-&gt;AbortLastError
+        if $swish-&gt;Error;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Display a list of results</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my $hits = $results-&gt;Hits;
+    if ( !$hits ) {
+        print &quot;No Results\n&quot;;
+        return;  /* for example *.
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    print &quot;Found &quot;, $results-&gt;Hits, &quot; hits\n&quot;;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Seek to a given page - should check for errors
+    $results-&gt;SeekResult( ($page-1) * $page_size );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    while ( my $result = $results-&gt;NextResult ) {
+        printf(&quot;Path: %s\n  Rank: %lu\n  Size: %lu\n  Title: %s\n  Index: %s\n  Modified: %s\n  Record #: %lu\n  File   #: %lu\n\n&quot;,
+            $result-&gt;Property( &quot;swishdocpath&quot; ),
+            $result-&gt;Property( &quot;swishrank&quot; ),
+            $result-&gt;Property( &quot;swishdocsize&quot; ),
+            $result-&gt;Property( &quot;swishtitle&quot; ),
+            $result-&gt;Property( &quot;swishdbfile&quot; ),
+            $result-&gt;ResultPropertyStr( &quot;swishlastmodified&quot; ),
+            $result-&gt;Property( &quot;swishreccount&quot; ),
+            $result-&gt;Property( &quot;swishfilenum&quot; )
+        );
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # display properties and metanames</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    for my $index_name ( $swish-&gt;IndexNames ) {
+        my @metas = $swish-&gt;MetaList( $index_name );
+        my @props = $swish-&gt;PropertyList( $index_name );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        for my $m ( @metas ) {
+            my $name = $m-&gt;Name;
+            my $id = $m-&gt;ID;
+            my $type = $m-&gt;Type;
+        }
+        # (repeat above for @props)
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="DESCRIPTION">DESCRIPTION</A></H1>
+<P>
+This module provides a Perl interface to the Swish-e search engine. This
+module allows embedding the swish-e search code into your application
+avoiding the need to fork to run the swish-e binary and to keep an index
+file open when running multiple queries. This results in increased search
+performance.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="DEPENDENCIES">DEPENDENCIES</A></H1>
+<P>
+You must have installed Swish-e version 2.4 before building this module.
+Download from:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://swish-e.org">http://swish-e.org</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="OVERVIEW">OVERVIEW</A></H1>
+<P>
+This module includes a number of classes.
+
+<P>
+Searching consists of connecting to a swish-e index (or indexes), and then
+running queries against the open index. Connecting to the index creates a
+swish object blessed into the SWISH::API class.
+
+<P>
+A SWISH::API::Search object is created from the SWISH::API object. The
+SWISH::API::Search object can have associated parameters (e.g. result sort
+order).
+
+<P>
+The SWISH::API::Search object is used to query the associated index file or
+files. A query on a search object returns a results object of the class
+SWISH::API::Results. Then individual results of the SWISH::API::Result
+class can be fetched by calling a method of the results object.
+
+<P>
+Finally, a result's properties can be accessed by calling methods on the
+result object.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="METHODS">METHODS</A></H1>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="SWISH_API_Swish_Handle_Object">SWISH::API - Swish Handle Object</A></H2>
+<P>
+To begin using Swish you must first create a Swish Handle object. This
+object makes the connection to one or more index files and is used to
+create objects used for searching the associated index files.
+
+<DL>
+<P><DT><STRONG><A NAME="item__swish">$swish = SWISH::API-&gt;new( $index_files );</A></STRONG><DD>
+<P>
+This method returns a swish handle object blessed into the SWISH::API
+class. <CODE>$index_files</CODE> is a space separated list of index files
+to open. This always returns an object, even on errors. Caller must check
+for errors (see below).
+
+<P><DT><STRONG><A NAME="item__indexes">@indexes = $swish-&gt;IndexNames;</A></STRONG><DD>
+<P>
+Returns a list of index names associated with the swish handle. These were
+the indexes specified as a parameter on the SWISH::API-&gt;new call. This
+can be used in calls below that require specifying the index file name.
+
+<P><DT><STRONG><A NAME="item__header_names">@header_names = $swish-&gt;HeaderNames;</A></STRONG><DD>
+<P>
+Returns a list of possible header names. These can be used to lookup header
+values. See <CODE>SwishHeaderValue</CODE> method below.
+
+<P><DT><STRONG><A NAME="item__values">@values = $swish-&gt;HeaderValue( $index_file, $header_name );</A></STRONG><DD>
+<P>
+A swish-e index has data associated with it stored in the index header.
+This method provides access to that data.
+
+<P>
+Returns the header value for the header and index file specified. Most
+headers are a single item, but some headers (e.g. &quot;Stopwords&quot;)
+return a list.
+
+<P>
+The list of possible header names can be obtained from the SwishHeaderNames
+method.
+
+<P><DT><STRONG><A NAME="item__swish_RankScheme_">$swish-&gt;RankScheme( 0|1 );</A></STRONG><DD>
+<P>
+Similar to the -R option with the swish-e command line tool. The default
+ranking scheme is 0. Set it to 1 to experiment with other ranking features.
+See the SWISH-CONFIG documentation for more on ranking schemes.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Error_Handling">Error Handling</A></H3>
+<P>
+All errors are stored in and accessed via the SWISH::API object (the Swish
+Handle). That is, even an error that occurs when calling a method on a
+result (SWISH::API::Result) object will store the error in the parent
+SWISH:API object.
+
+<P>
+Check for errors after every method call. Some errors are critical errors
+and will require destruction of the SWISH::API object. Critical errors will
+typically only happen when attaching to the database and are errors such as
+an invalid index file name, permissions errors, or passing invalid objects
+to calls.
+
+<P>
+Typically, if you receive an error when attaching to an index file or files
+you should assume that the error is critical and let the swish object fall
+out of scope (and destroyed). Otherwise, if an error is detected you should
+check if it is a critical error. If the error is not critical you may
+continue using the objects that have been created (for example, an invalid
+meta name will generate a non-critical error, so you may continue searching
+using the same search object).
+
+<P>
+Error state is cleared upon a new query.
+
+<P>
+Again, all error methods need to be called on the parent swish object
+
+<DL>
+<P><DT><STRONG><A NAME="item__swish_Error">$swish-&gt;Error</A></STRONG><DD>
+<P>
+Returns true if an error occurred on the last operation. On errors the
+value returned is the internal Swish-e error number (which is less than
+zero).
+
+<P><DT><STRONG><A NAME="item__swish_CriticalError">$swish-&gt;CriticalError</A></STRONG><DD>
+<P>
+Returns true if the last error was a critical error
+
+<P><DT><STRONG><A NAME="item__swish_AbortLastError">$swish-&gt;AbortLastError</A></STRONG><DD>
+<P>
+Aborts the running program and prints an error message to STDERR.
+
+<P><DT><STRONG><A NAME="item__str">$str = $swish-&gt;ErrorString</A></STRONG><DD>
+<P>
+Returns the string description of the current error (based on the value
+returned by $swish-&gt;Error). This is a generic error string.
+
+<P><DT><STRONG><A NAME="item__msg">$msg = $swish-&gt;LastErrorMsg</A></STRONG><DD>
+<P>
+Returns a string with specific information about the last error, if any.
+For example, if a query of:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    badmeta=foo</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and &quot;badmeta&quot; is an invalid metaname $swish-&gt;ErrorString might
+return &quot;Unknown metaname&quot;, but $swish-&gt;LastErrorMsg might
+return &quot;badmeta&quot;.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Generating_Search_and_Result_Objects">Generating Search and Result Objects</A></H3>
+<DL>
+<P><DT><STRONG><A NAME="item__search">$search = $swish-&gt;New_Search_Object( $query );</A></STRONG><DD>
+<P>
+This creates a new search object blessed into the SWISH::API::Search class.
+The optional <CODE>$query</CODE> parameter is a query string to store in
+the search object.
+
+<P>
+See the section on <CODE>SWISH::API::Search</CODE> for methods available on the returned object.
+
+<P>
+The advantage of this method is that a search object can be used for
+multiple queries:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $search = $swish-&gt;New_Search_Objet;
+    while ( $query = next_query() ) {
+        $results = $search-&gt;Execute( $query );
+        ...
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item__results">$results = $swish-&gt;Query( $query );</A></STRONG><DD>
+<P>
+This is a short-cut which avoids the step of creating a separate search
+object. It returns a results object blessed into the SWISH::API::Results
+class described below.
+
+<P>
+This method basically is the equivalent of
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $results = $swish-&gt;New_Search_Object-&gt;Execute( $query );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    </DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="SWISH_API_Search_Search_Objects">SWISH::API::Search - Search Objects</A></H2>
+<P>
+A search object holds the parameters used to generate a list of results.
+These methods are used to adjust these parameters and to create the list of
+results for the current set of search parameters.
+
+<DL>
+<P><DT><STRONG><A NAME="item__search_SetQuery_">$search-&gt;SetQuery( $query );</A></STRONG><DD>
+<P>
+This will set (or replace) the query string associated with a search
+object. This method is typically not used as the query can be set when
+executing the actual query or when creating a search object.
+
+<P><DT><STRONG><A NAME="item__search_SetStructure_">$search-&gt;SetStructure( $structure_bits );</A></STRONG><DD>
+<P>
+This method may change in the future.
+
+<P>
+A &quot;structure&quot; is a bit-mapped flag used to limit search results
+to specific parts of an HTML document, such as the title or in H tags. The
+possible bits are:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IN_FILE         = 1      This is the default
+    IN_TITLE        = 2      In &lt;title&gt; tag
+    IN_HEAD         = 4      In &lt;head&gt; tag
+    IN_BODY         = 8      In &lt;body&gt;
+    IN_COMMENTS     = 16     In html comments
+    IN_HEADER       = 32     In &lt;h*&gt;
+    IN_EMPHASIZED   = 64     In &lt;em&gt;, &lt;b&gt;, &lt;strong&gt;, &lt;i&gt;
+    IN_META         = 128    In a meta tag (e.g. not swishdefault)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+So if you wish to limit your searches to words in heading tags (e.g. &lt;H1&gt;) or in the &lt;title&gt; tag use:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $search-&gt;SetStructure( IN_HEAD | IN_TITLE );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item__search_PhraseDelimiter_">$search-&gt;PhraseDelimiter( $char );</A></STRONG><DD>
+<P>
+Sets the character used as the phrase delimiter in searches. The default is
+double-quotes (&quot;).
+
+<P><DT><STRONG><A NAME="item__search_SetSearchLimit_">$search-&gt;SetSearchLimit( $property, $low, $high );</A></STRONG><DD>
+<P>
+Sets a range from <CODE>$low</CODE> to <CODE>$high</CODE> inclusive that
+the give <CODE>$property</CODE> must be in to be selected as a result. Call
+multiple times to set more than one limit on different properties. Limits
+are ANDed, that is, a result must be within the range of all limits
+specified to be included in a list of results.
+
+<P>
+For example to limit searches to documents modified in the last 48 hours:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my $start = time - 48 * 60 * 60;
+    $search-&gt;SetSearchLimit( 'swishlastmodified', $start, time() );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+An error will be set if the property has already been specified or if
+<CODE>$high</CODE> &lt; $low.
+
+<P>
+Other errors may not be reported until running the query, such as the
+property name is invalid or if <CODE>$low</CODE> or <CODE>$high</CODE> are
+not numeric and the property specified is a numeric property.
+
+<P>
+Once a query is run you cannot change the limit settings without calling
+the ResetSearchLimit method first.
+
+<P><DT><STRONG><A NAME="item__search_ResetSearchLimit_">$search-&gt;ResetSearchLimit;</A></STRONG><DD>
+<P>
+Clears the limit parameters for the given object. This must be called if
+the limit parameters need to be changed.
+
+<P><DT><STRONG><A NAME="item__search_SetSort_">$search-&gt;SetSort( $sort_string );</A></STRONG><DD>
+<P>
+Sets the sort order of search results. The string is a space separated list
+of valid document properties. Each property may contain a qualifier that
+sets the direction of the sort.
+
+<P>
+For example, to sort the results by path name in ascending order and by
+rank in descending order:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $search-&gt;SetSort( 'swishdocpath asc swishrank desc' );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The &quot;asc&quot; and &quot;desc&quot; qualifiers are optional, and if
+omitted ascending is assumed.
+
+<P>
+Currently, errors (e.g invalid property name) are not detected on this
+call, but rather when executing a query. This may change in the future.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="SWISH_API_Results_Generating_and_accessing_results">SWISH::API::Results - Generating and accessing results</A></H2>
+<P>
+Searching generates a results object blessed into the SWISH::API::Results
+class.
+
+<DL>
+<P><DT><STRONG>$results = $search-&gt;Execute( $query );</STRONG><DD>
+<P>
+Executes a query based on the parameters in the search object.
+<CODE>$query</CODE> is an optional query string to use for the search
+($query replaces the set query string in the search object).
+
+<P>
+A typical use would be to create a search object once and then call this
+method for each query using the same search object changing only the passed
+in $query.
+
+<P>
+The caller should check for errors after making this all.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Results_Methods">Results Methods</A></H2>
+<P>
+A query creates a results object that contains information about the query
+(e.g. number of hits) and access to the individual results.
+
+<DL>
+<P><DT><STRONG><A NAME="item__hits">$hits = $results-&gt;Hits;</A></STRONG><DD>
+<P>
+Returns the number of results for the query. If zero and no errors were
+reported after calling $search-&gt;Execute then the query returned zero
+results.
+
+<P><DT><STRONG><A NAME="item__parsed_words">@parsed_words = $results-&gt;ParsedWords( $index_name );</A></STRONG><DD>
+<P>
+Returns an array of tokenized words and operators with stopwords removed.
+This is the array of tokens used by swish for the query.
+
+<P>
+<CODE>$index_name</CODE> must match one of the index files specified on the
+creation of the swish object (via the SWISH::API-&gt;new call).
+
+<P>
+The parsed words are useful for highlighting search terms in associated
+documents.
+
+<P><DT><STRONG><A NAME="item__removed_stopwords">@removed_stopwords = $results-&gt;RemovedStopwords( $index_name) ;</A></STRONG><DD>
+<P>
+Returns an array of stopwords removed from a query, if any, for the index
+specified.
+
+<P>
+<CODE>$index_name</CODE> must match one of the index files specified on the
+creation of the swish object (via the SWISH::API-&gt;new call).
+
+<P><DT><STRONG><A NAME="item__results_SeekResult_">$results-&gt;SeekResult( $position );</A></STRONG><DD>
+<P>
+Seeks to the position specified in the result list. Zero is the first
+position and $results-&gt;Hits-1 is the last position. Seeking past the end
+of results sets a non-critical error condition.
+
+<P>
+Useful for seeking to a specific &quot;page&quot; of results.
+
+<P><DT><STRONG><A NAME="item__result">$result = $results-&gt;NextResult;</A></STRONG><DD>
+<P>
+Fetches the next result from the list of results. Returns undef if no more
+results are available. <CODE>$result</CODE> is an object blessed into the
+SWISH::API::Result class.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="SWISH_API_Result_Result_Methods">SWISH::API::Result - Result Methods</A></H2>
+<P>
+The follow methods provide access to data related to an individual result.
+
+<DL>
+<P><DT><STRONG><A NAME="item__prop">$prop = $result-&gt;Property( $prop_name );</A></STRONG><DD>
+<P>
+Fetches the property specified for the current result. An invalid property
+name will cause an exception (which can be caught by wrapping the call in
+an eval block).
+
+<P>
+Can return undefined.
+
+<P>
+Date properties are returned as a timestamp. Use something like
+Date::Format to format the strings (or just call scalar
+<CODE>localtime(</CODE> <CODE>$prop</CODE> ) ).
+
+<P><DT><STRONG>$prop = $result-&gt;ResultPropertyStr( $prop_name );</STRONG><DD>
+<P>
+Fetches and formats the property. Unlike above, invalid property names
+return the string &quot;(null)&quot; -- this will likely change to match
+the above (i.e. throw an exception).
+
+<P>
+Undefined values are returned at the null string (&quot;&quot;).
+
+<P><DT><STRONG><A NAME="item__value">$value = $result-&gt;ResultIndexValue( $header_name );</A></STRONG><DD>
+<P>
+Returns the header value specified. This is similar to
+$swish-&gt;HeaderValue(), but the index file is not specified (it is
+determined by the result).
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Utility_Methods">Utility Methods</A></H2>
+<DL>
+<P><DT><STRONG><A NAME="item__metas">@metas = $swish-&gt;MetaList( $index_name );</A></STRONG><DD>
+<P>
+Swish-e has &quot;MetaNames&quot; which allow searching by fields in the
+index. This method returns information about the Metanames.
+
+<P>
+Pass in the name of an open index file name and returns a list of
+SWISH::API::MetaName objects. Three methods are currently defined on these
+objects:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $meta-&gt;Name;
+    $meta-&gt;ID;
+    $meta-&gt;Type;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Name returns the name of the meta as defined in the MetaNames config option
+when the index was created.
+
+<P>
+The ID is the internal ID number used to represent the meta name.
+
+<P>
+Type is the type of metaname. Currently only one type exists and its value
+is zero.
+
+<P><DT><STRONG><A NAME="item__props">@props = $swish-&gt;PropertyList( $index_name );</A></STRONG><DD>
+<P>
+Swish-e can store content or &quot;properties&quot; in the index and return
+this data when running a query. A document's path, URL, title, size, date
+or summary are examples of properites. Each property is accessed via its
+PropertyName. This method returns information about the PropertNames stored
+in the index.
+
+<P>
+Pass in the name of an open index file name and returns a list of
+SWISH::API::MetaName objects. Three methods are currently defined on these
+objects:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $prop-&gt;Name;
+    $prop-&gt;ID;
+    $prop-&gt;Type;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Name returns the name of the meta as defined in the MetaNames config option
+when the index was created.
+
+<P>
+The ID is the internal ID number used to represent the meta name.
+
+<P>
+Type is the type of metaname. Currently only one type exists and its value
+is zero.
+
+<P><DT><STRONG><A NAME="item__propes">@propes = $result-&gt;PropertyList;</A></STRONG><DD>
+<P><DT><STRONG><A NAME="item__meta">@meta = $result-&gt;MetaList;</A></STRONG><DD>
+<P>
+These also return a list of Property or Metaname description objects, but
+are accessed via a result record. Since the result comes from a specific
+index file there's no need to specify the index file name.
+
+<P><DT><STRONG><A NAME="item__stemmed_word">$stemmed_word = $swish-&gt;StemWord( $word );</A></STRONG><DD>
+<P>
+*Deprecated*
+
+<P>
+Returns the stemmed version of the passed in word.
+
+<P>
+Deprecated because only stems using the original Porter Stemmer and uses a
+shared memory location in the SW_HANDLE object to store the stemmed word.
+See below for other stemming options.
+
+<P><DT><STRONG><A NAME="item__fuzzy_word">$fuzzy_word = $swish-&gt;Fuzzy( $indexname, $word );</A></STRONG><DD>
+<P>
+Like StemWord used to work, only it uses whatever stemmer is named in
+$indexname. Returns the same kind of fuzzy_word object as the
+<CODE>FuzzyWord()</CODE> method.
+
+<P><DT><STRONG><A NAME="item__mode_string">$mode_string = $result-&gt;FuzzyMode;</A></STRONG><DD>
+<P>
+Returns the string (e.g. &quot;Stemming_en&quot;, &quot;Soundex&quot;,
+&quot;None&quot; ) indicating the stemming method used while indexing the
+given document.
+
+<P><DT><STRONG>$fuzzy_word = $result-&gt;FuzzyWord( $word );</STRONG><DD>
+<P>
+Converts <CODE>$word</CODE> using the same fuzzy mode used to index the
+$result. Returns a SWISH::API::FuzzyWord object. Methods on the object are
+used to access the converted words and other data as shown below.
+
+<P><DT><STRONG><A NAME="item__count">$count = $fuzzy_word-&gt;WordCount;</A></STRONG><DD>
+<P>
+Returns the number of output words. Normally this is the value one, but may
+be more depending on the stemmer used. DoubleMetaphone can return two
+strings for a single input string.
+
+<P><DT><STRONG><A NAME="item__status">$status = $fuzzy_word-&gt;WordError;</A></STRONG><DD>
+<P>
+Returns any error code that the stemmer might set. Normally, this return
+value is zero, indicating that the stemming/fuzzy operation succedded. The
+values returned are defined in the swish-e source file /src/stemmer.h.
+
+<P><DT><STRONG><A NAME="item__words">@words = $fuzzy_word-&gt;WordList;</A></STRONG><DD>
+<P>
+Returns the converted words from the stemming/fuzzy operation. Normally,
+the array will contain a single element, although may contain more (i.e. if
+DoubleMetaphone is used and the input word returns two strings).
+
+<P>
+In the event that a word does not stem (e.g. trying to stem a number), this
+method will return the original input word specified when
+$result-&gt;FuzzyWord( <CODE>$word</CODE> ) was called.
+
+<P><DT><STRONG>@parsed_words = $swish-&gt;SwishWords( $string, $index_file );</STRONG><DD>
+<P>
+* Not implemented *
+
+<P>
+Splits up the input string into tokens of swish words and operators.
+
+<H1><A NAME="NOTES">NOTES</A></H1>
+<P>
+Perl's garbage collection makes it easy to write code for searching with
+Swish-e, but care must be taken not to keep objects around too long which
+can use up memory.
+
+<P>
+Here's an example of a potential problem. Say you have a very large number
+of documents indexed and you want to find the first hit for a number of
+popular keywords (error checking omitted in this bad example):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    sub first_hit {
+      my $query = shift;
+      my $handle = SWISH::API-&gt;new( 'index.swish-e');
+      my $results = $handle-&gt;Query( $query );
+      my $first_hit = $results-&gt;NextResult;
+      return $first_hit;
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my @first_hit_list;
+    for ( @keywords )
+        push @first_hit_list, $first_hit($_);
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <CODE>first_hit()</CODE> subroutine is returning a SWISH::Result
+object. That makes it easy to access properties:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   # print file names
+   for my $result ( @first_hit_list ) {
+      print $result-&gt;Property('swishdocpath'),&quot;\n&quot;;
+   }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+But as long as a SWISH::API::Result object is around, so is the entire list
+of results generated by the $handle-&gt;Query() call, and the index file is
+still open (because a SWISH::API::Result depends on a SWISH::API::Results
+object, which depends on a SWISH::API object).
+
+<P>
+In this case it would be better to return from <CODE>first_hit()</CODE>
+just the properties you need:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>      ...
+      my $first_hit = $results-&gt;NextResult;
+      return $first_hit-&gt;Property('swishdocpath');
+   }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then when <CODE>first_hit()</CODE> sub ends the result list will be freed,
+and the index file closed, thanks to Perl's reference count tracking.
+
+<P>
+Note: the other problem with the above code is that the same index file is
+opened for each call to the function. Don't do that, instead open the index
+file once.
+
+<H1><A NAME="COPYRIGHT">COPYRIGHT</A></H1>
+<P>
+This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+<H1><A NAME="AUTHOR">AUTHOR</A></H1>
+<P>
+Bill Moseley <A HREF="mailto:moseley@hank.org.">moseley@hank.org.</A>
+2002/2003/2004
+
+<H1><A NAME="SUPPORT">SUPPORT</A></H1>
+<P>
+Please contact the Swish-e discussion email list for support with this
+module or with Swish-e. Please do not contact the developers directly.
+
+</DL>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+
+
+    <p>
+    <div class="navbar">
+      <a href="./SWISH-LIBRARY.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./swish.html">Next</a>
+    </div>
+    <p>
+
+    <P ALIGN="CENTER">
+    <IMG ALT="" WIDTH="470" HEIGHT="10" SRC="images/dotrule1.gif"></P>
+    <P ALIGN="CENTER">
+
+    <div class="footer">
+        <BR>SWISH-E is distributed with <B>no warranty</B> under the terms of the
+        <A HREF="http://www.fsf.org/copyleft/gpl.html">GNU Public License</A>,<BR>
+        Free Software Foundation, Inc., 
+        59 Temple Place - Suite 330, Boston, MA  02111-1307, USA<BR> 
+        Public questions may be posted to 
+        the <A HREF="http://swish-e.org/Discussion/">SWISH-E Discussion</A>.
+    </div>
+
+</body>
+</html>

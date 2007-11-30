@@ -1,0 +1,2568 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+   <title>SWISH-Enhanced:  The Swish-e FAQ - Answers to Common Questions </title>
+   <link href="./style.css" rel=stylesheet type="text/css" title="refstyle">
+  </head>
+  <body>
+
+    <h1 class="banner">
+        <a href="http://swish-e.org"><img border=0 src="images/swish.gif" alt="Swish-E Logo"></a><br>
+        <img src="images/swishbanner1.gif"><br>
+        <img src="images/dotrule1.gif"><br>
+         The Swish-e FAQ - Answers to Common Questions 
+    </h1>
+
+    <hr>
+
+    <p>
+    <div class="navbar">
+      <a href="./SWISH-SEARCH.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./SWISH-BUGS.html">Next</a>
+    </div>
+    <p>
+
+    <div class="toc">
+      
+<A NAME="toc"></A>
+<P><B>Table of Contents:</B></P>
+
+<UL>
+
+	<LI><A HREF="#Frequently_Asked_Questions">Frequently Asked Questions</A>
+	<UL>
+
+		<LI><A HREF="#General_Questions">General Questions</A>
+		<UL>
+
+			<LI><A HREF="#What_is_Swish_e_">What is Swish-e?</A>
+			<LI><A HREF="#So_is_Swish_e_a_search_engine_">So, is Swish-e a search engine?</A>
+			<LI><A HREF="#Should_I_upgrade_if_I_m_already_running_a_previous_version">Should I upgrade if I'm already running a previous version</A>
+			<LI><A HREF="#Are_there_binary_distributions_available_for_Swish_e_on_platform_foo_">Are there binary distributions available for Swish-e on platform foo?</A>
+			<LI><A HREF="#Do_I_need_to_reindex_my_site_each_time_I_upgrade_to_a_new_Swish_e">Do I need to reindex my site each time I upgrade to a new Swish-e</A>
+			<LI><A HREF="#What_s_the_advantage_of_using_the_libxml2_library_for_parsing_HTML_">What's the advantage of using the libxml2 library for parsing HTML?</A>
+			<LI><A HREF="#Does_Swish_e_include_a_CGI_interface_">Does Swish-e include a CGI interface?</A>
+			<LI><A HREF="#How_secure_is_Swish_e_">How secure is Swish-e?</A>
+			<LI><A HREF="#Should_I_run_Swish_e_as_the_superuser_root_">Should I run Swish-e as the superuser (root)?</A>
+			<LI><A HREF="#What_files_does_Swish_e_write_">What files does Swish-e write?</A>
+			<LI><A HREF="#Can_I_index_PDF_and_MS_Word_documents_">Can I index PDF and MS-Word documents?</A>
+			<LI><A HREF="#Can_I_index_documents_on_a_web_server_">Can I index documents on a web server?</A>
+			<LI><A HREF="#Can_I_implement_keywords_in_my_documents_">Can I implement keywords in my documents? </A>
+			<LI><A HREF="#What_are_document_properties_">What are document properties?</A>
+			<LI><A HREF="#What_s_the_difference_between_MetaNames_and_PropertyNames_">What's the difference between MetaNames and PropertyNames?</A>
+			<LI><A HREF="#Can_Swish_e_index_multi_byte_characters_">Can Swish-e index multi-byte characters?</A>
+		</UL>
+
+		<LI><A HREF="#Indexing">Indexing</A>
+		<UL>
+
+			<LI><A HREF="#How_do_I_pass_Swish_e_a_list_of_files_to_index_">How do I pass Swish-e a list of files to index?</A>
+			<LI><A HREF="#How_does_Swish_e_know_which_parser_to_use_">How does Swish-e know which parser to use?</A>
+			<LI><A HREF="#Can_I_reindex_and_search_at_the_same_time_">Can I reindex and search at the same time?</A>
+			<LI><A HREF="#Can_I_index_phrases_">Can I index phrases? </A>
+			<LI><A HREF="#How_can_I_prevent_phrases_from_matching_across_sentences_">How can I prevent phrases from matching across sentences?</A>
+			<LI><A HREF="#Swish_e_isn_t_indexing_a_certain_word_or_phrase_">Swish-e isn't indexing a certain word or phrase.</A>
+			<LI><A HREF="#How_do_I_keep_Swish_e_from_indexing_numbers_">How do I keep Swish-e from indexing numbers?</A>
+			<LI><A HREF="#Swish_e_crashes_and_burns_on_a_certain_file_What_can_I_do_">Swish-e crashes and burns on a certain file. What can I do?</A>
+			<LI><A HREF="#How_to_I_prevent_indexing_of_some_documents_">How to I prevent indexing of some documents?</A>
+			<LI><A HREF="#How_do_I_prevent_indexing_parts_of_a_document_">How do I prevent indexing parts of a document?</A>
+			<LI><A HREF="#How_do_I_modify_the_path_or_URL_of_the_indexed_documents_">How do I modify the path or URL of the indexed documents.</A>
+			<LI><A HREF="#How_can_I_index_data_from_a_database_">How can I index data from a database?</A>
+			<LI><A HREF="#How_do_I_index_my_PDF_Word_and_compressed_documents_">How do I index my PDF, Word, and compressed documents?</A>
+			<LI><A HREF="#How_do_I_filter_documents_">How do I filter documents?</A>
+			<LI><A HREF="#Eh_but_I_just_want_to_know_how_to_index_PDF_documents_">Eh, but I just want to know how to index PDF documents!</A>
+			<LI><A HREF="#I_m_using_Windows_and_can_t_get_Filters_or_the_prog_input_method">I'm using Windows and can't get Filters or the prog input method</A>
+			<LI><A HREF="#How_do_I_index_non_English_words_">How do I index non-English words?</A>
+			<LI><A HREF="#Can_I_add_remove_files_from_an_index_">Can I add/remove files from an index?</A>
+			<LI><A HREF="#I_run_out_of_memory_trying_to_index_my_files_">I run out of memory trying to index my files. </A>
+			<LI><A HREF="#_too_many_open_files_when_indexing_with_e_option">&quot;too many open files&quot; when indexing with -e option</A>
+			<LI><A HREF="#My_system_admin_says_Swish_e_uses_too_much_of_the_CPU_">My system admin says Swish-e uses too much of the CPU!</A>
+		</UL>
+
+		<LI><A HREF="#Spidering">Spidering</A>
+		<UL>
+
+			<LI><A HREF="#How_can_I_index_documents_on_a_web_server_">How can I index documents on a web server?</A>
+			<LI><A HREF="#Why_does_swish_report_swishspider_not_found_">Why does swish report &quot;./swishspider: not found&quot;?</A>
+			<LI><A HREF="#I_m_using_the_spider_pl_program_to_spider_my_web_site_but_some">I'm using the spider.pl program to spider my web site, but some</A>
+			<LI><A HREF="#I_still_don_t_think_all_my_web_pages_are_being_indexed_">I still don't think all my web pages are being indexed.</A>
+			<LI><A HREF="#Swish_is_not_spidering_Javascript_links_">Swish is not spidering Javascript links!</A>
+			<LI><A HREF="#How_do_I_spider_other_websites_and_combine_it_with_my_own">How do I spider other websites and combine it with my own</A>
+		</UL>
+
+		<LI><A HREF="#Searching">Searching</A>
+		<UL>
+
+			<LI><A HREF="#How_do_I_limit_searches_to_just_parts_of_the_index_">How do I limit searches to just parts of the index?</A>
+			<LI><A HREF="#How_is_ranking_calculated_">How is ranking calculated?</A>
+			<LI><A HREF="#How_can_I_limit_searches_to_the_title_body_or_comment_">How can I limit searches to the title, body, or comment?</A>
+			<LI><A HREF="#I_can_t_limit_searches_to_title_body_comment_">I can't limit searches to title/body/comment.</A>
+			<LI><A HREF="#I_ve_tried_running_the_included_CGI_script_and_I_get_a_Internal">I've tried running the included CGI script and I get a &quot;Internal</A>
+			<LI><A HREF="#When_I_try_to_view_the_swish_cgi_page_I_see_the_contents_of_the">When I try to view the swish.cgi page I see the contents of the</A>
+			<LI><A HREF="#How_do_I_make_Swish_e_highlight_words_in_search_results_">How do I make Swish-e highlight words in search results?</A>
+			<LI><A HREF="#Do_filters_effect_the_performance_during_search_">Do filters effect the performance during search?</A>
+		</UL>
+
+		<LI><A HREF="#I_have_read_the_FAQ_but_I_still_have_questions_about_using_Swish_e_">I have read the FAQ but I still have questions about using Swish-e.</A>
+	</UL>
+
+	<LI><A HREF="#Document_Info">Document Info</A>
+</UL>
+
+    </div>
+
+    
+
+	    [ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+<P>
+<H1><A NAME="Frequently_Asked_Questions">Frequently Asked Questions</A></H1>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="General_Questions">General Questions</A></H2>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="What_is_Swish_e_">What is Swish-e?</A></H3>
+<P>
+Swish-e is <STRONG>S</STRONG>imple <STRONG>W</STRONG>eb <STRONG>I</STRONG>ndexing <STRONG>S</STRONG>ystem for <STRONG>H</STRONG>umans -
+<STRONG>E</STRONG>nhanced. With it, you can quickly and easily index directories of files or
+remote web sites and search the generated indexes for words and phrases.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="So_is_Swish_e_a_search_engine_">So, is Swish-e a search engine?</A></H3>
+<P>
+Well, yes. Probably the most common use of Swish-e is to provide a search
+engine for web sites. The Swish-e distribution includes CGI scripts that
+can be used with it to add a <EM>search engine</EM> for your web site. The CGI scripts can be found in the <EM>example</EM> directory of the distribution package. See the <EM>README</EM> file for information about the scripts.
+
+<P>
+But Swish-e can also be used to index all sorts of data, such as email
+messages, data stored in a relational database management system, XML
+documents, or documents such as Word and PDF documents -- or any
+combination of those sources at the same time. Searches can be limited to
+fields or <EM>MetaNames</EM> within a document, or limited to areas within an HTML document (e.g. body,
+title). Programs other than CGI applications can use Swish-e, as well.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Should_I_upgrade_if_I_m_already_running_a_previous_version_of_Swish_e_">Should I upgrade if I'm already running a previous version
+of Swish-e?</A></H3>
+<P>
+A large number of bug fixes, feature additions, and logic corrections were
+made in version 2.2. In addition, indexing speed has been drastically
+improved (reports of indexing times changing from four hours to 5 minutes),
+and major parts of the indexing and search parsers have been rewritten.
+There's better debugging options, enhanced output formats, more document
+meta data (e.g. last modified date, document summary), options for indexing
+from external data sources, and faster spidering just to name a few
+changes. (See the CHANGES file for more information.
+
+<P>
+Since so much effort has gone into version 2.2, support for previous
+versions will probably be limited.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Are_there_binary_distributions_available_for_Swish_e_on_platform_foo_">Are there binary distributions available for Swish-e on platform foo?</A></H3>
+<P>
+Foo? Well, yes there are some binary distributions available. Please see
+the Swish-e web site for a list at <A
+HREF="http://swish-e.org/.">http://swish-e.org/.</A>
+
+<P>
+In general, it is recommended that you build Swish-e from source, if
+possible.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Do_I_need_to_reindex_my_site_each_time_I_upgrade_to_a_new_Swish_e_version_">Do I need to reindex my site each time I upgrade to a new Swish-e
+version?</A></H3>
+<P>
+At times it might not strictly be necessary, but since you don't really
+know if anything in the index has changed, it is a good rule to reindex.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="What_s_the_advantage_of_using_the_libxml2_library_for_parsing_HTML_">What's the advantage of using the libxml2 library for parsing HTML?</A></H3>
+<P>
+Swish-e may be linked with libxml2, a library for working with HTML and XML
+documents. Swish-e can use libxml2 for parsing HTML and XML documents.
+
+<P>
+The libxml2 parser is a better parser than Swish-e's built-in HTML parser.
+It offers more features, and it does a much better job at extracting out
+the text from a web page. In addition, you can use the
+<CODE>ParserWarningLevel</CODE> configuration setting to find structural errors in your documents that
+could (and would with Swish-e's HTML parser) cause documents to be indexed
+incorrectly.
+
+<P>
+Libxml2 is not required, but is strongly recommended for parsing HTML
+documents. It's also recommended for parsing XML, as it offers many more
+features than the internal Expat xml.c parser.
+
+<P>
+The internal HTML parser will have limited support, and does have a number
+of bugs. For example, HTML entities may not always be correctly converted
+and properties do not have entities converted. The internal parser tends to
+get confused when invalid HTML is parsed where the libxml2 parser doesn't
+get confused as often. The structure is better detected with the libxml2
+parser.
+
+<P>
+If you are using the Perl module (the C interface to the Swish-e library)
+you may wish to build two versions of Swish-e, one with the libxml2 library
+linked in the binary, and one without, and build the Perl module against
+the library without the libxml2 code. This is to save space in the library.
+Hopefully, the library will someday soon be split into indexing and
+searching code (volunteers welcome).
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Does_Swish_e_include_a_CGI_interface_">Does Swish-e include a CGI interface?</A></H3>
+<P>
+Yes. Kind of.
+
+<P>
+There's two example CGI scripts included, swish.cgi and search.cgi. Both
+are installed at <EM>$prefix/lib/swish-e</EM>.
+
+<P>
+Both require a bit of work to setup and use. Swish.cgi is probably what
+most people will want to use as it contains more features. Search.cgi is
+for those that want to start with a small script and customize it to fit
+their needs.
+
+<P>
+An example of using swish.cgi is given in the <A HREF="././INSTALL.html">INSTALL</A> man page, and it the swish.cgi documentation. Like often is the case, it
+will be easier to use if you first read the documentation.
+
+<P>
+Please use caution about CGI scripts found on the Internet for use with
+Swish-e. Some are not secure.
+
+<P>
+The included example CGI scripts were designed with security in mind.
+Regardless, you are encouraged to have your local Perl expert review it
+(and all other CGI scripts you use) before placing it into production. This
+is just a good policy to follow.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_secure_is_Swish_e_">How secure is Swish-e?</A></H3>
+<P>
+We know of no security issues with using Swish-e. Careful attention has
+been made with regard to common security problems such as buffer overruns
+when programming Swish-e.
+
+<P>
+The most likely security issue with Swish-e is when it is run via a poorly
+written CGI interface. This is not limited to CGI scripts written in Perl,
+as it's just as easy to write an insecure CGI script in C, Java, PHP, or
+Python. A good source of information is included with the Perl
+distribution. Type <CODE>perldoc perlsec</CODE> at your local prompt for more information. Another must-read document is
+located at
+<CODE>http://www.w3.org/Security/faq/wwwsf4.html</CODE>.
+
+<P>
+Note that there are many <EM>free</EM> yet insecure and poorly written CGI scripts available -- even some designed
+for use with Swish-e. Please carefully review any CGI script you use. Free
+is not such a good price when you get your server hacked...
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Should_I_run_Swish_e_as_the_superuser_root_">Should I run Swish-e as the superuser (root)?</A></H3>
+<P>
+No. Never.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="What_files_does_Swish_e_write_">What files does Swish-e write?</A></H3>
+<P>
+Swish writes the index file, of course. This is specified with the
+<A HREF="#item_IndexFile">IndexFile</A> configuration directive or by the <CODE>-f</CODE> command line switch.
+
+<P>
+The index file is actually a collection of files, but all start with the
+file name specified with the <A HREF="#item_IndexFile">IndexFile</A> directive or the <CODE>-f</CODE>
+command line switch.
+
+<P>
+For example, the file ending in <EM>.prop</EM> contains the document properties.
+
+<P>
+When creating the index files Swish-e appends the extension <EM>.temp</EM>
+to the index file names. When indexing is complete Swish-e renames the
+<EM>.temp</EM> files to the index files specified by <A HREF="#item_IndexFile">IndexFile</A> or <CODE>-f</CODE>. This is done so that existing indexes remain untouched until it completes
+indexing.
+
+<P>
+Swish-e also writes temporary files in some cases during indexing (e.g. <CODE>-s http</CODE>, <CODE>-s prog</CODE> with filters), when merging, and when using <CODE>-e</CODE>). Temporary files are created with the <CODE>mkstemp(3)</CODE> function
+(with 0600 permission on unix-like operating systems).
+
+<P>
+The temporary files are created in the directory specified by the
+environment variables <CODE>TMPDIR</CODE> and <CODE>TMP</CODE> in that order. If those are not set then swish uses the setting the
+configuration setting
+<A HREF="././SWISH-CONFIG.html#item_TmpDir">TmpDir</A>. Otherwise, the temporary file will be located in the current directory.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Can_I_index_PDF_and_MS_Word_documents_">Can I index PDF and MS-Word documents?</A></H3>
+<P>
+Yes, you can use a <EM>Filter</EM> to convert documents while indexing, or you can use a program that
+&quot;feeds&quot; documents to Swish-e that have already been converted.
+See <CODE>Indexing</CODE> below.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Can_I_index_documents_on_a_web_server_">Can I index documents on a web server?</A></H3>
+<P>
+Yes, Swish-e provides two ways to index (spider) documents on a web server.
+See <CODE>Spidering</CODE> below.
+
+<P>
+Swish-e can retrieve documents from a file system or from a remote web
+server. It can also execute a program that returns documents back to it.
+This program can retrieve documents from a database, filter compressed
+documents files, convert PDF files, extract data from mail archives, or
+spider remote web sites.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Can_I_implement_keywords_in_my_documents_">Can I implement keywords in my documents?</A></H3>
+<P>
+Yes, Swish-e can associate words with <EM>MetaNames</EM> while indexing, and you can limit your searches to these MetaNames while
+searching.
+
+<P>
+In your HTML files you can put keywords in HTML META tags or in XML blocks.
+
+<P>
+META tags can have two formats in your source documents:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;META NAME=&quot;DC.subject&quot; CONTENT=&quot;digital libraries&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And in XML format (can also be used in HTML documents when using libxml2):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;meta2&gt;
+        Some Content
+    &lt;/meta2&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then, to inform Swish-e about the existence of the meta name in your
+documents, edit the line in your configuration file:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MetaNames DC.subject meta1 meta2</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+When searching you can now limit some or all search terms to that MetaName.
+For example, to look for documents that contain the word apple and also
+have either fruit or cooking in the DC.subject meta tag.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="What_are_document_properties_">What are document properties?</A></H3>
+<P>
+A document property is typically data that describes the document. For
+example, properties might include a document's path name, its last modified
+date, its title, or its size. Swish-e stores a document's properties in the
+index file, and they can be reported back in search results.
+
+<P>
+Swish-e also uses properties for sorting. You may sort your results by one
+or more properties, in ascending or descending order.
+
+<P>
+Properties can also be defined within your documents. HTML and XML files
+can specify tags (see previous question) as properties. The <EM>contents</EM> of these tags can then be returned with search results. These user-defined
+properties can also be used for sorting search results.
+
+<P>
+For example, if you had the following in your documents
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   &lt;meta name=&quot;creator&quot; content=&quot;accounting department&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and <CODE>creator</CODE> is defined as a property (see <A HREF="#item_PropertyNames">PropertyNames</A> in
+<A HREF="././SWISH-CONFIG.html">SWISH-CONFIG</A>) Swish-e can return <CODE>accounting department</CODE>
+with the result for that document.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w foo -p creator</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Or for sorting:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w foo -s creator</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="What_s_the_difference_between_MetaNames_and_PropertyNames_">What's the difference between MetaNames and PropertyNames?</A></H3>
+<P>
+MetaNames allows keywords searches in your documents. That is, you can use
+MetaNames to restrict searches to just parts of your documents.
+
+<P>
+PropertyNames, on the other hand, define text that can be returned with
+results, and can be used for sorting.
+
+<P>
+Both use <EM>meta tags</EM> found in your documents (as shown in the above two questions) to define the
+text you wish to use as a property or meta name.
+
+<P>
+You may define a tag as <STRONG>both</STRONG> a property and a meta name. For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   &lt;meta name=&quot;creator&quot; content=&quot;accounting department&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+placed in your documents and then using configuration settings of:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    PropertyNames creator
+    MetaNames creator</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+will allow you to limit your searches to documents created by accounting:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w 'foo and creator=(accounting)'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+That will find all documents with the word <CODE>foo</CODE> that also have a creator meta tag that contains the word <CODE>accounting</CODE>. This is using MetaNames.
+
+<P>
+And you can also say:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w foo -p creator</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+which will return all documents with the word <CODE>foo</CODE>, but the results will also include the contents of the <CODE>creator</CODE> meta tag along with results. This is using properties.
+
+<P>
+You can use properties and meta names at the same time, too:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w creator=(accounting or marketing) -p creator -s creator</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+That searches only in the <CODE>creator</CODE>  <EM>meta name</EM> for either of the words
+<CODE>accounting</CODE> or <CODE>marketing</CODE>, prints out the contents of the contents of the <CODE>creator</CODE>  <EM>property</EM>, and sorts the results by the <CODE>creator</CODE>
+
+<EM>property name</EM>.
+
+<P>
+(See also the <CODE>-x</CODE> output format switch in <A HREF="././SWISH-RUN.html">SWISH-RUN</A>.)
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Can_Swish_e_index_multi_byte_characters_">Can Swish-e index multi-byte characters?</A></H3>
+<P>
+No. This will require much work to change. But, Swish-e works with
+eight-bit characters, so many characters sets can be used. Note that it
+does call the ANSI-C <CODE>tolower()</CODE> function which does depend on
+the current locale setting. See <CODE>locale(7)</CODE> for more information.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Indexing">Indexing</A></H2>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_pass_Swish_e_a_list_of_files_to_index_">How do I pass Swish-e a list of files to index?</A></H3>
+<P>
+Currently, there is not a configuration directive to include a file that
+contains a list of files to index. But, there is a directive to include
+another configuration file.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IncludeConfigFile /path/to/other/config</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And in <CODE>/path/to/other/config</CODE> you can say:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexDir file1 file2 file3 file4 file5 ...
+    IndexDir file20 file21 file22</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You may also specify more than one configuration file on the command line:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./swish-e -c config_one config_two config_three</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Another option is to create a directory with symbolic links of the files to
+index, and index just that directory.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_does_Swish_e_know_which_parser_to_use_">How does Swish-e know which parser to use?</A></H3>
+<P>
+Swish can parse HTML, XML, and text documents. The parser is set by
+associating a file extension with a parser by the <A HREF="#item_IndexContents">IndexContents</A>
+directive. You may set the default parser with the <A HREF="#item_DefaultContents">DefaultContents</A>
+directive. If a document is not assigned a parser it will default to the
+HTML parser (HTML2 if built with libxml2).
+
+<P>
+You may use Filters or an external program to convert documents to HTML,
+XML, or text.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Can_I_reindex_and_search_at_the_same_time_">Can I reindex and search at the same time?</A></H3>
+<P>
+Yes. Starting with version 2.2 Swish-e indexes to temporary files, and then
+renames the files when indexing is complete. On most systems renames are
+atomic. But, since Swish-e also generates more than one file during
+indexing there will be a very short period of time between renaming the
+various files when the index is out of sync.
+
+<P>
+Settings in <EM>src/config.h</EM> control some options related to temporary files, and their use during
+indexing.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Can_I_index_phrases_">Can I index phrases?</A></H3>
+<P>
+Phrases are indexed automatically. To search for a phrase simply place
+double quotes around the phrase.
+
+<P>
+For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w 'free and &quot;fast search engine&quot;'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_can_I_prevent_phrases_from_matching_across_sentences_">How can I prevent phrases from matching across sentences?</A></H3>
+<P>
+Use the
+<A HREF="././SWISH-CONFIG.html#item_BumpPositionCounterCharacters">BumpPositionCounterCharacters</A>
+configuration directive.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Swish_e_isn_t_indexing_a_certain_word_or_phrase_">Swish-e isn't indexing a certain word or phrase.</A></H3>
+<P>
+There are a number of configuration parameters that control what Swish-e
+considers a &quot;word&quot; and it has a debugging feature to help
+pinpoint any indexing problems.
+
+<P>
+Configuration file directives (<A HREF="././SWISH-CONFIG.html">SWISH-CONFIG</A>)
+<A HREF="#item_WordCharacters">WordCharacters</A>, <A HREF="#item_BeginCharacters">BeginCharacters</A>, <A HREF="#item_EndCharacters">EndCharacters</A>,
+<A HREF="#item_IgnoreFirstChar">IgnoreFirstChar</A>, and <A HREF="#item_IgnoreLastChar">IgnoreLastChar</A> are the main settings that Swish-e uses to define a &quot;word&quot;. See <A HREF="././SWISH-CONFIG.html">SWISH-CONFIG</A> and
+<A HREF="././SWISH-RUN.html">SWISH-RUN</A> for details.
+
+<P>
+Swish-e also uses compile-time defaults for many settings. These are
+located in <EM>src/config.h</EM> file.
+
+<P>
+Use of the command line arguments <CODE>-k</CODE>, <CODE>-v</CODE> and <CODE>-T</CODE> are useful when debugging these problems. Using <CODE>-T INDEXED_WORDS</CODE> while indexing will display each word as it is indexed. You should specify
+one file when using this feature since it can generate a lot of output.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>     ./swish-e -c my.conf -i problem.file -T INDEXED_WORDS</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You may also wish to index a single file that contains words that are or
+are not indexing as you expect and use -T to output debugging information
+about the index. A useful command might be:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./swish-e -f index.swish-e -T INDEX_FULL</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Once you see how Swish-e is parsing and indexing your words, you can adjust
+the configuration settings mentioned above to control what words are
+indexed.
+
+<P>
+Another useful command might be:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>     ./swish-e -c my.conf -i problem.file -T PARSED_WORDS INDEXED_WORDS</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This will show white-spaced words parsed from the document (PARSED_WORDS),
+and how those words are split up into separate words for indexing
+(INDEXED_WORDS).
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_keep_Swish_e_from_indexing_numbers_">How do I keep Swish-e from indexing numbers?</A></H3>
+<P>
+Swish-e indexes words as defined by the <A HREF="#item_WordCharacters">WordCharacters</A> setting, as described above. So to avoid indexing numbers you simply remove
+digits from the <A HREF="#item_WordCharacters">WordCharacters</A> setting.
+
+<P>
+There are also some settings in <EM>src/config.h</EM> that control what &quot;words&quot; are indexed. You can configure swish to
+never index words that are all digits, vowels, or consonants, or that
+contain more than some consecutive number of digits, vowels, or consonants.
+In general, you won't need to change these settings.
+
+<P>
+Also, there's an experimental feature called <A HREF="#item_IgnoreNumberChars">IgnoreNumberChars</A>
+which allows you to define a set of characters that describe a number. If a
+word is made up of <STRONG>only</STRONG> those characters it will not be indexed.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Swish_e_crashes_and_burns_on_a_certain_file_What_can_I_do_">Swish-e crashes and burns on a certain file. What can I do?</A></H3>
+<P>
+This shouldn't happen. If it does please post to the Swish-e discussion
+list the details so it can be reproduced by the developers.
+
+<P>
+In the mean time, you can use a <A HREF="#item_FileRules">FileRules</A> directive to exclude the particular file name, or pathname, or its title.
+If there are serious problems in indexing certain types of files, they may
+not have valid text in them (they may be binary files, for instance). You
+can use NoContents to exclude that type of file.
+
+<P>
+Swish-e will issue a warning if an embedded null character is found in a
+document. This warning will be an indication that you are trying to index
+binary data. If you need to index binary files try to find a program that
+will extract out the text (e.g. <CODE>strings(1),</CODE>
+<CODE>catdoc(1),</CODE> <CODE>pdftotext(1)).</CODE>
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_to_I_prevent_indexing_of_some_documents_">How to I prevent indexing of some documents?</A></H3>
+<P>
+When using the file system to index your files you can use the
+<A HREF="#item_FileRules">FileRules</A> directive. Other than <CODE>FileRules title</CODE>, <A HREF="#item_FileRules">FileRules</A>
+only works with the file system (<CODE>-S fs</CODE>) indexing method, not with
+<CODE>-S prog</CODE> or <CODE>-S http</CODE>.
+
+<P>
+If you are spidering, use a <EM>robots.text</EM> file in your document root. This is a standard way to excluded files from
+search engines, and is fully supported by Swish-e. See <A
+HREF="http://www.robotstxt.org/">http://www.robotstxt.org/</A>
+
+<P>
+You can also modify the <EM>spider.pl</EM> spider perl program to skip, index content only, or spider only listed web
+pages. Type <CODE>perldoc spider.pl</CODE>
+in the <CODE>prog-bin</CODE> directory for details.
+
+<P>
+If using the libxml2 library for parsing HTML, you may also use the Meta
+Robots Exclusion in your documents:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    &lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+See the <A HREF="././SWISH-CONFIG.html#item_obeyRobotsNoIndex">obeyRobotsNoIndex</A> directive.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_prevent_indexing_parts_of_a_document_">How do I prevent indexing parts of a document?</A></H3>
+<P>
+To prevent Swish-e from indexing a common header, footer, or navigation
+bar, AND you are using libxml2 for parsing HTML, then you may use a fake
+HTML tag around the text you wish to ignore and use the
+<A HREF="#item_IgnoreMetaTags">IgnoreMetaTags</A> directive. This will generate an error message if the <CODE>ParserWarningLevel</CODE> is set as it's invalid HTML.
+
+<P>
+<A HREF="#item_IgnoreMetaTags">IgnoreMetaTags</A> works with XML documents (and HTML documents when using libxml2 as the
+parser), but not with documents parsed by the text (TXT) parser.
+
+<P>
+If you are using the libxml2 parser (HTML2 and XML2) then you can use the
+the following comments in your documents to prevent indexing:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>       &lt;!-- SwishCommand noindex --&gt;
+       &lt;!-- SwishCommand index --&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and/or these may be used also:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>       &lt;!-- noindex --&gt;
+       &lt;!-- index --&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_modify_the_path_or_URL_of_the_indexed_documents_">How do I modify the path or URL of the indexed documents.</A></H3>
+<P>
+Use the <A HREF="#item_ReplaceRules">ReplaceRules</A> configuration directive to rewrite path names and URLs. If you are using <CODE>-S prog</CODE> input method you may set the path to any string.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_can_I_index_data_from_a_database_">How can I index data from a database?</A></H3>
+<P>
+Use the &quot;prog&quot; document source method of indexing. Write a
+program to extract out the data from your database, and format it as XML,
+HTML, or text. See the examples in the <CODE>prog-bin</CODE> directory, and the next question.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_index_my_PDF_Word_and_compressed_documents_">How do I index my PDF, Word, and compressed documents?</A></H3>
+<P>
+Swish-e can internally only parse HTML, XML and TXT (text) files by
+default, but can make use of <EM>filters</EM> that will convert other types of files such as MS Word documents, PDF, or
+gzipped files into one of the file types that Swish-e understands.
+
+<P>
+Please see <A HREF="././SWISH-CONFIG.html#Document_Filter_Directives">SWISH-CONFIG</A>
+and the examples in the <EM>filters</EM> and <EM>filter-bin</EM> directory for more information.
+
+<P>
+See the next question to learn about the filtering options with Swish-e.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_filter_documents_">How do I filter documents?</A></H3>
+<P>
+The term &quot;filter&quot; in Swish-e means the converstion of a document
+of one type (one that swish-e cannot index directly) into a type that
+Swish-e can index, namely HTML, plain text, or XML. To add to the
+confusion, there are a number of ways to accomplish this in Swish-e. So
+here's a bit of background.
+
+<P>
+The <A HREF="././SWISH-CONFIG.html#Document_Filter_Directives">FileFilter</A> directive was added to swish first. This feature allows you to specify a
+program to run for documents that match a given file extension. For
+example, to filter PDF files (files that end in .pdf) you can specify the
+configuation setting of:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilter .pdf pdftotext   &quot;'%p' -&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+which says to run the program &quot;pdftotext&quot; passing it the pathname
+of the file (%p) and a dash (which tells pdftotext to output to stdout).
+Then for each .pdf file Swish-e runs this program and reads in the filtered
+document from the output from the filter program.
+
+<P>
+This has the advantage that it is easy to setup -- a single line in the
+config file is all that is needed to add the filter into Swish-e. But it
+also has a number of problems. For example, if you use a Perl script to do
+your filtering it can be very slow since the filter script must be run (and
+thus compiled) for each processed document. This is exacerbated when using
+the -S http method since the -S http method also uses a Perl script that is
+run for every URL fetched. Also, when using -S prog method of input
+(reading input from a program) using FileFilter means that Swish-e must
+first read the file in from the external program and then write the file
+out to a temporary file before running the filter.
+
+<P>
+With -S prog it makes much more sense to filter the document in the program
+that is fetching the documents than to have swish-e read the file into
+memory, write it to a temporary file and then run an external program.
+
+<P>
+The Swish-e distribution contains a couple of example -S prog programs.  <EM>spider.pl</EM> is a reasonably full-featured web spider that offers many more options than
+the -S http method. And it is much faster than running -S http, too.
+
+<P>
+The spider has a perl configuration file, which means you can add
+programming logic right into the configuration file without editing the
+spider program. One bit of logic that is provided in the spider's
+configuration file is a &quot;call-back&quot; function that allows you to
+filter the content. In other words, before the spider passes a fetched web
+document to swish for indexing the spider can call a simple subroutine in
+the spider's configuration file passing the document and its content type.
+The subroutine can then look at the content type and decide if the document
+needs to be filtered.
+
+<P>
+For example, when processing a document of type
+&quot;application/msword&quot; the call-back subroutine might call the
+doc2txt.pm perl module, and a document of type &quot;appliation/pdf&quot;
+could use the pdf2html.pm module. The <EM>prog-bin/SwishSpiderConfig.pl</EM> file shows this usage.
+
+<P>
+This system works reasonably well, but also means that more work is
+required to setup the filters. First, you must explicitly check for
+specific content types and then call the appropriate Perl module, and
+second, you have to know how each module must be called and how each
+returns the possibly modified content.
+
+<P>
+In comes SWISH::Filter.
+
+<P>
+To make things easier the SWISH::Filter Perl module was created. The idea
+of this module is that there is one interface used to filter all types of
+documents. So instead of checking for specific types of content you just
+pass the content type and the document to the SWISH::Filter module and it
+returns a new content type and document if it was filtered. The filters
+that do the actual work are designed with a standard interface and work
+like filter &quot;plug-ins&quot;. Adding new filters means just downloading
+the filter to a directory and no changes are needed to the spider's
+configuation file. Download a filter for Postscript and next time you run
+indexing your Postscript files will be indexed.
+
+<P>
+Since the filters are standardized, hopefully when you have the need to
+filter documents of a specific type there will already be a filter ready
+for your use.
+
+<P>
+Now, note that the perl modules may or may not do the actual conversion of
+a document. For example, the PDF conversion module calls the pdfinfo and
+pdftotext programs. Those programs (part of the Xpfd package) must be
+installed separately from the filters.
+
+<P>
+The SwishSpiderConfig.pl examle spider configuration file shows how to use
+the SWISH::Filter module for filtering. This file is installed at
+$prefix/share/doc/swish-e/examples/prog-bin, where <CODE>$prefix</CODE> is
+normally /usr/local on unix-type machines.
+
+<P>
+The SWISH::Filter method of filtering can also be used with the -S http
+method of indexing. By default the <EM>swishspider</EM> program (the Perl helper script that fetches documents from the web) will
+attempt to use the SWISH::Filter module if it can be found in Perls library
+path. This path is set automatically for spider.pl but not for swishspider
+(because it would slow down a method that's already slow and spider.pl is
+recommended over the -S http method).
+
+<P>
+Therefore, all that's required to use this system with -S http is setting
+the <CODE>@INC</CODE> array to point to the filter directory.
+
+<P>
+For example, if the swish-e distribution was unpacked into ~/swish-e:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   PERL5LIB=~/swish-e/filters swish-e -c conf -S http</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+will allow the -S http method to make use of the SWISH::Filter module.
+
+<P>
+Note that if you are not using the SWISH::Filter module you may wish to
+edit the <EM>swishspider</EM> program and disable the use of the SWISH::Filter module using this setting:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    use constant USE_FILTERS  =&gt; 0;  # disable SWISH::Filter</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This prevents the program from attempting to use the SWISH::Filter module
+for every non-text URL that is fetched. Of course, if you are concerned
+with indexing speed you should be using the -S prog method with spider.pl
+instead of -S http.
+
+<P>
+If you are not spidering, but you still want to make use of the
+SWISH::Filter module for filtering you can use the DirTree.pl program (in
+$prefix/lib/swish-e). This is a simple program that traverses the file
+system and uses SWISH::Filter for filtering.
+
+<P>
+Here's two examples of how to run a filter program, one using Swish-e's
+<A HREF="#item_FileFilter">FileFilter</A> directive, another using a <A HREF="#item_prog">prog</A> input method program. See the <EM>SwishSpiderConfig.pl</EM> file for an example of using the SWISH::Filter module.
+
+<P>
+These filters simply use the program <CODE>/bin/cat</CODE> as a filter and only indexes .html files.
+
+<P>
+First, using the <A HREF="#item_FileFilter">FileFilter</A> method, here's the entire configuration file (swish.conf):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexDir .
+    IndexOnly .html
+    FileFilter .html &quot;/bin/cat&quot;   &quot;'%p'&quot;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and index with the command
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -c swish.conf -v 1</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now, the same thing with using the <CODE>-S prog</CODE> document source input method and a Perl program called catfilter.pl. You
+can see that's it's much more work than using the <A HREF="#item_FileFilter">FileFilter</A> method above, but provides a place to do additional processing. In this
+example, the <A HREF="#item_prog">prog</A> method is only slightly faster. But if you needed a perl script to run as a
+FileFilter then <A HREF="#item_prog">prog</A> will be significantly faster.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    #!/usr/local/bin/perl -w
+    use strict;
+    use File::Find;  # for recursing a directory tree</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $/ = undef;
+    find(
+        { wanted =&gt; \&amp;wanted, no_chdir =&gt; 1, },
+        '.',
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    sub wanted {
+        return if -d;
+        return unless /\.html$/;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        my $mtime  = (stat)[9];</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        my $child = open( FH, '-|' );
+        die &quot;Failed to fork $!&quot; unless defined $child;
+        exec '/bin/cat', $_ unless $child;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        my $content = &lt;FH&gt;;
+        my $size = length $content;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        print &lt;&lt;EOF;
+    Content-Length: $size
+    Last-Mtime: $mtime
+    Path-Name: $_</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    EOF</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        print &lt;FH&gt;;
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And index with the command:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -S prog -i ./catfilter.pl -v 1</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This example will probably not work under Windows due to the '-|' open. A
+simple piped open may work just as well:
+
+<P>
+That is, replace:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my $child = open( FH, '-|' );
+    die &quot;Failed to fork $!&quot; unless defined $child;
+    exec '/bin/cat', $_ unless $child;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+with this:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    open( FH, &quot;/bin/cat $_ |&quot; ) or die $!;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Perl will try to avoid running the command through the shell if meta
+characters are not passed to the open. See <CODE>perldoc -f open</CODE> for more information.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Eh_but_I_just_want_to_know_how_to_index_PDF_documents_">Eh, but I just want to know how to index PDF documents!</A></H3>
+<P>
+See the examples in the <EM>conf</EM> directory and the comments in the <EM>SwishSpiderConfig.pl</EM> file.
+
+<P>
+See the previous question for the details on filtering. The method you
+decide to use will depend on how fast you want to index, and your comfort
+level with using Perl modules.
+
+<P>
+Regardless of the filtering method you use you will need to install the
+Xpdf packages available from <A
+HREF="http://www.foolabs.com/xpdf/.">http://www.foolabs.com/xpdf/.</A>
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="I_m_using_Windows_and_can_t_get_Filters_or_the_prog_input_method_to_work_">I'm using Windows and can't get Filters or the prog input method
+to work!</A></H3>
+<P>
+Both the <CODE>-S prog</CODE> input method and filters use the <CODE>popen()</CODE> system call to run the external program. If your external program is, for
+example, a perl script, you have to tell Swish-e to run perl, instead of
+the script. Swish-e will convert forward slashes to backslashes when
+running under Windows.
+
+<P>
+For example, you would need to specify the path to perl as (assuming this
+is where perl is on your system):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexDir e:/perl/bin/perl.exe</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Or run a filter like:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    FileFilter .foo e:/perl/bin/perl.exe 'myscript.pl &quot;%p&quot;'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+It's often easier to just install Linux.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_index_non_English_words_">How do I index non-English words?</A></H3>
+<P>
+Swish-e indexes 8-bit characters only. This is the ISO 8859-1 Latin-1
+character set, and includes many non-English letters (and symbols). As long
+as they are listed in <A HREF="#item_WordCharacters">WordCharacters</A> they will be indexed.
+
+<P>
+Actually, you probably can index any 8-bit character set, as long as you
+don't mix character sets in the same index and don't use libxml2 for
+parsing (see below).
+
+<P>
+The <A HREF="#item_TranslateCharacters">TranslateCharacters</A> directive (<A HREF="././SWISH-CONFIG.html">SWISH-CONFIG</A>) can translate characters while indexing and searching. You may specify
+the mapping of one character to another character with the
+<A HREF="#item_TranslateCharacters">TranslateCharacters</A> directive.
+
+<P>
+<CODE>TranslateCharacters :ascii7:</CODE> is a predefined set of characters that will translate eight-bit characters
+to ascii7 characters. Using the
+<CODE>:ascii7:</CODE> rule will, for example, translate &quot;Ääç&quot; to &quot;aac&quot;. This
+means: searching &quot;Çelik&quot;, &quot;çelik&quot; or &quot;celik&quot;
+will all match the same word.
+
+<P>
+Note: When using libxml2 for parsing, parsed documents are converted
+internally (within libxml2) to UTF-8. This is converted to ISO 8859-1
+Latin-1 when indexing. In cases where a string can not be converted from
+UTF-8 to ISO 8859-1 (because it contains non 8859-1 characters), the string
+will be sent to Swish-e in UTF-8 encoding. This will results in some words
+indexed incorrectly. Setting <CODE>ParserWarningLevel</CODE> to 1 or more will display warnings when UTF-8 to 8859-1 conversion fails.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Can_I_add_remove_files_from_an_index_">Can I add/remove files from an index?</A></H3>
+<P>
+Try building swish-e with the <CODE>--enable-incremental</CODE> option.
+
+<P>
+The rest of this FAQ applies to the default swish-e format.
+
+<P>
+Swish-e currently has no way to add or remove items from its index. But,
+Swish-e indexes so quickly that it's often possible to reindex the entire
+document set when a file needs to be added, modified or removed. If you are
+spidering a remote site then consider caching documents locally compressed.
+
+<P>
+Incremental additions can be handled in a couple of ways, depending on your
+situation. It's probably easiest to create one main index every night (or
+every week), and then create an index of just the new files between main
+indexing jobs and use the <CODE>-f</CODE> option to pass both indexes to Swish-e while searching.
+
+<P>
+You can merge the indexes into one index (instead of using -f), but it's
+not clear that this has any advantage over searching multiple indexes.
+
+<P>
+How does one create the incremental index?
+
+<P>
+One method is by using the <CODE>-N</CODE> switch to pass a file path to Swish-e when indexing. It will only index
+files that have a last modification date <CODE>newer</CODE> than the file supplied with the <CODE>-N</CODE> switch.
+
+<P>
+This option has the disadvantage that Swish-e must process every file in
+every directory as if they were going to be indexed (the test for <CODE>-N</CODE>
+is done last right before indexing of the file contents begin and after all
+other tests on the file have been completed) -- all that just to find a few
+new files.
+
+<P>
+Also, if you use the Swish-e index file as the file passed to <CODE>-N</CODE> there may be files that were added after indexing was started, but before
+the index file was written. This could result in a file not being added to
+the index.
+
+<P>
+Another option is to maintain a parallel directory tree that contains
+symlinks pointing to the main files. When a new file is added (or changed)
+to the main directory tree you create a symlink to the real file in the
+parallel directory tree. Then just index the symlink directory to generate
+the incremental index.
+
+<P>
+This option has the disadvantage that you need to have a central program
+that creates the new files that can also create the symlinks. But, indexing
+is quite fast since Swish-e only has to look at the files that need to be
+indexed. When you run full indexing you simply unlink (delete) all the
+symlinks.
+
+<P>
+Both of these methods have issues where files could end up in both indexes,
+or files being left out of an index. Use of file locks while indexing, and
+hash lookups during searches can help prevent these problems.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="I_run_out_of_memory_trying_to_index_my_files_">I run out of memory trying to index my files.</A></H3>
+<P>
+It's true that indexing can take up a lot of memory! Swish-e is extremely
+fast at indexing, but that comes at the cost of memory.
+
+<P>
+The best answer is install more memory.
+
+<P>
+Another option is use the <CODE>-e</CODE> switch. This will require less memory, but indexing will take longer as not
+all data will be stored in memory while indexing. How much less memory and
+how much more time depends on the documents you are indexing, and the
+hardware that you are using.
+
+<P>
+Here's an example of indexing all .html files in /usr/doc on Linux. This
+first example is <EM>without</EM>  <CODE>-e</CODE> and used about 84M of memory:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    270279 unique words indexed.
+    23841 files indexed.  177640166 total bytes.
+    Elapsed time: 00:04:45 CPU time: 00:03:19</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This is <EM>with</EM>  <CODE>-e</CODE>, and used about 26M or memory:    
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    270279 unique words indexed.
+    23841 files indexed.  177640166 total bytes.
+    Elapsed time: 00:06:43 CPU time: 00:04:12</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You can also build a number of smaller indexes and then merge together with <CODE>-M</CODE>. Using <CODE>-e</CODE> while merging will save memory.
+
+<P>
+Finally, if you do build a number of smaller indexes, you can specify more
+than one index when searching by using the <CODE>-f</CODE> switch. Sorting large results sets by a property will be slower when
+specifying multiple index files while searching.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="_too_many_open_files_when_indexing_with_e_option">&quot;too many open files&quot; when indexing with -e option</A></H3>
+<P>
+Some platforms report &quot;too many open files&quot; when using the -e
+economy option. The -e feature uses many temporary files (something like
+377) plus the index files and this may exceed your system's limits.
+
+<P>
+Depending on your platform you may need to set &quot;ulimit&quot; or
+&quot;unlimit&quot;.
+
+<P>
+For example, under Linux bash shell:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  $ ulimit -n 1024</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Or under an old Sparc
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  % unlimit openfiles</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="My_system_admin_says_Swish_e_uses_too_much_of_the_CPU_">My system admin says Swish-e uses too much of the CPU!</A></H3>
+<P>
+That's a good thing! That expensive CPU is supposed to be busy.
+
+<P>
+Indexing takes a lot of work -- to make indexing fast much of the work is
+done in memory which reduces the amount of time Swish-e is waiting on I/O.
+But, there's two things you can try:
+
+<P>
+The <CODE>-e</CODE> option will run Swish-e in economy mode, which uses the disk to store data
+while indexing. This makes Swish-e run somewhat slower, but also uses less
+memory. Since it is writing to disk more often it will be spending more
+time waiting on I/O and less time in CPU. Maybe.
+
+<P>
+The other thing is to simply lower the priority of the job using the
+<CODE>nice(1)</CODE> command:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    /bin/nice -15 swish-e -c search.conf</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If concerned about searching time, make sure you are using the -b and -m
+switches to only return a page at a time. If you know that your result sets
+will be large, and that you wish to return results one page at a time, and
+that often times many pages of the same query will be requested, you may be
+smart to request all the documents on the first request, and then cache the
+results to a temporary file. The perl module File::Cache makes this very
+simple to accomplish.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Spidering">Spidering</A></H2>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_can_I_index_documents_on_a_web_server_">How can I index documents on a web server?</A></H3>
+<P>
+If possible, use the file system method <CODE>-S fs</CODE> of indexing to index documents in you web area of the file system. This
+avoids the overhead of spidering a web server and is much faster. (<CODE>-S fs</CODE> is the default method if <CODE>-S</CODE> is not specified).
+
+<P>
+If this is impossible (the web server is not local, or documents are
+dynamically generated), Swish-e provides two methods of spidering. First,
+it includes the http method of indexing <CODE>-S http</CODE>. A number of special configuration directives are available that control
+spidering (see <A HREF="././SWISH-CONFIG.html#Directives_for_the_HTTP_Access_Method_Only">Directives for the HTTP Access Method Only</A>). A perl helper script (swishspider) is included in the <EM>src</EM> directory to assist with spidering web servers. There are example
+configurations for spidering in the <EM>conf</EM> directory.
+
+<P>
+As of Swish-e 2.2, there's a general purpose &quot;prog&quot; document
+source where a program can feed documents to it for indexing. A number of
+example programs can be found in the <CODE>prog-bin</CODE> directory, including a program to spider web servers. The provided
+spider.pl program is full-featured and is easily customized.
+
+<P>
+The advantage of the &quot;prog&quot; document source feature over the
+&quot;http&quot; method is that the program is only executed one time,
+where the swishspider.pl program used in the &quot;http&quot; method is
+executed once for every document read from the web server. The forking of
+Swish-e and compiling of the perl script can be quite expensive, time-wise.
+
+<P>
+The other advantage of the <CODE>spider.pl</CODE> program is that it's simple and efficient to add filtering (such as for PDF
+or MS Word docs) right into the spider.pl's configuration, and it includes
+features such as MD5 checks to prevent duplicate indexing, options to avoid
+spidering some files, or index but avoid spidering. And since it's a perl
+program there's no limit on the features you can add.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Why_does_swish_report_swishspider_not_found_">Why does swish report &quot;./swishspider: not found&quot;?</A></H3>
+<P>
+Does the file <EM>swishspider</EM> exist where the error message displays? If not, either set the
+configuration option <A HREF="././SWISH-CONFIG.html#item_SpiderDir">SpiderDirectory</A>
+to point to the directory where the <EM>swishspider</EM> program is found, or place the
+<EM>swishspider</EM> program in the current directory when running swish-e.
+
+<P>
+If you are running Windows, make sure &quot;perl&quot; is in your path. Try
+typing <EM>perl</EM> from a command prompt.
+
+<P>
+If you not running windows, make sure that the shebang line (the first line
+of the swishspider program that starts with #!) points to the correct
+location of perl. Typically this will be <EM>/usr/bin/perl</EM> or <EM>/usr/local/bin/perl</EM>. Also, make sure that you have execute and read permissions on <EM>swishspider</EM>.
+
+<P>
+The <EM>swishspider</EM> perl script is only used with the -S http method of indexing.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="I_m_using_the_spider_pl_program_to_spider_my_web_site_but_some_large_files_are_not_indexed_">I'm using the spider.pl program to spider my web site, but some
+large files are not indexed.</A></H3>
+<P>
+The <CODE>spider.pl</CODE> program has a default limit of 5MB file size. This can be changed with the <CODE>max_size</CODE> parameter setting. See <CODE>perldoc
+spider.pl</CODE> for more information.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="I_still_don_t_think_all_my_web_pages_are_being_indexed_">I still don't think all my web pages are being indexed.</A></H3>
+<P>
+The <EM>spider.pl</EM> program has a number of debugging switches and can be quite verbose in
+telling you what's happening, and why. See <CODE>perldoc
+spider.pl</CODE> for instructions.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Swish_is_not_spidering_Javascript_links_">Swish is not spidering Javascript links!</A></H3>
+<P>
+Swish cannot follow links generated by Javascript, as they are generated by
+the browser and are not part of the document.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_spider_other_websites_and_combine_it_with_my_own_filesystem_index_">How do I spider other websites and combine it with my own
+(filesystem) index?</A></H3>
+<P>
+You can either merge <CODE>-M</CODE> two indexes into a single index, or use <CODE>-f</CODE>
+to specify more than one index while searching.
+
+<P>
+You will have better results with the <CODE>-f</CODE> method.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Searching">Searching</A></H2>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_limit_searches_to_just_parts_of_the_index_">How do I limit searches to just parts of the index?</A></H3>
+<P>
+If you can identify &quot;parts&quot; of your index by the path name you
+have two options.
+
+<P>
+The first options is by indexing the document path. Add this to your
+configuration:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MetaNames swishdocpath</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now you can search for words or phrases in the path name:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w 'foo AND swishdocpath=(sales)'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+So that will only find documents with the word &quot;foo&quot; and where
+the file's path contains &quot;sales&quot;. That might not works as well as
+you like, though, as both of these paths will match:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    /web/sales/products/index.html
+    /web/accounting/private/sales_we_messed_up.html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This can be solved by searching with a phrase (assuming &quot;/&quot; is
+not a WordCharacter):
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w 'foo AND swishdocpath=(&quot;/web/sales/&quot;)'
+    swish-e -w 'foo AND swishdocpath=(&quot;web sales&quot;)'  (same thing)</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The second option is a bit more powerful. With the <A HREF="#item_ExtractPath">ExtractPath</A>
+directive you can use a regular expression to extract out a sub-set of the
+path and save it as a separate meta name:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MetaNames department
+    ExtractPath department regex !^/web/([^/]+).+$!$1/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Which says match a path that starts with &quot;/web/&quot; and extract out
+everything after that up to, but not including the next &quot;/&quot; and
+save it in variable $1, and then match everything from the &quot;/&quot;
+onward. Then replace the entire matches string with $1. And that gets
+indexed as meta name &quot;department&quot;.
+
+<P>
+Now you can search like:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -w 'foo AND department=sales'</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and be sure that you will only match the documents in the /www/sales/*
+path. Note that you can map completely different areas of your file system
+to the same metaname:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # flag the marketing specific pages
+    ExtractPath department regex !^/web/(marketing|sales)/.+$!marketing/
+    ExtractPath department regex !^/internal/marketing/.+$!marketing/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # flag the technical departments pages
+    ExtractPath department regex !^/web/(tech|bugs)/.+$!tech/</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Finally, if you have something more complicated, use <CODE>-S prog</CODE> and write a perl program or use a filter to set a meta tag when processing
+each file.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_is_ranking_calculated_">How is ranking calculated?</A></H3>
+<P>
+The <CODE>swishrank</CODE> property value is calculated based on which Ranking Scheme (or algorithm)
+you have selected. In this discussion, any time the word <STRONG>fancy</STRONG> is used, you should consult the actual code for more details. It is open
+source, after all.
+
+<P>
+Things you can do to affect ranking:
+
+<DL>
+<P><DT><STRONG><A NAME="item_MetaRankBias">MetaRankBias</A></STRONG><DD>
+<P>
+You may configure your index to bias certain metaname values more or less
+than others. See the <A HREF="#item_MetaRankBias">MetaRankBias</A> configuration option in <A HREF="././SWISH-CONFIG.html">the SWISH-CONFIG manpage</A>.
+
+<P><DT><STRONG><A NAME="item_IgnoreTotalWordCountWhenRanking">IgnoreTotalWordCountWhenRanking</A></STRONG><DD>
+<P>
+Set to 1 (default) or 0 in your config file. See <A HREF="././SWISH-CONFIG.html">the SWISH-CONFIG manpage</A>.
+<STRONG>NOTE:</STRONG> You must set this to 0 to use the IDF Ranking Scheme.
+
+<P><DT><STRONG><A NAME="item_structure">structure</A></STRONG><DD>
+<P>
+Each term's position in each HTML document is given a structure value based
+on the context in which the word appears. The structure value is used to
+artificially inflate the frequency of each term in that particular
+document. These structural values are defined in <EM>config.h</EM>:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre> #define RANK_TITLE             7
+ #define RANK_HEADER            5
+ #define RANK_META              3
+ #define RANK_COMMENTS          1
+ #define RANK_EMPHASIZED        0</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+For example, if the word <CODE>foo</CODE> appears in the title of a document, the Scheme will treat that document as
+if <CODE>foo</CODE> appeared 7 additional times.
+
+</DL>
+<P>
+All Schemes share the following characteristics:
+
+<DL>
+<P><DT><STRONG><A NAME="item_AND">AND searches</A></STRONG><DD>
+<P>
+The rank value is averaged for all AND'd terms. Terms within a set of
+parentheses () are averaged as a single term (this is an acknowledged
+weakness and is on the TODO list).
+
+<P><DT><STRONG><A NAME="item_OR">OR searches</A></STRONG><DD>
+<P>
+The rank value is summed and then doubled for each pair of OR'd terms. This
+results in higher ranks for documents that have multiple OR'd terms.
+
+<P><DT><STRONG><A NAME="item_scaled">scaled rank</A></STRONG><DD>
+<P>
+After a document's raw rank score is calculated, a final rank score is
+calculated using a fancy <CODE>log()</CODE> function. All the documents are then scaled against a base score of 1000.
+The top-ranked document will therefore always have a <CODE>swishrank</CODE> value of 1000.
+
+</DL>
+<P>
+Here is a brief overview of how the different Schemes work. The number in
+parentheses after the name is the value to invoke that scheme with <CODE>swish-e -R</CODE> or <CODE>RankScheme()</CODE>.
+
+<DL>
+<P><DT><STRONG><A NAME="item_Default">Default (0)</A></STRONG><DD>
+<P>
+The default ranking scheme considers the number of times a term appears in
+a document (frequency), the MetaRankBias and the structure value. The rank
+might be summarized as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre> DocRank = Sum of ( structure + metabias )</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Consider this output with the DEBUG_RANK variable set at compile time: 
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre> Ranking Scheme: 0 
+ Word entry 0 at position 6 has struct 7
+ Word entry 1 at position 64 has struct 41
+ Word entry 2 at position 71 has struct 9
+ Word entry 3 at position 132 has struct 9
+ Word entry 4 at position 154 has struct 9
+ Word entry 5 at position 423 has struct 73
+ Word entry 6 at position 541 has struct 73
+ Word entry 7 at position 662 has struct 73
+ File num: 1104.  Raw Rank: 21.  Frequency: 8 scaled rank: 30445
+  Structure tally:
+  struct 0x7 = count of 1 ( HEAD TITLE FILE ) x rank map of 8 = 8</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  struct 0x9 = count of 3 ( BODY FILE ) x rank map of 1 = 3</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  struct 0x29 = count of 1 ( HEADING BODY FILE ) x rank map of 6 = 6</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  struct 0x49 = count of 3 ( EM BODY FILE ) x rank map of 1 = 3</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Every word instance starts with a base score of 1. Then for each instance
+of your word, a running sum is taken of the structural value of that word
+position plus any bias you've configured. In the example above, the raw
+rank is <CODE>1 + 8 + 3 + 6 + 3 = 21</CODE>.
+
+<P>
+Consider this line:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  struct 0x7 = count of 1 ( HEAD TITLE FILE ) x rank map of 8 = 8</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+That means there was one instance of our word in the title of the file.
+It's context was in the &lt;head&gt; tagset, inside the &lt;title&gt;. The &lt;title&gt; is the most specific structure, so it gets the RANK_TITLE score:
+7. The base rank of 1 plus the structure score of 7 equals 8. If there had
+been two instances of this word in the title, then the score would have
+been <CODE>8 + 8 = 16</CODE>.
+
+<P><DT><STRONG><A NAME="item_IDF">IDF (1)</A></STRONG><DD>
+<P>
+IDF is short for Inverse Document Frequency. That's fancy ranking lingo for
+taking into account the total frequency of a term across the entire index,
+in addition to the term's frequency in a single document. IDF ranking also
+uses the relative density of a word in a document to judge its relevancy.
+Words that appear more often in a doc make that doc's rank higher, and
+longer docs are not weighted higher than shorter docs.
+
+<P>
+The IDF Scheme might be summarized as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  DocRank = Sum of ( density * idf * ( structure + metabias ) )</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Consider this output from DEBUG_RANK:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre> Ranking Scheme: 1 
+ File num: 1104  Word Score: 1  Frequency: 8  Total files: 1451   
+ Total word freq: 108   IDF: 2564  
+ Total words: 1145877   Indexed words in this doc: 562   
+ Average words: 789   Density: 1120    Word Weight: 28716   
+ Word entry 0 at position 6 has struct 7
+ Word entry 1 at position 64 has struct 41
+ Word entry 2 at position 71 has struct 9
+ Word entry 3 at position 132 has struct 9
+ Word entry 4 at position 154 has struct 9
+ Word entry 5 at position 423 has struct 73
+ Word entry 6 at position 541 has struct 73
+ Word entry 7 at position 662 has struct 73
+ Rank after IDF weighting: 574321  
+ scaled rank: 132609
+  Structure tally:
+  struct 0x7 = count of  1 ( HEAD TITLE FILE ) x rank map of 8 = 8</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  struct 0x9 = count of  3 ( BODY FILE ) x rank map of 1 = 3</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  struct 0x29 = count of  1 ( HEADING BODY FILE ) x rank map of 6 = 6</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>  struct 0x49 = count of  3 ( EM BODY FILE ) x rank map of 1 = 3</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+It is similar to the default Scheme, but notice how the total number of
+files in the index and the total word frequency (as opposed to the document
+frequency) are both part of the equation.
+
+</DL>
+<P>
+Ranking is a complicated subject. SWISH-E allows for more Ranking Schemes
+to be developed and experimented with, using the -R option (from the
+swish-e command) and the RankScheme (see the API documentation). Experiment
+and share your findings via the discussion list.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_can_I_limit_searches_to_the_title_body_or_comment_">How can I limit searches to the title, body, or comment?</A></H3>
+<P>
+Use the <CODE>-t</CODE> switch.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="I_can_t_limit_searches_to_title_body_comment_">I can't limit searches to title/body/comment.</A></H3>
+<P>
+Or, <EM>I can't search with meta names, all the names are indexed as
+"plain".</EM>
+
+
+
+<P>
+Check in the config.h file if #define INDEXTAGS is set to 1. If it is,
+change it to 0, recompile, and index again. When INDEXTAGS is 1, ALL the
+tags are indexed as plain text, that is you index &quot;title&quot;,
+&quot;h1&quot;, and so on, AND they loose their indexing meaning. If
+INDEXTAGS is set to 0, you will still index meta tags and comments, unless
+you have indicated otherwise in the user config file with the IndexComments
+directive.
+
+<P>
+Also, check for the <A HREF="#item_UndefinedMetaTags">UndefinedMetaTags</A> setting in your configuration file.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="I_ve_tried_running_the_included_CGI_script_and_I_get_a_Internal_Server_Error_">I've tried running the included CGI script and I get a &quot;Internal
+Server Error&quot;</A></H3>
+<P>
+Debugging CGI scripts are beyond the scope of this document. Internal
+Server Error basically means &quot;check the web server's log for an error
+message&quot;, as it can mean a bad shebang (#!) line, a missing perl
+module, FTP transfer error, or simply an error in the program. The CGI
+script <EM>swish.cgi</EM> in the <EM>example</EM> directory contains some debugging suggestions. Type <CODE>perldoc swish.cgi</CODE> for information.
+
+<P>
+There are also many, many CGI FAQs available on the Internet. A quick web
+search should offer help. As a last resort you might ask your webadmin for
+help...
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="When_I_try_to_view_the_swish_cgi_page_I_see_the_contents_of_the_Perl_program_">When I try to view the swish.cgi page I see the contents of the
+Perl program.</A></H3>
+<P>
+Your web server is not configured to run the program as a CGI script. This
+problem is described in <CODE>perldoc swish.cgi</CODE>.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="How_do_I_make_Swish_e_highlight_words_in_search_results_">How do I make Swish-e highlight words in search results?</A></H3>
+<P>
+Short answer:
+
+<P>
+Use the supplied swish.cgi or search.cgi scripts located in the <EM>example</EM> directory.
+
+<P>
+Long answer:
+
+<P>
+Swish-e can't because it doesn't have access to the source documents when
+returning results, of course. But a front-end program of your creation can
+highlight terms. Your program can open up the source documents and then use
+regular expressions to replace search terms with highlighted or bolded
+words.
+
+<P>
+But, that will fail with all but the most simple source documents. For HTML
+documents, for example, you must parse the document into words and tags
+(and comments). A word you wish to highlight may span multiple HTML tags,
+or be a word in a URL and you wish to highlight the entire link text.
+
+<P>
+Perl modules such as HTML::Parser and XML::Parser make word extraction
+possible. Next, you need to consider that Swish-e uses settings such as
+WordCharacters, BeginCharacters, EndCharacters, IgnoreFirstChar, and
+IgnoreLast, char to define a &quot;word&quot;. That is, you can't consider
+that a string of characters with white space on each side is a word.
+
+<P>
+Then things like TranslateCharacters, and HTML Entities may transform a
+source word into something else, as far as Swish-e is concerned. Finally,
+searches can be limited by metanames, so you may need to limit your
+highlighting to only parts of the source document. Throw phrase searches
+and stopwords into the equation and you can see that it's not a trivial
+problem to solve.
+
+<P>
+All hope is not lost, thought, as Swish-e does provide some help. Using the <CODE>-H</CODE> option it will return in the headers the current index (or indexes)
+settings for WordCharacters (and others) required to parse your source
+documents as it parses them during indexing, and will return a &quot;Parsed
+Words:&quot; header that will show how it parsed the query internally. If
+you use fuzzy indexing (word stemming, soundex, or metaphone) then you will
+also need to stem each word in your document before comparing with the
+&quot;Parsed Words:&quot; returned by Swish-e.
+
+<P>
+The Swish-e stemming code is available either by using the Swish-e Perl
+module (SWISH::API) or the C library (included with the swish-e
+distribution), or by using the SWISH::Stemmer module available on CPAN.
+Also on CPAN is the module Text::DoubleMetaphone. Using SWISH::API probably
+provides the best stemming support.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H3><A NAME="Do_filters_effect_the_performance_during_search_">Do filters effect the performance during search?</A></H3>
+<P>
+No. Filters (FileFilter or via &quot;prog&quot; method) are only used for
+building the search index database. During search requests there will be no
+filter calls.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="I_have_read_the_FAQ_but_I_still_have_questions_about_using_Swish_e_">I have read the FAQ but I still have questions about using Swish-e.</A></H2>
+<P>
+The Swish-e discussion list is the place to go. <A
+HREF="http://swish-e.org/.">http://swish-e.org/.</A> Please do not email
+developers directly. The list is the best place to ask questions.
+
+<P>
+Before you post please read <EM>QUESTIONS AND TROUBLESHOOTING</EM> located in the <A HREF="././INSTALL.html">INSTALL</A> page. You should also search the Swish-e discussion list archive which can
+be found on the swish-e web site.
+
+<P>
+In short, be sure to include in the following when asking for help.
+
+<UL>
+<P><LI><STRONG><A NAME="item_The">The swish-e version (./swish-e -V)</A></STRONG>
+<P><LI><STRONG><A NAME="item_What">What you are indexing (and perhaps a sample), and the number
+of files</A></STRONG>
+<P><LI><STRONG><A NAME="item_Your">Your Swish-e configuration file</A></STRONG>
+<P><LI><STRONG><A NAME="item_Any">Any error messages that Swish-e is reporting</A></STRONG>
+</UL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Document_Info">Document Info</A></H1>
+<P>
+$Id: SWISH-FAQ.html,v 1.1 2005/04/12 14:23:44 joshr Exp $
+
+<P>
+.
+
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+
+
+    <p>
+    <div class="navbar">
+      <a href="./SWISH-SEARCH.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./SWISH-BUGS.html">Next</a>
+    </div>
+    <p>
+
+    <P ALIGN="CENTER">
+    <IMG ALT="" WIDTH="470" HEIGHT="10" SRC="images/dotrule1.gif"></P>
+    <P ALIGN="CENTER">
+
+    <div class="footer">
+        <BR>SWISH-E is distributed with <B>no warranty</B> under the terms of the
+        <A HREF="http://www.fsf.org/copyleft/gpl.html">GNU Public License</A>,<BR>
+        Free Software Foundation, Inc., 
+        59 Temple Place - Suite 330, Boston, MA  02111-1307, USA<BR> 
+        Public questions may be posted to 
+        the <A HREF="http://swish-e.org/Discussion/">SWISH-E Discussion</A>.
+    </div>
+
+</body>
+</html>

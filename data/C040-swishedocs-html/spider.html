@@ -1,0 +1,2557 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+   <title>SWISH-Enhanced:  spider.pl - Example Perl program to spider web servers </title>
+   <link href="./style.css" rel=stylesheet type="text/css" title="refstyle">
+  </head>
+  <body>
+
+    <h1 class="banner">
+        <a href="http://swish-e.org"><img border=0 src="images/swish.gif" alt="Swish-E Logo"></a><br>
+        <img src="images/swishbanner1.gif"><br>
+        <img src="images/dotrule1.gif"><br>
+         spider.pl - Example Perl program to spider web servers 
+    </h1>
+
+    <hr>
+
+    <p>
+    <div class="navbar">
+      <a href="./search.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./Filter.html">Next</a>
+    </div>
+    <p>
+
+    <div class="toc">
+      
+<A NAME="toc"></A>
+<P><B>Table of Contents:</B></P>
+
+<UL>
+
+	<LI><A HREF="#SYNOPSIS">SYNOPSIS</A>
+	<LI><A HREF="#DESCRIPTION">DESCRIPTION</A>
+	<UL>
+
+		<LI><A HREF="#Running_the_spider">Running the spider</A>
+		<LI><A HREF="#Robots_Exclusion_Rules_and_being_nice">Robots Exclusion Rules and being nice</A>
+		<LI><A HREF="#Duplicate_Documents">Duplicate Documents</A>
+		<LI><A HREF="#Broken_relative_links">Broken relative links</A>
+		<LI><A HREF="#Compression">Compression</A>
+	</UL>
+
+	<LI><A HREF="#REQUIREMENTS">REQUIREMENTS</A>
+	<LI><A HREF="#CONFIGURATION_FILE">CONFIGURATION FILE</A>
+	<LI><A HREF="#CONFIGURATION_OPTIONS">CONFIGURATION OPTIONS</A>
+	<LI><A HREF="#CALLBACK_FUNCTIONS">CALLBACK FUNCTIONS</A>
+	<UL>
+
+		<LI><A HREF="#More_on_setting_flags">More on setting flags</A>
+	</UL>
+
+	<LI><A HREF="#SIGNALS">SIGNALS</A>
+	<LI><A HREF="#CHANGES">CHANGES</A>
+	<UL>
+
+		<LI><A HREF="#Thu_Sep_30_2004_changes_for_Swish_e_2_4_3">Thu Sep 30 2004 - changes for Swish-e 2.4.3</A>
+	</UL>
+
+	<LI><A HREF="#TODO">TODO</A>
+	<LI><A HREF="#COPYRIGHT">COPYRIGHT</A>
+	<LI><A HREF="#SUPPORT">SUPPORT</A>
+</UL>
+
+    </div>
+
+    
+
+	    [ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+<P>
+<H1><A NAME="SYNOPSIS">SYNOPSIS</A></H1>
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    spider.pl [&lt;spider config file&gt;] [&lt;URL&gt; ...]</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Spider using some common defaults and capture the output
+    # into a file</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl default <A HREF="http://myserver.com/">http://myserver.com/</A> &gt; output.txt</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # or using a config file</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    spider.config:
+    @servers = (
+        {
+            base_url    =&gt; '<A HREF="http://myserver.com/">http://myserver.com/</A>',
+            email       =&gt; 'me@myself.com',
+            # other spider settings described below
+        },
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl spider.config &gt; output.txt</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # or using the default config file SwishSpiderConfig.pl
+    ./spider.pl &gt; output.txt</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # using with swish-e</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl spider.config | swish-e -c swish.config -S prog -i stdin</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # or in two steps
+    ./spider.pl spider.config &gt; output.txt
+    swish-e -c swish.config -S prog -i stdin &lt; output.txt</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # or with compression
+    ./spider.pl spider.config | gzip &gt; output.gz
+    gzip -dc output.gz | swish-e -c swish.config -S prog -i stdin</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # or having swish-e call the spider directly using the
+    # spider config file SwishSpiderConfig.pl:
+    swish-e -c swish.config -S prog -i spider.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # or the above but passing passing a parameter to the spider:
+    echo &quot;SwishProgParameters  spider.config&quot; &gt;&gt; swish.config
+    echo &quot;IndexDir spider.pl&quot; &gt;&gt; swish.config
+    swish-e -c swish.config -S prog</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    Note: When running on some versions of Windows (e.g. Win ME and Win 98 SE)
+    you may need to tell Perl to run the spider directly:</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        perl spider.pl | swish-e -S prog -c swish.conf -i stdin</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    This pipes the output of the spider directly into swish.</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="DESCRIPTION">DESCRIPTION</A></H1>
+<P>
+<EM>spider.pl</EM> is a program for fetching documnts from a web server, and outputs the
+documents to STDOUT in a special format designed to be read by Swish-e.
+
+<P>
+The spider can index non-text documents such as PDF and MS Word by use of
+filter (helper) programs. These programs are not part of the Swish-e
+distribution and must be installed separately. See the section on filtering
+below.
+
+<P>
+A configuration file is noramlly used to control what documents are fetched
+from the web <CODE>server(s).</CODE> The configuration file and its options
+are described below. The is also a &quot;default&quot; config suitable for
+spidering.
+
+<P>
+The spider is designed to spider web pages and fetch documents from one
+host at a time -- offsite links are not followed. But, you can configure
+the spider to spider multiple sites in a single run.
+
+<P>
+<EM>spider.pl</EM> is distributed with Swish-e and is installed in the swish-e library
+directory at installation time. This directory (libexedir) can be seen by
+running the command:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -h</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Typically on unix-type systems the spider is installed at:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    /usr/local/lib/swish-e/spider.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This spider stores all links in memory while processing and does not do
+parallel requests.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Running_the_spider">Running the spider</A></H2>
+<P>
+The output from <EM>spider.pl</EM> can be captured to a temporary file which is then fed into swish-e:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl &gt; docs.txt
+    swish-e -c config -S prog -i stdin &lt; docs.txt</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+or the output can be passed to swish-e via a pipe:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   ./spider.pl | swish-e -c config -S prog -i stdin</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+or the swish-e can run the spider directly:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   swish-e -c config -S prog -i spider.pl</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+One advantage of having Swish-e run <EM>spider.pl</EM> is that Swish-e knows where to locate the program (based on libexecdir
+compiled into swish-e).
+
+<P>
+When running the spider <EM>without</EM> any parameters it looks for a configuration file called <EM>SwishSpiderConfig.pl</EM> in the current directory. The spider will abort with an error if this file
+is not found.
+
+<P>
+A configuration file can be specified as the first parameter to the spider:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl spider.config &gt; output.txt</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If running the spider via Swish-e (i.e. Swish-e runs the spider) then use
+the Swish-e config option <A HREF="././SWISH-CONFIG.html#item_SwishProgParameters">SwishProgParameters</A>
+to specify the config file:
+
+<P>
+In swish.config:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    # Use spider.pl as the external program:
+    IndexDir spider.pl
+    # And pass the name of the spider config file to the spider:
+    SwishProgParameters spider.config</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And then run Swish-e like this:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    swish-e -c swish.config -S prog</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Finally, by using the special word &quot;default&quot; on the command line
+the spider will use a default configuration that is useful for indexing
+most sites. It's a good way to get started with the spider:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl default <A HREF="http://my_server.com/index.html">http://my_server.com/index.html</A> &gt; output.txt</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+There's no &quot;best&quot; way to run the spider. I like to capture to a
+file and then feed that into Swish-e.
+
+<P>
+The spider does require Perl's LWP library and a few other reasonably
+common modules. Most well maintained systems should have these modules
+installed. See  <A HREF="#REQUIREMENTS">REQUIREMENTS</A> below for more information. It's a good idea to check that you are running
+a current version of these modules.
+
+<P>
+Note: the &quot;prog&quot; document source in Swish-e bypasses many Swish-e
+configuration settings. For example, you cannot use the
+<A HREF="././SWISH-CONFIG.html#item_SwishProgParameters">IndexOnly</A> directive with the &quot;prog&quot; document source. This is by design to
+limit the overhead when using an external program for providing documents
+to swish; after all, with &quot;prog&quot;, if you don't want to index a
+file, then don't give it to swish to index in the first place.
+
+<P>
+So, for spidering, if you do not wish to index images, for example, you
+will need to either filter by the URL or by the content-type returned from
+the web server. See <A HREF="#CALLBACK_FUNCTIONS">CALLBACK FUNCTIONS</A> below for more information.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Robots_Exclusion_Rules_and_being_nice">Robots Exclusion Rules and being nice</A></H2>
+<P>
+By default, this script will not spider files blocked by <EM>robots.txt</EM>. In addition, The script will check for &lt;meta
+name=&quot;robots&quot;..&gt; tags, which allows finer control over what
+files are indexed and/or spidered. See <A
+HREF="http://www.robotstxt.org/wc/exclusion.html">http://www.robotstxt.org/wc/exclusion.html</A>
+for details.
+
+<P>
+This spider provides an extension to the &lt;meta&gt; tag exclusion, by adding a
+<STRONG>NOCONTENTS</STRONG> attribute. This attribute turns on the <CODE>no_contents</CODE> setting, which asks swish-e to only index the document's title (or file
+name if not title is found).
+
+<P>
+For example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>      &lt;META NAME=&quot;ROBOTS&quot; CONTENT=&quot;NOCONTENTS, NOFOLLOW&quot;&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+says to just index the document's title, but don't index its contents, and
+don't follow any links within the document. Granted, it's unlikely that
+this feature will ever be used...
+
+<P>
+If you are indexing your own site, and know what you are doing, you can
+disable robot exclusion by the <A HREF="#item_ignore_robots_file">ignore_robots_file</A> configuration parameter, described below. This disables both <EM>robots.txt</EM> and the meta tag parsing. You may disable just the meta tag parsing by
+using <CODE>ignore_robots_headers</CODE>.
+
+<P>
+This script only spiders one file at a time, so load on the web server is
+not that great. And with libwww-perl-5.53_91 HTTP/1.1 keep alive requests
+can reduce the load on the server even more (and potentially reduce
+spidering time considerably).
+
+<P>
+Still, discuss spidering with a site's administrator before beginning. Use
+the <A HREF="#item_delay_sec">delay_sec</A> to adjust how fast the spider fetches documents. Consider running a second
+web server with a limited number of children if you really want to fine
+tune the resources used by spidering.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Duplicate_Documents">Duplicate Documents</A></H2>
+<P>
+The spider program keeps track of URLs visited, so a document is only
+indexed one time.
+
+<P>
+The Digest::MD5 module can be used to create a &quot;fingerprint&quot; of
+every page indexed and this fingerprint is used in a hash to find duplicate
+pages. For example, MD5 will prevent indexing these as two different
+documents:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://localhost/path/to/some/index.html">http://localhost/path/to/some/index.html</A>
+    <A HREF="http://localhost/path/to/some/">http://localhost/path/to/some/</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+But note that this may have side effects you don't want. If you want this
+file indexed under this URL:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://localhost/important.html">http://localhost/important.html</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+But the spider happens to find the exact content in this file first:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://localhost/developement/test/todo/maybeimportant.html">http://localhost/developement/test/todo/maybeimportant.html</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then only that URL will be indexed.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Broken_relative_links">Broken relative links</A></H2>
+<P>
+Sometimes web page authors use too many <CODE>/../</CODE> segments in relative URLs which reference documents above the document
+root. Some web servers such as Apache will return a 400 Bad Request when
+requesting a document above the root. Other web servers such as Micorsoft
+IIS/5.0 will try and &quot;correct&quot; these errors. This correction will
+lead to loops when spidering.
+
+<P>
+The spider can fix these above-root links by placing the following in your
+spider config:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    remove_leading_dots =&gt; 1,</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+It is not on by default so that the spider can report the broken links (as
+400 errors on sane webservers).
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Compression">Compression</A></H2>
+<P>
+If The Perl module Compress::Zlib is installed the spider will send the
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   Accept-Encoding: gzip</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+header and uncompress the document if the server returns the header
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   Content-Encoding: gzip</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+MD5 checksomes are done on the compressed data.
+
+<P>
+MD5 may slow down indexing a tiny bit, so test with and without if speed is
+an issue (which it probably isn't since you are spidering in the first
+place). This feature will also use more memory.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="REQUIREMENTS">REQUIREMENTS</A></H1>
+<P>
+Perl 5 (hopefully at least 5.00503) or later.
+
+<P>
+You must have the LWP Bundle on your computer. Load the LWP::Bundle via the
+CPAN.pm shell, or download libwww-perl-x.xx from CPAN (or via ActiveState's
+ppm utility). Also required is the the HTML-Parser-x.xx bundle of modules
+also from CPAN (and from ActiveState for Windows).
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://search.cpan.org/search?dist=libwww-perl">http://search.cpan.org/search?dist=libwww-perl</A>
+    <A HREF="http://search.cpan.org/search?dist=HTML-Parser">http://search.cpan.org/search?dist=HTML-Parser</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You will also need Digest::MD5 if you wish to use the MD5 feature.
+HTML::Tagset is also required. Other modules may be required (for example,
+the pod2xml.pm module has its own requirementes -- see perldoc pod2xml for
+info).
+
+<P>
+The spider.pl script, like everyone else, expects perl to live in
+/usr/local/bin. If this is not the case then either add a symlink at
+/usr/local/bin/perl to point to where perl is installed or modify the
+shebang (#!) line at the top of the spider.pl program.
+
+<P>
+Note that the libwww-perl package does not support SSL (Secure Sockets
+Layer) (https) by default. See <EM>README.SSL</EM> included in the libwww-perl package for information on installing SSL
+support.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="CONFIGURATION_FILE">CONFIGURATION FILE</A></H1>
+<P>
+The spider configuration file is a read by the script as Perl code. This
+makes the configuration a bit more complex than simple text config files,
+but allows the spider to be configured programmatically.
+
+<P>
+For example, the config file can contain logic for testing URLs against
+regular expressions or even against a database lookup while running.
+
+<P>
+The configuration file sets an array called <CODE>@servers</CODE>. This array can contain one or more hash structures of parameters. Each
+hash structure is a configuration for a single server.
+
+<P>
+Here's an example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my %main_site = (
+        base_url   =&gt; '<A HREF="http://example.com">http://example.com</A>',
+        same_hosts =&gt; 'www.example.com',
+        email      =&gt; 'admin@example.com',
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my %news_site = (
+        base_url   =&gt; '<A HREF="http://news.example.com">http://news.example.com</A>',
+        email      =&gt; 'admin@example.com',
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    @servers = ( \%main_site, \%news_site );
+    1;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The above defines two Perl hashes (%main_site and %news_site) and then
+places a *reference* (the backslash before the name of the hash) to each of
+those hashes in the <CODE>@servers</CODE> array. The &quot;1;&quot; at the
+end is required at the end of the file (Perl must see a true value at the
+end of the file).
+
+<P>
+The <CODE>config file path</CODE> is the first parameter passed to the spider script.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl F&lt;config&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If you do not specify a config file then the spider will look for the file
+<EM>SwishSpiderConfig.pl</EM> in the current directory.
+
+<P>
+The Swish-e distribution includes a <EM>SwishSpiderConfig.pl</EM> file with a few example configurations. This example file is installed in
+the <EM>prog-bin/</EM>
+documentation directory (on unix often this is
+/usr/local/share/swish-e/prog-bin).
+
+<P>
+When the special config file name &quot;default&quot; is used:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SwishProgParameters default <A HREF="http://www.mysite/index.html">http://www.mysite/index.html</A> [&lt;URL&gt;] [...]</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Then a default set of parameters are used with the spider. This is a good
+way to start using the spider before attempting to create a configuration
+file.
+
+<P>
+The default settings skip any urls that look like images (well, .gif .jpeg
+.png), and attempts to filter PDF and MS Word documents IF you have the
+required filter programs installed (which are not part of the Swish-e
+distribution). The spider will follow &quot;a&quot; and &quot;frame&quot;
+type of links only.
+
+<P>
+Note that if you do use a spider configuration file that the default
+configuration will NOT be used (unless you set the
+&quot;use_default_config&quot; option in your config file).
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="CONFIGURATION_OPTIONS">CONFIGURATION OPTIONS</A></H1>
+<P>
+This describes the required and optional keys in the server configuration
+hash, in random order...
+
+<DL>
+<P><DT><STRONG><A NAME="item_base_url">base_url</A></STRONG><DD>
+<P>
+This required setting is the starting URL for spidering.
+
+<P>
+This sets the first URL the spider will fetch. It does NOT limit spidering
+to URLs at or below the level of the directory specified in this setting.
+For that feature you need to use the <A HREF="#item_test_url">test_url</A> callback function.
+
+<P>
+Typically, you will just list one URL for the base_url. You may specify
+more than one URL as a reference to a list and each will be spidered:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    base_url =&gt; [qw! <A HREF="http://swish-e.org/">http://swish-e.org/</A> <A HREF="http://othersite.org/other/index.html">http://othersite.org/other/index.html</A> !],</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+but each site will use the same config opions. If you want to index two
+separate sites you will likely rather add an additional configuration to
+the <CODE>@servers</CODE> array.
+
+<P>
+You may specify a username and password:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    base_url =&gt; '<A HREF="http://user:pass@swish-e.org/index.html">http://user:pass@swish-e.org/index.html</A>',</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+If a URL is protected by Basic Authentication you will be prompted for a
+username and password. The parameter <A HREF="#item_max_wait_time">max_wait_time</A> controls how long to wait for user entry before skipping the current URL.
+See also <A HREF="#item_credentials">credentials</A>
+below.
+
+<P><DT><STRONG><A NAME="item_same_hosts">same_hosts</A></STRONG><DD>
+<P>
+This optional key sets equivalent <STRONG>authority</STRONG> <CODE>name(s)</CODE> for the site you are spidering. For example, if your
+site is <CODE>www.mysite.edu</CODE> but also can be reached by
+<CODE>mysite.edu</CODE> (with or without <CODE>www</CODE>) and also <CODE>web.mysite.edu</CODE> then:
+
+<P>
+Example:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $serverA{base_url} = '<A HREF="http://www.mysite.edu/index.html">http://www.mysite.edu/index.html</A>';
+    $serverA{same_hosts} = ['mysite.edu', 'web.mysite.edu'];</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Now, if a link is found while spidering of:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://web.mysite.edu/path/to/file.html">http://web.mysite.edu/path/to/file.html</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+it will be considered on the same site, and will actually spidered and
+indexed as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://www.mysite.edu/path/to/file.html">http://www.mysite.edu/path/to/file.html</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: This should probably be called <STRONG>same_host_port</STRONG> because it compares the URI <CODE>host:port</CODE>
+against the list of host names in <A HREF="#item_same_hosts">same_hosts</A>. So, if you specify a port name in you will want to specify the port name
+in the the list of hosts in <A HREF="#item_same_hosts">same_hosts</A>:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my %serverA = (
+        base_url    =&gt; '<A HREF="http://sunsite.berkeley.edu:4444/">http://sunsite.berkeley.edu:4444/</A>',
+        same_hosts  =&gt; [ qw/www.sunsite.berkeley.edu:4444/ ],
+        email       =&gt; 'my@email.address',
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_email">email</A></STRONG><DD>
+<P>
+This required key sets the email address for the spider. Set this to your
+email address.
+
+<P><DT><STRONG><A NAME="item_agent">agent</A></STRONG><DD>
+<P>
+This optional key sets the name of the spider.
+
+<P><DT><STRONG><A NAME="item_link_tags">link_tags</A></STRONG><DD>
+<P>
+This optional tag is a reference to an array of tags. Only links found in
+these tags will be extracted. The default is to only extract links from &gt;a&lt; tags.
+
+<P>
+For example, to extract tags from <CODE>a</CODE> tags and from <CODE>frame</CODE> tags:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my %serverA = (
+        base_url    =&gt; '<A HREF="http://sunsite.berkeley.edu:4444/">http://sunsite.berkeley.edu:4444/</A>',
+        same_hosts  =&gt; [ qw/www.sunsite.berkeley.edu:4444/ ],
+        email       =&gt; 'my@email.address',
+        link_tags   =&gt; [qw/ a frame /],
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_use_default_config">use_default_config</A></STRONG><DD>
+<P>
+This option is new for Swish-e 2.4.3.
+
+<P>
+The spider has a hard-coded default configuration that's available when the
+spider is run with the configuration file listed as &quot;default&quot;:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl default &lt;url&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This default configuration skips urls that match the regular expression:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    /\.(?:gif|jpeg|png)$/i</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and the spider will attempt to use the SWISH::Filter module for filtering
+non-text documents. (You still need to install programs to do the actual
+filtering, though).
+
+<P>
+Here's the basic config for the &quot;default&quot; mode:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    @servers = (
+    {
+        email               =&gt; 'swish@user.failed.to.set.email.invalid',
+        link_tags           =&gt; [qw/ a frame /],
+        keep_alive          =&gt; 1,
+        test_url            =&gt; sub {  $_[0]-&gt;path !~ /\.(?:gif|jpeg|png)$/i },
+        test_response       =&gt; $response_sub,
+        use_head_requests   =&gt; 1,  # Due to the response sub
+        filter_content      =&gt; $filter_sub,
+    } );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The filter_content callback will be used if SWISH::Filter was loaded and
+ready to use. This doesn't mean that filtering will work automatically --
+you will likely need to install aditional programs for filtering (like Xpdf
+or Catdoc).
+
+<P>
+The test_response callback will be set to test if a given content type can
+be filtered by SWISH::Filter (if SWISH::Filter was loaded), otherwise, it
+will check for content-type of text/* -- any text type of document.
+
+<P>
+Normally, if you specify your own config file:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ./spider.pl my_own_spider.config</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+then you must setup those features available in the default setting in your
+own config file. But, if you wish to build upon the &quot;default&quot;
+config file then set this option.
+
+<P>
+For example, to use the default config but specify your own email address:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    @servers = (
+        {
+            email               =&gt; my@email.address,
+            use_default_config  =&gt; 1,
+            delay_sec           =&gt; 0,
+        },
+    );
+    1;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+What this does is &quot;merge&quot; your config file with the default
+config file.
+
+<P><DT><STRONG><A NAME="item_delay_sec">delay_sec</A></STRONG><DD>
+<P>
+This optional key sets the delay in seconds to wait between requests. See
+the LWP::RobotUA man page for more information. The default is 5 seconds.
+Set to zero for no delay.
+
+<P>
+When using the keep_alive feature (recommended) the delay will be used only
+where the previous request returned a &quot;Connection: closed&quot;
+header.
+
+<P><DT><STRONG><A NAME="item_delay_min">delay_min  (deprecated)</A></STRONG><DD>
+<P>
+Set the delay to wait between requests in minutes. If both delay_sec and
+delay_min are defined, delay_sec will be used.
+
+<P><DT><STRONG><A NAME="item_max_wait_time">max_wait_time</A></STRONG><DD>
+<P>
+This setting is the number of seconds to wait for data to be returned from
+the request. Data is returned in chunks to the spider, and the timer is
+reset each time a new chunk is reported. Therefore, documents (requests)
+that take longer than this setting should not be aborted as long as some
+data is received every max_wait_time seconds. The default it 30 seconds.
+
+<P>
+NOTE: This option has no effect on Windows.
+
+<P><DT><STRONG><A NAME="item_max_time">max_time</A></STRONG><DD>
+<P>
+This optional key will set the max minutes to spider. Spidering for this
+host will stop after <A HREF="#item_max_time">max_time</A> minutes, and move on to the next server, if any. The default is to not
+limit by time.
+
+<P><DT><STRONG><A NAME="item_max_files">max_files</A></STRONG><DD>
+<P>
+This optional key sets the max number of files to spider before aborting.
+The default is to not limit by number of files. This is the number of
+requests made to the remote server, not the total number of files to index
+(see <A HREF="#item_max_indexed">max_indexed</A>). This count is displayted at the end of indexing as <CODE>Unique URLs</CODE>.
+
+<P>
+This feature can (and perhaps should) be use when spidering a web site
+where dynamic content may generate unique URLs to prevent run-away
+spidering.
+
+<P><DT><STRONG><A NAME="item_max_indexed">max_indexed</A></STRONG><DD>
+<P>
+This optional key sets the max number of files that will be indexed. The
+default is to not limit. This is the number of files sent to swish for
+indexing (and is reported by <CODE>Total Docs</CODE> when spidering ends).
+
+<P><DT><STRONG><A NAME="item_max_size">max_size</A></STRONG><DD>
+<P>
+This optional key sets the max size of a file read from the web server.
+This <STRONG>defaults</STRONG> to 5,000,000 bytes. If the size is exceeded the resource is skipped and a
+message is written to STDERR if the DEBUG_SKIPPED debug flag is set.
+
+<P>
+Set max_size to zero for unlimited size. If the server returns a
+Content-Length header then that will be used. Otherwise, the document will
+be checked for size limitation as it arrives. That's a good reason to have
+your server send Content-Length headers.
+
+<P>
+See also <A HREF="#item_use_head_requests">use_head_requests</A> below.
+
+<P><DT><STRONG><A NAME="item_keep_alive">keep_alive</A></STRONG><DD>
+<P>
+This optional parameter will enable keep alive requests. This can
+dramatically speed up spidering and reduce the load on server being
+spidered. The default is to not use keep alives, although enabling it will
+probably be the right thing to do.
+
+<P>
+To get the most out of keep alives, you may want to set up your web server
+to allow a lot of requests per single connection (i.e MaxKeepAliveRequests
+on Apache). Apache's default is 100, which should be good.
+
+<P>
+When a connection is not closed the spider does not wait the
+&quot;delay_sec&quot; time when making the next request. In other words,
+there is no delay in requesting documents while the connection is open.
+
+<P>
+Note: try to filter as many documents as possible <STRONG>before</STRONG> making the request to the server. In other words, use <A HREF="#item_test_url">test_url</A> to look for files ending in <CODE>.html</CODE> instead of using <A HREF="#item_test_response">test_response</A> to look for a content type of <CODE>text/html</CODE> if possible. Do note that aborting a request from <A HREF="#item_test_response">test_response</A> will break the current keep alive connection.
+
+<P>
+Note: you must have at least libwww-perl-5.53_90 installed to use this
+feature.
+
+<P><DT><STRONG><A NAME="item_use_head_requests">use_head_requests</A></STRONG><DD>
+<P>
+This option is new as of swish-e 2.4.3 and can effect the speed of
+spidering and the load of the web server.
+
+<P>
+To understand this you will likely need to read about the <A HREF="#CALLBACK_FUNCTIONS">CALLBACK FUNCTIONS</A>
+below -- specifically about the <A HREF="#item_test_response">test_response</A> callback function. This option is also only used when <A HREF="#item_keep_alive">keep_alive</A> is also enabled (although it could be debated that it's useful without keep
+alives).
+
+<P>
+This option tells the spider to use http HEAD requests before each request.
+
+<P>
+Normally, the spider simply does a GET request and after receiving the
+first chunk of data back from the web server calls the <A HREF="#item_test_response">test_response</A> callback function (if one is defined in your config file). The <A HREF="#item_test_response">test_response</A>
+callback function is a good place to test the content-type header returned
+from the server and reject types that you do not want to index.
+
+<P>
+Now, *if* you are using the <A HREF="#item_keep_alive">keep_alive</A> feature then rejecting a document will often (always?) break the keep alive
+connection.
+
+<P>
+So, what the <A HREF="#item_use_head_requests">use_head_requests</A> option does is issue a HEAD request for every document, checks for a
+Content-Length header (to check if the document is larger than
+<A HREF="#item_max_size">max_size</A>, and then calls your <A HREF="#item_test_response">test_response</A> callback function. If your callback function returns true then a GET
+request is used to fetch the document.
+
+<P>
+The idea is that by using HEAD requests instead of GET request a false
+return from your <A HREF="#item_test_response">test_response</A> callback function (i.e. rejecting the document) will not break the keep
+alive connection.
+
+<P>
+Now, don't get too excited about this. Before using this think about the
+ratio of rejected documents to accepted documents. If you reject no
+documents then using this feature will double the number of requests to the
+web server -- which will also double the number of connections to the web
+server. But, if you reject a large percentage of documents then this
+feature will help maximize the number of keep alive requests to the server
+(i.e. reduce the number of separate connections needed).
+
+<P>
+There's also another problem with using HEAD requests. Some broken servers
+may not respond correctly to HEAD requests (some issues a 500 error), but
+respond fine to a normal GET request. This is something to watch out for.
+
+<P>
+Finally, if you do not have a <A HREF="#item_test_response">test_response</A> callback AND <A HREF="#item_max_size">max_size</A> is set to zero then setting <A HREF="#item_use_head_requests">use_head_requests</A> will have no effect.
+
+<P>
+And, with all other factors involved you might find this option has no
+effect at all.
+
+<P><DT><STRONG><A NAME="item_skip">skip</A></STRONG><DD>
+<P>
+This optional key can be used to skip the current server. It's only purpose
+is to make it easy to disable a specific server hash in a configuration
+file.
+
+<P><DT><STRONG><A NAME="item_debug">debug</A></STRONG><DD>
+<P>
+Set this item to a comma-separated list of debugging options.
+
+<P>
+Options are currently:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    errors, failed, headers, info, links, redirect, skipped, url</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Here are basically the levels:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    errors      =&gt;   general program errors (not used at this time)
+    url         =&gt;   print out every URL processes
+    headers     =&gt;   prints the response headers
+    failed      =&gt;   failed to return a 200
+    skipped     =&gt;   didn't index for some reason
+    info        =&gt;   a little more verbose
+    links       =&gt;   prints links as they are extracted
+    redirect    =&gt;   prints out redirected URLs</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Debugging can be also be set by an environment variable SPIDER_DEBUG when
+running <EM>spider.pl</EM>. You can specify any of the above debugging options, separated by a comma.
+
+<P>
+For example with Bourne type shell:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SPIDER_DEBUG=url,links spider.pl [....]</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Before Swish-e 2.4.3 you had to use the internal debugging constants or'ed
+together like so:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    debug =&gt; DEBUG_URL | DEBUG_FAILED | DEBUG_SKIPPED,</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You can still do this, but the string version is easier. In fact, if you
+want to turn on debugging dynamically (for example in a
+<CODE>test_url()</CODE> callback function) then you currently *must* use
+the DEBUG_* constants. The string is converted to a number only at the
+start of spiderig -- after that the <A HREF="#item_debug">debug</A>
+parameter is converted to a number.
+
+<P><DT><STRONG><A NAME="item_quiet">quiet</A></STRONG><DD>
+<P>
+If this is true then normal, non-error messages will be supressed. Quiet
+mode can also be set by setting the environment variable SPIDER_QUIET to
+any true value.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    SPIDER_QUIET=1</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_max_depth">max_depth</A></STRONG><DD>
+<P>
+The <A HREF="#item_max_depth">max_depth</A> parameter can be used to limit how deeply to recurse a web site. The depth
+is just a count of levels of web pages decended, and not related to the
+number of path elements in a URL.
+
+<P>
+A max_depth of zero says to only spider the page listed as the <A HREF="#item_base_url">base_url</A>. A max_depth of one will spider the <A HREF="#item_base_url">base_url</A> page, plus all links on that page, and no more. The default is to spider
+all pages.
+
+<P><DT><STRONG><A NAME="item_ignore_robots_file">ignore_robots_file</A></STRONG><DD>
+<P>
+If this is set to true then the robots.txt file will not be checked when
+spidering this server. Don't use this option unless you know what you are
+doing.
+
+<P><DT><STRONG><A NAME="item_use_cookies">use_cookies</A></STRONG><DD>
+<P>
+If this is set then a &quot;cookie jar&quot; will be maintained while
+spidering. Some (poorly written ;) sites require cookies to be enabled on
+clients.
+
+<P>
+This requires the HTTP::Cookies module.
+
+<P><DT><STRONG><A NAME="item_use_md5">use_md5</A></STRONG><DD>
+<P>
+If this setting is true, then a MD5 digest &quot;fingerprint&quot; will be
+made from the content of every spidered document. This digest number will
+be used as a hash key to prevent indexing the same content more than once.
+This is helpful if different URLs generate the same content.
+
+<P>
+Obvious example is these two documents will only be indexed one time:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    <A HREF="http://localhost/path/to/index.html">http://localhost/path/to/index.html</A>
+    <A HREF="http://localhost/path/to/">http://localhost/path/to/</A></pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This option requires the Digest::MD5 module. Spidering with this option
+might be a tiny bit slower.
+
+<P><DT><STRONG><A NAME="item_validate_links">validate_links</A></STRONG><DD>
+<P>
+Just a hack. If you set this true the spider will do HEAD requests all
+links (e.g. off-site links), just to make sure that all your links work.
+
+<P><DT><STRONG><A NAME="item_credentials">credentials</A></STRONG><DD>
+<P>
+You may specify a username and password to be used automatically when
+spidering:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    credentials =&gt; 'username:password',</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+A username and password supplied in a URL will override this setting. This
+username and password will be used for every request.
+
+<P>
+See also the <A HREF="#item_get_password">get_password</A> callback function below.  <A HREF="#item_get_password">get_password</A>, if defined, will be called when a page requires authorization.
+
+<P><DT><STRONG><A NAME="item_credential_timeout">credential_timeout</A></STRONG><DD>
+<P>
+Sets the number of seconds to wait for user input when prompted for a
+username or password. The default is 30 seconds.
+
+<P>
+Set this to zero to wait forever. Probably not a good idea.
+
+<P>
+Set to undef to disable asking for a password.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    credential_timeout =&gt; undef,</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P><DT><STRONG><A NAME="item_remove_leading_dots">remove_leading_dots</A></STRONG><DD>
+<P>
+Removes leading dots from URLs that might reference documents above the
+document root. The default is to not remove the dots.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="CALLBACK_FUNCTIONS">CALLBACK FUNCTIONS</A></H1>
+<P>
+Callback functions can be defined in your parameter hash. These optional
+settings are <EM>callback</EM> subroutines that are called while processing URLs.
+
+<P>
+A little perl discussion is in order:
+
+<P>
+In perl, a scalar variable can contain a reference to a subroutine. The
+config example above shows that the configuration parameters are stored in
+a perl <EM>hash</EM>.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my %serverA = (
+        base_url    =&gt; '<A HREF="http://sunsite.berkeley.edu:4444/">http://sunsite.berkeley.edu:4444/</A>',
+        same_hosts  =&gt; [ qw/www.sunsite.berkeley.edu:4444/ ],
+        email       =&gt; 'my@email.address',
+        link_tags   =&gt; [qw/ a frame /],
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+There's two ways to add a reference to a subroutine to this hash:
+
+<P>
+sub foo { return 1; }
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my %serverA = (
+        base_url    =&gt; '<A HREF="http://sunsite.berkeley.edu:4444/">http://sunsite.berkeley.edu:4444/</A>',
+        same_hosts  =&gt; [ qw/www.sunsite.berkeley.edu:4444/ ],
+        email       =&gt; 'my@email.address',
+        link_tags   =&gt; [qw/ a frame /],
+        test_url    =&gt; \&amp;foo,  # a reference to a named subroutine
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Or the subroutine can be coded right in place:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my %serverA = (
+        base_url    =&gt; '<A HREF="http://sunsite.berkeley.edu:4444/">http://sunsite.berkeley.edu:4444/</A>',
+        same_hosts  =&gt; [ qw/www.sunsite.berkeley.edu:4444/ ],
+        email       =&gt; 'my@email.address',
+        link_tags   =&gt; [qw/ a frame /],
+        test_url    =&gt; sub { reutrn 1; },
+    );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The above example is not very useful as it just creates a user callback
+function that always returns a true value (the number 1). But, it's just an
+example.
+
+<P>
+The function calls are wrapped in an eval, so calling die (or doing
+something that dies) will just cause that URL to be skipped. If you really
+want to stop processing you need to set $server-&gt;{abort} in your
+subroutine (or send a kill -HUP to the spider).
+
+<P>
+The first two parameters passed are a URI object (to have access to the
+current URL), and a reference to the current server hash. The <CODE>server</CODE> hash is just a global hash for holding data, and useful for setting flags
+as described below.
+
+<P>
+Other parameters may be also passed in depending the the callback function,
+as described below. In perl parameters are passed in an array called
+&quot;@_&quot;. The first element (first parameter) of that array is $_[0],
+and the second is $_[1], and so on. Depending on how complicated your
+function is you may wish to shift your parameters off of the
+<CODE>@_</CODE> list to make working with them easier. See the examples
+below.
+
+<P>
+To make use of these routines you need to understand when they are called,
+and what changes you can make in your routines. Each routine deals with a
+given step, and returning false from your routine will stop processing for
+the current URL.
+
+<DL>
+<P><DT><STRONG><A NAME="item_test_url">test_url</A></STRONG><DD>
+<P>
+<A HREF="#item_test_url">test_url</A> allows you to skip processing of urls based on the url before the request
+to the server is made. This function is called for the <A HREF="#item_base_url">base_url</A> links (links you define in the spider configuration file) and for every
+link extracted from a fetched web page.
+
+<P>
+This function is a good place to skip links that you are not interested in
+following. For example, if you know there's no point in requesting images
+then you can exclude them like:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_url =&gt; sub {
+        my $uri = shift;
+        return 0 if $uri-&gt;path =~ /\.(gif|jpeg|png)$/;
+        return 1;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Or to write it another way:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_url =&gt; sub { $_[0]-&gt;path !~ /\.(gif|jpeg|png)$/ },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Another feature would be if you were using a web server where path names
+are NOT case sensitive (e.g. Windows). You can normalize all links in this
+situation using something like
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_url =&gt; sub {
+        my $uri = shift;
+        return 0 if $uri-&gt;path =~ /\.(gif|jpeg|png)$/;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        $uri-&gt;path( lc $uri-&gt;path ); # make all path names lowercase
+        return 1;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The important thing about <A HREF="#item_test_url">test_url</A> (compared to the other callback functions) is that it is called while <EM>extracting</EM> links, not while actually fetching that page from the web server. Returning
+false from <A HREF="#item_test_url">test_url</A> simple says to not add the URL to the list of links to spider.
+
+<P>
+You may set a flag in the server hash (second parameter) to tell the spider
+to abort processing.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_url =&gt; sub {
+        my $server = $_[1];
+        $server-&gt;{abort}++ if $_[0]-&gt;path =~ /foo\.html/;
+        return 1;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You cannot use the server flags:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    no_contents
+    no_index
+    no_spider</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+This is discussed below.
+
+<P><DT><STRONG><A NAME="item_test_response">test_response</A></STRONG><DD>
+<P>
+This function allows you to filter based on the response from the remote
+server (such as by content-type).
+
+<P>
+Web servers use a Content-Type: header to define the type of data returned
+from the server. On a web server you could have a .jpeg file be a web page
+-- file extensions may not always indicate the type of the file.
+
+<P>
+If you enable <A HREF="#item_use_head_requests">use_head_requests</A> then this function is called after the spider makes a HEAD request.
+Otherwise, this function is called while the web pages is being fetched
+from the remote server, typically after just enought data has been returned
+to read the response from the web server.
+
+<P>
+The test_response callback function is called with the following
+parameters:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    ( $uri, $server, $response, $content_chunk )</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <CODE>$response</CODE> variable is a HTTP::Response object and provies
+methods of examining the server's response. The <CODE>$content_chunk</CODE>
+is the first chunk of data returned from the server (if not a HEAD
+request).
+
+<P>
+When not using <A HREF="#item_use_head_requests">use_head_requests</A> the spider requests a document in &quot;chunks&quot; of 4096 bytes. 4096 is
+only a suggestion of how many bytes to return in each chunk. The <A HREF="#item_test_response">test_response</A> routine is called when the first chunk is received only. This allows
+ignoring (aborting) reading of a very large file, for example, without
+having to read the entire file. Although not much use, a reference to this
+chunk is passed as the forth parameter.
+
+<P>
+If you are spidering a site with many different types of content that you
+do not wish to index (and cannot use a test_url callback to determine what
+docs to skip) then you will see better performance using both the <A HREF="#item_use_head_requests">use_head_requests</A> and <A HREF="#item_keep_alive">keep_alive</A>
+features. (Aborting a GET request kills the keep-alive session.)
+
+<P>
+For example, to only index true HTML (text/html) pages:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_response =&gt; sub {
+        my $content_type = $_[2]-&gt;content_type;
+        return $content_type =~ m!text/html!;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You can also set flags in the server hash (the second parameter) to control
+indexing:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    no_contents -- index only the title (or file name), and not the contents
+    no_index    -- do not index this file, but continue to spider if HTML
+    no_spider   -- index, but do not spider this file for links to follow
+    abort       -- stop spidering any more files</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+For example, to avoid index the contents of &quot;private.html&quot;, yet
+still follow any links in that file:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_response =&gt; sub {
+        my $server = $_[1];
+        $server-&gt;{no_index}++ if $_[0]-&gt;path =~ /private\.html$/;
+        return 1;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Note: Do not modify the URI object in this call back function.
+
+<P><DT><STRONG><A NAME="item_filter_content">filter_content</A></STRONG><DD>
+<P>
+This callback function is called right before sending the content to swish.
+Like the other callback function, returning false will cause the URL to be
+skipped. Setting the <CODE>abort</CODE> server flag and returning false will abort spidering.
+
+<P>
+You can also set the <CODE>no_contents</CODE> flag.
+
+<P>
+This callback function is passed four parameters. The URI object, server
+hash, the HTTP::Response object, and a reference to the content.
+
+<P>
+You can modify the content as needed. For example you might not like upper
+case:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    filter_content =&gt; sub {
+        my $content_ref = $_[3];</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>        $$content_ref = lc $$content_ref;
+        return 1;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+I more reasonable example would be converting PDF or MS Word documents for
+parsing by swish. Examples of this are provided in the <EM>prog-bin</EM> directory of the swish-e distribution.
+
+<P>
+You may also modify the URI object to change the path name passed to swish
+for indexing.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    filter_content =&gt; sub {
+        my $uri = $_[0];
+        $uri-&gt;host('www.other.host') ;
+        return 1;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Swish-e's ReplaceRules feature can also be used for modifying the path name
+indexed.
+
+<P>
+Note: Swish-e now includes a method of filtering based on the SWISH::Filter
+Perl modules. See the SwishSpiderConfig.pl file for an example how to use
+SWISH::Filter in a filter_content callback function.
+
+<P>
+If you use the &quot;default&quot; configuration (i.e. pass
+&quot;default&quot; as the first parameter to the spider) then
+SWISH::Filter is used automatically. This only adds code for calling the
+programs to filter your content -- you still need to install applications
+that do the hard work (like xpdf for pdf conversion and catdoc for MS Word
+conversion).
+
+<P>
+The a function included in the <EM>spider.pl</EM> for calling SWISH::Filter when using the &quot;default&quot; config can
+also be used in your config file. There's a function called
+<CODE>swish_filter()</CODE> that returns a list of two subroutines. So in
+your config you could do:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    my ($filter_sub, $response_sub ) = swish_filter();</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    @server = ( {
+        test_response   =&gt; $response_sub,
+        filter_content  =&gt; $filter_sub,
+        [...],
+    } );</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The <CODE>$response_sub</CODE> is not required, but is useful if using HEAD
+requests (<A HREF="#item_use_head_requests">use_head_requests</A>): It tests the content type from the server to see if there's any filters
+that can handle the document. The <CODE>$filter_sub</CODE> does all the
+work of filtering a document.
+
+<P>
+Make sense? If not, then that's what the Swish-e list is for.
+
+<P><DT><STRONG><A NAME="item_spider_done">spider_done</A></STRONG><DD>
+<P>
+This callback is called after processing a server (after each server listed
+in the <CODE>@servers</CODE> array if more than one).
+
+<P>
+This allows your config file to do any cleanup work after processing. For
+example, if you were keeping counts during, say, a
+<CODE>test_response()</CODE> callback function you could use the
+<CODE>spider_done()</CODE> callback to print the results.
+
+<P><DT><STRONG><A NAME="item_output_function">output_function</A></STRONG><DD>
+<P>
+If defined, this callback function is called instead of printing the
+content and header to STDOUT. This can be used if you want to store the
+output of the spider before indexing.
+
+<P>
+The output_function is called with the following parameters:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   ($server, $content, $uri, $response, $bytecount, $path);</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Here is an example that simply shows two of the params passed:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    output_function =&gt; sub {
+        my ($server, $content, $uri, $response, $bytecount, $path) = @_;
+        print STDERR  &quot;passed: uri $uri, bytecount $bytecount...\n&quot;;
+        # no output to STDOUT for swish-e
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+You can do almost the same thing with a filter_content callback.
+
+<P><DT><STRONG><A NAME="item_get_password">get_password</A></STRONG><DD>
+<P>
+This callback is called when a HTTP password is needed (i.e. after the
+server returns a 401 error). The function can test the URI and Realm and
+then return a username and password separated by a colon:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    get_password =&gt; sub {
+        my ( $uri, $server, $response, $realm ) = @_;
+        if ( $uri-&gt;path =~ m!^/path/to/protected! &amp;&amp; $realm eq 'private' ) {
+            return 'joe:secret931password';
+        }
+        return;  # sorry, I don't know the password.
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Use the <A HREF="#item_credentials">credentials</A> setting if you know the username and password and they will be the same for
+every request. That is, for a site-wide password.
+
+</DL>
+<P>
+Note that you can create your own counters to display in the summary list
+when spidering is finished by adding a value to the hash pointed to by <CODE>$server-</CODE>{counts}&gt;.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_url =&gt; sub {
+        my $server = $_[1];
+        $server-&gt;{no_index}++ if $_[0]-&gt;path =~ /private\.html$/;
+        $server-&gt;{counts}{'Private Files'}++;
+        return 1;
+    },</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Each callback function <STRONG>must</STRONG> return true to continue processing the URL. Returning false will cause
+processing of <EM>the current</EM> URL to be skipped.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="More_on_setting_flags">More on setting flags</A></H2>
+<P>
+Swish (not this spider) has a configuration directive <A HREF="#item_NoContents">NoContents</A> that will instruct swish to index only the title (or file name), and not
+the contents. This is often used when indexing binary files such as image
+files, but can also be used with html files to index only the document
+titles.
+
+<P>
+As shown above, you can turn this feature on for specific documents by
+setting a flag in the server hash passed into the <A HREF="#item_test_response">test_response</A> or <A HREF="#item_filter_content">filter_content</A> subroutines. For example, in your configuration file you might have the <A HREF="#item_test_response">test_response</A> callback set as:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    test_response =&gt; sub {
+        my ( $uri, $server, $response ) = @_;
+        # tell swish not to index the contents if this is of type image
+        $server-&gt;{no_contents} = $response-&gt;content_type =~ m[^image/];
+        return 1;  # ok to index and spider this document
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The entire contents of the resource is still read from the web server, and
+passed on to swish, but swish will also be passed a <A HREF="#item_No_Contents">No-Contents</A> header which tells swish to enable the NoContents feature for this document
+only.
+
+<P>
+Note: Swish will index the path name only when <A HREF="#item_NoContents">NoContents</A> is set, unless the document's type (as set by the swish configuration
+settings <A HREF="#item_IndexContents">IndexContents</A> or <A HREF="#item_DefaultContents">DefaultContents</A>) is HTML <EM>and</EM> a title is found in the html document.
+
+<P>
+Note: In most cases you probably would not want to send a large binary file
+to swish, just to be ignored. Therefore, it would be smart to use a <A HREF="#item_filter_content">filter_content</A> callback routine to replace the contents with single character (you cannot
+use the empty string at this time).
+
+<P>
+A similar flag may be set to prevent indexing a document at all, but still
+allow spidering. In general, if you want completely skip spidering a file
+you return false from one of the callback routines (<A HREF="#item_test_url">test_url</A>, <A HREF="#item_test_response">test_response</A>, or <A HREF="#item_filter_content">filter_content</A>). Returning false from any of those three callbacks will stop processing
+of that file, and the file will <STRONG>not</STRONG> be spidered.
+
+<P>
+But there may be some cases where you still want to spider (extract links)
+yet, not index the file. An example might be where you wish to index only
+PDF files, but you still need to spider all HTML files to find the links to
+the PDF files.
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    $server{test_response} = sub {
+        my ( $uri, $server, $response ) = @_;
+        $server-&gt;{no_index} = $response-&gt;content_type ne 'application/pdf';
+        return 1;  # ok to spider, but don't index
+    }</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+So, the difference between <CODE>no_contents</CODE> and <CODE>no_index</CODE> is that <CODE>no_contents</CODE> will still index the file name, just not the contents.  <CODE>no_index</CODE> will still spider the file (if it's <CODE>text/html</CODE>) but the file will not be processed by swish at all.
+
+<P>
+<STRONG>Note:</STRONG> If <CODE>no_index</CODE> is set in a <A HREF="#item_test_response">test_response</A> callback function then the document <EM>will not be filtered</EM>. That is, your <A HREF="#item_filter_content">filter_content</A>
+callback function will not be called.
+
+<P>
+The <CODE>no_spider</CODE> flag can be set to avoid spiderering an HTML file. The file will still be
+indexed unless
+<CODE>no_index</CODE> is also set. But if you do not want to index and spider, then simply return
+false from one of the three callback funtions.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="SIGNALS">SIGNALS</A></H1>
+<P>
+Sending a SIGHUP to the running spider will cause it to stop spidering.
+This is a good way to abort spidering, but let swish index the documents
+retrieved so far.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="CHANGES">CHANGES</A></H1>
+<P>
+List of some of the changes
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H2><A NAME="Thu_Sep_30_2004_changes_for_Swish_e_2_4_3">Thu Sep 30 2004 - changes for Swish-e 2.4.3</A></H2>
+<P>
+Code reorganization and a few new featues. Updated docs a little tiny bit.
+Introduced a few spelling mistakes.
+
+<DL>
+<P><DT><STRONG><A NAME="item_Config">Config opiton: use_default_config</A></STRONG><DD>
+<P>
+It used to be that you could run the spider like:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    spider.pl default &lt;some url&gt;</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+and the spider would use its own internal config. But if you used your own
+config file then the defaults were not used. This options allows you to
+merge your config with the default config. Makes making small changes to
+the default easy.
+
+<P><DT><STRONG>Config option: use_head_requests</STRONG><DD>
+<P>
+Tells the spider to make a HEAD request before GET'ing the document from
+the web server. Useful if you use keep_alive and have a
+<CODE>test_response()</CODE> callback that rejects many documents (which
+breaks the connection).
+
+<P><DT><STRONG>Config option: spider_done</STRONG><DD>
+<P>
+Callback to tell you (or tell your config as it may be) that the spider is
+done. Useful if you need to do some extra processing when done spidering --
+like record counts to a file.
+
+<P><DT><STRONG>Config option: get_password</STRONG><DD>
+<P>
+This callback is called when a document returns a 401 error needing a
+username and password. Useful if spidering a site proteced with multiple
+passwords.
+
+<P><DT><STRONG>Config option: output_function</STRONG><DD>
+<P>
+If defined spider.pl calls this instead of sending ouptut to STDOUT.
+
+<P><DT><STRONG>Config option: debug</STRONG><DD>
+<P>
+Now you can use the words instead of or'ing the DEBUG_* constants together.
+
+</DL>
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="TODO">TODO</A></H1>
+<P>
+Add a &quot;get_document&quot; callback that is called right before making
+the &quot;GET&quot; request. This would make it easier to use cached
+documents. You can do that now in a test_url callback or in a test_response
+when using HEAD request.
+
+<P>
+Save state of the spider on SIGHUP so spidering could be restored at a
+later date.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="COPYRIGHT">COPYRIGHT</A></H1>
+<P>
+Copyright 2001 Bill Moseley
+
+<P>
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="SUPPORT">SUPPORT</A></H1>
+<P>
+Send all questions to the The SWISH-E discussion list.
+
+<P>
+See <A
+HREF="http://sunsite.berkeley.edu/SWISH-E.">http://sunsite.berkeley.edu/SWISH-E.</A>
+
+
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+
+
+    <p>
+    <div class="navbar">
+      <a href="./search.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./Filter.html">Next</a>
+    </div>
+    <p>
+
+    <P ALIGN="CENTER">
+    <IMG ALT="" WIDTH="470" HEIGHT="10" SRC="images/dotrule1.gif"></P>
+    <P ALIGN="CENTER">
+
+    <div class="footer">
+        <BR>SWISH-E is distributed with <B>no warranty</B> under the terms of the
+        <A HREF="http://www.fsf.org/copyleft/gpl.html">GNU Public License</A>,<BR>
+        Free Software Foundation, Inc., 
+        59 Temple Place - Suite 330, Boston, MA  02111-1307, USA<BR> 
+        Public questions may be posted to 
+        the <A HREF="http://swish-e.org/Discussion/">SWISH-E Discussion</A>.
+    </div>
+
+</body>
+</html>

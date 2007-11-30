@@ -1,0 +1,63 @@
+Swishetest version 0.05
+=======================
+
+This is a module for testing Swish-e. Includes data and tests.
+
+The tests are performed by first installing Swish-e and SWISH::API, then:
+	* untarring the Swishetest.x.xx.tar.gz tarball
+	* perl Makefile.PL
+	* make && make test
+	(this module is not intended to be installed at this point)
+
+Swishetest.pm implements two functions which are simple interfaces
+	to build and search on swishe indices : build_index() and do_search().	
+	See perldoc Swishetest.pm for more.
+
+In the t/ directory are the perl scripts that perform tests using Swishetest.
+They're typically run via 'make test'
+'make test TEST_VERBOSE=1' will give you more debug output,
+'make test TEST_VERBOSE=2' will give you even more debug output (try it).
+
+'make test MAX_INDEX_FILES=1000' will use only 1000 files in the test index
+
+The tests in the t/ directory are named like
+		010-C010-trivial-txt.t , that is
+		[Test#]-[CollectionNumber]-[Description]-[type].t
+	(Don't put hyphens ('-'s) in your Description.)
+
+In the conf/ directory are swish-e configuration files used for the testing.
+	The basic configurations so far are
+		basic-libxml2.conf  and
+		basic-nolibxml2.conf
+	which each set .html, .xml, and .txt files to the appropriate parsers.
+	More can be added.  (It would be good if users could specify all options from
+	the command line and not have to use config files, perhaps through a
+	-O switch that would act as if the text had been found in the config file:
+	would be used like   % swish-e -O'IndexOnly .html' -i htmldir/ -f swish.index )
+
+The blib/index/ directory is where the test indexes are deposited.  This way
+they get cleaned up when you type 'make clean'
+
+INSTALLATION
+
+This package is not currently intended to be 'install'ed. To use this module 
+type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   (this package is not intended to be installed... at this point)
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  SWISH::API
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2004-2007 Josh Rabinowitz
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. 
+

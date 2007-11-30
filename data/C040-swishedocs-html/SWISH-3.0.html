@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+   <title>SWISH-Enhanced:  Proposed changes for Swish-e 3.0 </title>
+   <link href="./style.css" rel=stylesheet type="text/css" title="refstyle">
+  </head>
+  <body>
+
+    <h1 class="banner">
+        <a href="http://swish-e.org"><img border=0 src="images/swish.gif" alt="Swish-E Logo"></a><br>
+        <img src="images/swishbanner1.gif"><br>
+        <img src="images/dotrule1.gif"><br>
+         Proposed changes for Swish-e 3.0 
+    </h1>
+
+    <hr>
+
+    <p>
+    <div class="navbar">
+      <a href="./SWISH-BUGS.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./SWISH-LIBRARY.html">Next</a>
+    </div>
+    <p>
+
+    <div class="toc">
+      
+<A NAME="toc"></A>
+<P><B>Table of Contents:</B></P>
+
+<UL>
+
+	<LI><A HREF="#Overview">Overview</A>
+	<LI><A HREF="#UTF_8_support">UTF-8 support</A>
+	<LI><A HREF="#drop_expat_based_parsers_require_libxml2">drop expat-based parsers, require libxml2</A>
+	<LI><A HREF="#Support_Incremental_Indexing">Support Incremental Indexing</A>
+	<LI><A HREF="#Split_code_into_Search_and_Indexing_code">Split code into Search and Indexing code</A>
+	<LI><A HREF="#Switch_to_Content_Types">Switch to Content-Types</A>
+	<LI><A HREF="#Enhanced_the_PropertyNames_directive">Enhanced the PropertyNames directive</A>
+	<LI><A HREF="#Apache_XML_style_configuration">Apache/XML style configuration</A>
+	<LI><A HREF="#Document_Info">Document Info</A>
+</UL>
+
+    </div>
+
+    
+
+	    [ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+<P>
+<H1><A NAME="Overview">Overview</A></H1>
+<P>
+This pages is intended to give users of Swish-e an idea of the changes to
+come, to foster discussion of the direction of Swish-e, and a place where
+developers can map out new ideas.
+
+<P>
+None of this is written in stone. Any of the developers can write their
+ideas in this document, but that doesn't mean it will actually happen ;).
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="UTF_8_support">UTF-8 support</A></H1>
+<P>
+Supporting Unicode basically requires a full re-write of all the code.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="drop_expat_based_parsers_require_libxml2">drop expat-based parsers, require libxml2</A></H1>
+<P>
+This might simplify the code somewhat as well.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Support_Incremental_Indexing">Support Incremental Indexing</A></H1>
+<P>
+The Swish-e index structure currently makes it difficult to do incremental
+indexing, range limiting, and presents limits to indexing due to memory
+requirements. A database may solve some of these issues, at possibly a cost
+of performance.
+
+<P>
+Swish-e has been linked with Berkeley DB. Although much slower in indexing,
+this may allow incremental indexing. Currently, the idea is to offer both
+database backends.
+
+<P>
+UPDATE: Mon Nov 8 15:07:59 CST 2004 (<A
+HREF="mailto:karman@cray.com">karman@cray.com</A>)
+
+<P>
+This feature is in the 2.5 branch already. What kind of requirements do we
+have to label it 'stable'?
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Split_code_into_Search_and_Indexing_code">Split code into Search and Indexing code</A></H1>
+<P>
+There may be a small benefit from creating a smaller search-only program.
+CGI scripts may be faster, and the code would be smaller for those that
+want to embed Swish-e in to other applications.
+
+<P>
+Currently, linking libswish-e into a program adds about 720K. Not real
+significant, but it could be if a number of processes are running with
+Swish-e. Another option is to build libswish-e as a shared library.
+
+<P>
+UPDATE: Mon Nov 8 15:09:12 CST 2004 (<A
+HREF="mailto:karman@cray.com">karman@cray.com</A>)
+
+<P>
+This seems done in the 2.4 release. Is that true?
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Switch_to_Content_Types">Switch to Content-Types</A></H1>
+<P>
+Moseley: Dec 28, 2000
+
+<P>
+I'm wondering if it might be smart to switch from the current
+&quot;Document Types&quot; to Content-Types. Currently, Swish-e know how to
+parse three types of documents TXT, HTML, and XML. There's currently two
+new configuration directives DefaultContents and IndexContents that map
+file extensions to one of the three types. This doesn't really work when
+spidering since it's the content-type that describes the document and not
+the file extension.
+
+<P>
+It's an issue that can wait, but I'm concerned about backward compatiblity
+before people start using the IndexContents and DefaultContents config
+directives and then we change to content-type in the future. There's
+probably not that many people using those, but it might be work noting in
+the documentation that it will change, if we agree.
+
+<P>
+The main reason to use content-type instead is for http processing where
+you can't depend on the file extension to determine the document type, so
+with http we have to use content-type to determine how to deal with the
+file. This is somewhat moot, as mapping can now be done with -S prog.
+
+<P>
+I'd propose that Swish-e uses a mime.types file to map from extension to
+content-type. You could add or override mappings in the config file:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   AddType text/plain .doc .log</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   DefaultType text/html  # like DefaultContents currently</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+The file source &quot;plug-in&quot; (whatever that ends up being) would
+return a content-type, but if not returned then Swish-e would map the type
+from the file name using the mime.types file or any AddType directives.
+
+<P>
+Again, internally Swish-e only knows about text/[TXT|HTML|XML], so there
+should be a way to map other types, otherwise Swish-e might ignore the
+file. We could continue to use the three type names or switch completely to
+content-types.
+
+<P>
+For example, if we continued to use [TXT|HTML|XML]
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    MapType TXT  text/directory text/logfile
+    MapType HTML text/html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Or maybe just extend the current directives
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    IndexContents HTML .htm .html text/html</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Where the content-type would have precedence over the file extensions.    
+
+<P>
+This would tell Swish-e that those types are handled by those internal
+handlers.
+
+<P>
+Then as I've mentioned before, you might specify filters as such
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>   FilterDocument application/msword /path/to/word-to-text</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+And word-to-text would convert to text and return one of the three
+content-types that Swish-e knows how to parse, or a different content type
+if were to chain filters.
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Enhanced_the_PropertyNames_directive">Enhanced the PropertyNames directive</A></H1>
+<P>
+Moseley: Updated Jan 13, 2001
+
+<P>
+If the PropertyNames directive was enhanced to be able to limit the number
+of characters stored, optionally extract text from HTML, and was able to
+define what type of docs (text, XML, HTML) it applied to, then the existing
+PropertyNames feature would work like the new StoreDescription feature but
+be useful for more than just one use.
+
+<P>
+I'm not clear how to enhance the syntax of Properties and/or Metanames, but
+here's some ideas. Rainer suggested that an xml-type of format might be
+best and commonly understood. That's a good idea. Below are some older
+ideas that I had. But you will get the idea...
+
+<P>
+The metaname structure could have flags for properties:
+
+<P>
+
+    <table>
+      <tr>
+
+	<td bgcolor="#eeeeee" width="1">
+	  &nbsp;
+        </td>
+
+	<td>
+	  <pre>    1 - limiting to a length
+    2 - stripping HTML
+    3 - encoding HTML entities on output</pre>
+        </td>
+	    
+      </tr>
+    </table>
+    <P>
+Oct 9, 2001 - The code is now in Swish-e to limit a string property to a
+length. The stripping of HTML is an issue for discussion. And encoding
+entities on output should be a result_outpu.c issue.
+
+<P>
+UPDATE: Mon Nov 8 15:13:26 CST 2004 (<A
+HREF="mailto:karman@cray.com">karman@cray.com</A>)
+
+<P>
+Is this fully supported in 2.4?
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Apache_XML_style_configuration">Apache/XML style configuration</A></H1>
+<P>
+This would be to allow some directives to be set per directory, or perl
+file extenstion (or content-type).
+
+<P>
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+<H1><A NAME="Document_Info">Document Info</A></H1>
+<P>
+$Id: SWISH-3.0.html,v 1.1 2005/04/12 14:23:44 joshr Exp $
+
+<P>
+.
+
+[ <B><FONT SIZE=-1><A HREF="#toc">TOC</A></FONT></B> ]
+<HR>
+
+
+
+    <p>
+    <div class="navbar">
+      <a href="./SWISH-BUGS.html">Prev</a> |
+      <a href="./index.html">Contents</a> |
+      <a href="./SWISH-LIBRARY.html">Next</a>
+    </div>
+    <p>
+
+    <P ALIGN="CENTER">
+    <IMG ALT="" WIDTH="470" HEIGHT="10" SRC="images/dotrule1.gif"></P>
+    <P ALIGN="CENTER">
+
+    <div class="footer">
+        <BR>SWISH-E is distributed with <B>no warranty</B> under the terms of the
+        <A HREF="http://www.fsf.org/copyleft/gpl.html">GNU Public License</A>,<BR>
+        Free Software Foundation, Inc., 
+        59 Temple Place - Suite 330, Boston, MA  02111-1307, USA<BR> 
+        Public questions may be posted to 
+        the <A HREF="http://swish-e.org/Discussion/">SWISH-E Discussion</A>.
+    </div>
+
+</body>
+</html>

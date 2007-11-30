@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# this script rebuilds the MANIFEST file all craftily 
+# using the below command line.  Found with the aid of 
+# Sman http://joshr.com/src/sman
+
+perl -MExtUtils::Manifest -e 'ExtUtils::Manifest::mkmanifest()'
