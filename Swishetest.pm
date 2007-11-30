@@ -11,7 +11,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw( build_index do_search) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw( );
 
-our $VERSION = '0.04a';
+our $VERSION = '0.05';
 
 use DoSearch;
 use BuildIndex;
