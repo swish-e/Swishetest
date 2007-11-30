@@ -1,5 +1,4 @@
 # BuildIndex.pm
-# for simplicity and brevity, we don't use packages, C-style
 package BuildIndex;
 use strict;
 use warnings; 
