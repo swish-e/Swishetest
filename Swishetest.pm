@@ -32,13 +32,13 @@ Swishetest - Library routines for the Swishetest tool
 
   use Swishetest qw(build_index do_search);
   use Data::Dumper qw(Dumper);
-	
+    
   my %info = build_index( "input/data", "out/myindex.index"); 
-	# 3rd & 4th params 'configfile' and 'extraoptions' are optional
+    # 3rd & 4th params 'configfile' and 'extraoptions' are optional
   print Dumper( \%info );
   open_index("myindex.index");
-  my @rows = do_search( "myindex.index", "this is the search" );	
-		# returns a list of hashrefs
+  my @rows = do_search( "myindex.index", "this is the search" );    
+        # returns a list of hashrefs
   close_index("myindex.index");
   print Dumper( \@rows );
   #Test::More::comp_ok( scalar(@rows), '>', 10, "more than 10 results found");
