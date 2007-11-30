@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                Swishetest
-version:             0.04a
+version:             0.05
 abstract:            Library routines for the Swishetest tool
 license:             ~
 generated_by:        ExtUtils::MakeMaker version 6.31
