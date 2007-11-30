@@ -1,5 +1,7 @@
 Revision history for Perl test suite Swishetest.
-0.05 
+0.05  Fri Nov 30 15:44:01 2006
+    - first version put in swish-e svn at 
+        http://svn.swish-e.org/Swishetest/trunk/
     - updated copyright dates through 2007
 0.04  Thu Nov 29 16:30:00 2007
 	- there are 5 properties now, not 4
