@@ -48,7 +48,7 @@ BEGIN {
             my (%out) = BuildIndex::build_index_from_external_program( $cmd, $index);
 
             # first three tests: did the indexing seem to work?
-            cmp_ok( scalar(%out),     '>',          0,      "Indexing output" ); 
+            cmp_ok( scalar(keys(%out)), '>',        0,      "Indexing output" ); 
             cmp_ok( $out{files},      '==', scalar(@$words), 'files indexed' );
             cmp_ok( $out{properties}, '==',         5,      'num properties' );
 
