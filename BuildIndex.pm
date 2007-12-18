@@ -27,6 +27,7 @@ sub build_index_from_external_program {
         # -v 1 is important, we use it to test the indexer 
     print STDERR "$0: Running '$cmd'\n" if $ENV{TEST_VERBOSE};
     my $output = `$cmd`;    
+    die "$0: Didn't get any output from $cmd\n" unless $output;
     return parse_indexing_output( $output );
 }
 
