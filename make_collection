@@ -77,7 +77,7 @@ sub main {
     {
         if ($progress && time() - $lastprogresstime >= 10) {
             my $percent = sprintf("%1.1f", $i / $num_files * 100);
-            print STDERR "$prog: " . scalar(localtime(time())) . " on file $i of $num_files ($percent%)\n";
+            print STDERR "$prog: $filetype: " . scalar(localtime(time())) . " on file $i of $num_files ($percent%)\n";
             $lastprogresstime = time();
         }
         #if (($i+1) % 1000 == 0) { print STDERR "** working on file $i"; }
