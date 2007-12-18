@@ -55,8 +55,9 @@ BEGIN {
             DoSearch::open_index($index);
             for my $word (@$words) {    # then, one test for each word in the test
                 my @rows = DoSearch::do_search($index, "'$word'");  # quote the word
-                my ($num_expected_rows) = (     # look up the count unless it's AND, OR, or NOT
-                    ($word =~ /^\s*(and|or|not|near)\s*$/i) ? 0 : ($word_count->{lc($word)} || 1));
+                #my ($num_expected_rows) = (     # look up the count unless it's AND, OR, or NOT
+                #    ($word =~ /^\s*(and|or|not|near)\s*$/i) ? 0 : ($word_count->{lc($word)} || 1));
+                my $num_expected_rows = $word_count->{lc($word)};
                 cmp_ok(scalar(@rows), "==", $num_expected_rows, "search '$word' ($filetype index from $dict)");
             }
             DoSearch::close_index($index);
