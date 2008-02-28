@@ -17,16 +17,23 @@ use Swishetest;
 BEGIN { 
     use MinMax;
     use File::Path qw(mkpath);
+    use List::Util qw(sum);    # sum sums up digits in a list
     use GetDictionaryWords;
-    use Test::More qw(no_plan);
+    use Test::More;# qw(no_plan);
     my $max_words = MinMax::min(1_000_000, ($ENV{MAX_INDEX_FILES} || 1_000_000));
     # predict number of tests based on number of files in dictionaries and number of index types
-    my @dicts = qw( data/C020-words-txt/words-linux-fc1.txt data/C020-words-txt/words-osx-10_3.txt);
+    #my @dicts = qw( data/C020-words-txt/words-linux-fc1.txt data/C020-words-txt/words-osx-10_3.txt);
+    my @dicts = qw( data/C020-words-txt/words-osx-10_3.txt data/C020-words-txt/words-linux-fc1.txt );
+    my @dictwordcounts = map { `wc -l $_ | awk '{print \$1}' ` } @dicts;
+    chomp(@dictwordcounts);
+    my $numdictwords = sum( @dictwordcounts );
     my @filetypes = qw(html xml txt);
     my $numdicts = scalar(@dicts);
     my $numfiletypes = scalar(@filetypes);
+    my $totalnumtests = $numfiletypes * (3 + $numdictwords);
     # three tests plus one for each word, for each dictionary and filetype.
     #plan tests => ($numdicts * $numfiletypes * (3 + $max_words ));
+    plan tests => $totalnumtests;
     mkpath( ["blib/index"], 0, 0755);
     my $base = "C030";
     for my $dict (@dicts) {
