@@ -22,12 +22,18 @@ BEGIN {
     use Test::More;# qw(no_plan);
     my $max_words = MinMax::min(1_000_000, ($ENV{MAX_INDEX_FILES} || 1_000_000));
     # predict number of tests based on number of files in dictionaries and number of index types
-    #my @dicts = qw( data/C020-words-txt/words-linux-fc1.txt data/C020-words-txt/words-osx-10_3.txt);
-    my @dicts = qw( data/C020-words-txt/words-osx-10_3.txt data/C020-words-txt/words-linux-fc1.txt );
+
+    # ONE ORDER
+    my @dicts = qw( data/C020-words-txt/words-linux-fc1.txt data/C020-words-txt/words-osx-10_3.txt);
+
+    # THE OTHER ORDER
+    #my @dicts = qw( data/C020-words-txt/words-osx-10_3.txt data/C020-words-txt/words-linux-fc1.txt );
+
     my @dictwordcounts = map { `wc -l $_ | awk '{print \$1}' ` } @dicts;
     chomp(@dictwordcounts);
     my $numdictwords = sum( @dictwordcounts );
-    my @filetypes = qw(html xml txt);
+    #my @filetypes = qw(html xml txt);
+    my @filetypes = qw(txt xml html);
     my $numdicts = scalar(@dicts);
     my $numfiletypes = scalar(@filetypes);
     my $totalnumtests = $numfiletypes * $numdictwords + scalar(@dicts) * scalar(@filetypes) * 3;
