@@ -50,8 +50,10 @@ sub do_search {
 
         while ( my $result = $results->NextResult() ) {
             my %h;
-            for my $p (@props) { $h{$p} = $result->Property($p); }
+            #for my $p (@props) { $h{$p} = $result->Property($p); }
+            for my $p (@props) { if($p eq "swishdocpath") { $h{$p} = $result->Property($p);}  }
             push(@r, \%h);
+            #push( @r, {swishdocpath=>$result->Property( "swishdocpath" );
         }
     };  # end eval{}
     if ($@) {
