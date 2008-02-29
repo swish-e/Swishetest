@@ -30,7 +30,7 @@ BEGIN {
     my @filetypes = qw(html xml txt);
     my $numdicts = scalar(@dicts);
     my $numfiletypes = scalar(@filetypes);
-    my $totalnumtests = $numfiletypes * (3 + $numdictwords);
+    my $totalnumtests = $numfiletypes * $numdictwords + scalar(@dicts) * scalar(@filetypes) * 3;
     # three tests plus one for each word, for each dictionary and filetype.
     #plan tests => ($numdicts * $numfiletypes * (3 + $max_words ));
     plan tests => $totalnumtests;
