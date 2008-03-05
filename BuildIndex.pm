@@ -13,7 +13,7 @@ sub build_index_from_directory {
 	# we assume swish-e is in the PATH!
     my $cmd = "swish-e -c $config -i '$input' -f '$index' -v 1 $extra_options";
     my $output = `$cmd`;
-    print STDERR "$0: Running '$output'\n" if $ENV{TEST_VERBOSE};
+    print STDERR "$0: Running '$cmd'\n" if $ENV{TEST_VERBOSE};
         # -v 1 is important, we use it to test the indexer 
     die "$0: Didn't get any output from $cmd\n" unless $output;
     return parse_indexing_output( $output );
