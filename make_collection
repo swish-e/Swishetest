@@ -33,7 +33,8 @@ sub Usage {
     return "make_collection: [--dict=words.txt] [--base_dir=/your/location]\n" .
            "  [--min_words_per_file=$min_words_per_file] [--max_words_per_file=$max_words_per_file] [--num_files=$num_files]\n" .
            "  [--verbose] [--englishify] [--filetype=(txt|html|xml)] [--(no)randommode]:\n" .
-           "   Makes a set of (possibly random) xml, html, or txt files based on a dict.\n";
+           "   Makes a set of (possibly random) xml, html, or txt files based on a dict.\n" . 
+           "   If you dont set a --base_dir, then it outputs data like a swish-e prog.\n";
 }
 
 main();
@@ -90,7 +91,7 @@ sub main {
             my $toadd = $randommode ? $$words[ not_rand( scalar(@$words) ) ] : $$words[$wordcounter % scalar(@$words)];
             # choose the next word, either randomly, or sequentially
 
-            if ($toCap) { $toadd = "\u$toadd"; $toCap = 0; }
+            if ($englishify && toCap) { $toadd = "\u$toadd"; $toCap = 0; }
             if (!defined($toadd)) { next; } 
             $doc .= $toadd;
             if ($englishify) {
