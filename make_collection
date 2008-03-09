@@ -91,7 +91,7 @@ sub main {
             my $toadd = $randommode ? $$words[ not_rand( scalar(@$words) ) ] : $$words[$wordcounter % scalar(@$words)];
             # choose the next word, either randomly, or sequentially
 
-            if ($englishify && toCap) { $toadd = "\u$toadd"; $toCap = 0; }
+            if ($englishify && $toCap) { $toadd = "\u$toadd"; $toCap = 0; }
             if (!defined($toadd)) { next; } 
             $doc .= $toadd;
             if ($englishify) {
