@@ -47,7 +47,7 @@ BEGIN {
 
         # the first real test here is if you get an error indexing above :)
         
-        #print Dumper( \%out );
+        print STDERR "$0: DUMPING data for debug: " . Dumper( \%out );   
     
         cmp_ok( scalar(keys(%out)), '>',          2, "Indexing output" ); 
     }
