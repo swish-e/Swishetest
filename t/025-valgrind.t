@@ -5,19 +5,28 @@ use warnings;
 
 #########################
 
-# change 'tests => 1' to 'tests => last_test_to_print';
-
-use Test::More tests => 3;
+use Test::More; 
+use File::Path qw(mkpath);
 use Swishetest;
 
-BEGIN { 
-    use File::Path qw(mkpath);
+############################################
+main();
+
+############################################
+sub main {
     mkpath( ["blib/index"], 0, 0755);
 
     my @docs = qw(  data/C012-trivial-xml/ 
                     data/C020-words-txt/words-linux-fc1.txt 
                     data/C020-words-txt/words-osx-10_3.txt );
 
+    my $valgrind = mywhich( "valgrind" );
+    unless( $valgrind ) {
+        plan tests => 1;
+        ok( 1, "skipping, valgrind not found" );
+        exit(0);
+    }
+    plan tests => scalar( @docs );
     for my $doc (@docs) {
         #my $valgrind_options = "--show-below-main=yes --leak-check=full --show-reachable=yes -v";
         my $valgrind_options = "--show-below-main=yes --leak-check=full --show-reachable=yes";  # -v removed
@@ -25,5 +34,16 @@ BEGIN {
         print STDERR @output;
         ok(1, "valgrind indexing $doc" );
     }
-
 };
+
+############################################
+sub mywhich {   # so we don't have to use File::Which
+    my $exe = shift;
+    my @dirs = split( /:/, $ENV{PATH} || "" );
+    for my $dir (@dirs) {
+        if (-x "$dir/$exe") {
+            return "$dir/$exe";
+        }
+    }
+    return; # not found
+}
