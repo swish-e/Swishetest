@@ -16,9 +16,11 @@ main();
 sub main {
     mkpath( ["blib/index"], 0, 0755);
 
-    my @docs = qw(  data/C012-trivial-xml/ 
-                    data/C020-words-txt/words-linux-fc1.txt 
-                    data/C020-words-txt/words-osx-10_3.txt );
+    my @docs = ( "data/C012-trivial-xml/",
+                 "data/C040-swishedocs-html",
+                 #data/C020-words-txt/words-linux-fc1.txt 
+                 #data/C020-words-txt/words-osx-10_3.txt 
+               );
 
     my $valgrind = mywhich( "valgrind" );
     unless( $valgrind ) {
