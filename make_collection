@@ -14,7 +14,7 @@ use NotRand qw(not_rand);
 my $prog = "make_collection";
 
 # Dict file with words. One word per line.
-my $dict='data/C020-words-txt/words-linux-fc1.txt';
+my $dict='data/C020-words-txt/words-linux-fc1.txt';     # 45,000 word dictionary (408K)
 
 my $min_words_per_file=100;
 my $max_words_per_file=100;
@@ -27,6 +27,7 @@ my $englishify = 0; # insert commas, periods, and caps?
 my $filetype = "xml";   # type of file to create. can also be 'html' or 'txt'
 my $verbose = 0;
 my $progress = 1;
+my $progress_seconds = 60;
 my $lastprogresstime = 0;
 
 sub Usage {
@@ -74,11 +75,10 @@ sub main {
 
     my $wordcounter = 0;
     print "Creating files...\n" if $verbose;
-    for(my $i = 0; $i < $num_files; $i++)
-    {
-        if ($progress && time() - $lastprogresstime >= 10) {
+    for(my $i = 0; $i < $num_files; $i++) {
+        if ($i && $progress && time() - $lastprogresstime >= $progress_seconds) {
             my $percent = sprintf("%1.1f", $i / $num_files * 100);
-            print STDERR "$prog: $filetype: " . scalar(localtime(time())) . " on file $i of $num_files ($percent%)\n";
+            print STDERR "$prog: $filetype: on file $i of $num_files ($percent%)\n";
             $lastprogresstime = time();
         }
         #if (($i+1) % 1000 == 0) { print STDERR "** working on file $i"; }
@@ -113,7 +113,7 @@ sub main {
         }
         if ($base_dir) {
             my $path = "$base_dir/$i.$filetype";
-            open(OUTFILE, ">" . " $path") || die "$prog: Couldn't open $path";
+            open(OUTFILE, ">", $path) || die "$prog: Couldn't open $path";
             print OUTFILE $doc;
             close(OUTFILE) || die "$prog: Couldn't close $path";
             print STDERR "$prog: created $path...\n" if ($verbose && $i % 1000 == 0);
@@ -126,13 +126,14 @@ sub main {
 
 # one block of text in xml
 sub simple_xmlify {
+    # we should test with other encodings. This tests with ISO-8859-1
     return qq{<?xml version="1.0" encoding="ISO-8859-1"?>\n<swishdefault>\n} . 
         $_[0] . "\n</swishdefault>\n\n"; 
 }
 
 # one block of text in txt
 sub simple_txtify {
-    return "$_[0]\n";
+    return $_[0] . "\n";
 }
 
 
@@ -157,7 +158,9 @@ EOF
 }
 
 sub simple_swishe_progify {
-    #my ($parser, $path, $content, $lasttime) = @_;
+    #my ($parser, $path, $content, $lasttime) = @_; 
+    # we dont use named here, based on the (probably misguided) 
+    #thinking that it may be faster.
     my $length = length($_[2]);
     my $header= <<EOF;
 Content-Length: $length
