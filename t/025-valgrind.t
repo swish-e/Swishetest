@@ -22,6 +22,11 @@ sub main {
                  #data/C020-words-txt/words-osx-10_3.txt 
                );
 
+    unless( $ENV{TEST_VALGRIND} ) {
+        plan tests => 1;
+        ok( 1, "skipping, TEST_VALGRIND not set" );
+        exit(0);
+    }
     my $valgrind = mywhich( "valgrind" );
     unless( $valgrind ) {
         plan tests => 1;
