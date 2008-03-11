@@ -16,7 +16,7 @@ BEGIN {
         print STDERR "$0: not running huge index test, set TEST_HUGE_INDEX=1 to enable\n";
         exit(0);
     }
-    plan tests => 8;
+    plan tests => 9;
     use File::Path qw(mkpath);
     mkpath( ["blib/index"], 0, 0755);
     my $base = "T050-$$";  # test 050
