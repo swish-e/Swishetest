@@ -3,8 +3,10 @@ package GetDictionaryWords;
 use strict;
 use warnings;
 
-# given a /usr/dict/words type file, whether or not to be case-sensitive, and a max amount of words (0 means no limit)
-# reads word-like lines (one word per line)
+# get_dictonary_words( $dict, [$case_sensitive_bool], [max_words] )
+#  given a /usr/dict/words type file, whether or not to be case-sensitive, 
+#  and a max amount of words (0 means no limit)
+#  reads word-like lines (one word per line)
 # returns ref to array of the read words and ref to hash of word->count
 sub get_dictionary_words {
     my $dict = shift;
