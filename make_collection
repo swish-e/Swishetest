@@ -26,7 +26,7 @@ my $randommode = 1;
 my $englishify = 0; # insert commas, periods, and caps?
 my $filetype = "xml";   # type of file to create. can also be 'html' or 'txt'
 my $verbose = 0;
-my $progress = 1;
+my $progress = 0;
 my $progress_seconds = 60;
 my $lastprogresstime = 0;
 
