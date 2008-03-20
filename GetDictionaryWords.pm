@@ -15,7 +15,7 @@ sub get_dictionary_words {
     my @words;
     my %word_count;
     # Load words. Repeats are OK
-    print STDERR "Loading dictionary...\n" if $ENV{TEST_VERBOSE};
+    print STDERR "$0: Loading dictionary...\n" if $ENV{TEST_VERBOSE};
     open (my $fh, "<", $dict)|| die "$0: Couldn't open $dict: $!"; 
     #for($num_words = 0; $words[$num_words] = <$fh>; ) { 
     while( defined( my $word = <$fh> ) && ($max_words == 0 || scalar(@words) < $max_words)) {
