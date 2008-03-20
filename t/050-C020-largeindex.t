@@ -9,48 +9,51 @@ use Test::More;
 use Swishetest;
 use Data::Dumper;
 
-BEGIN { 
-    unless ($ENV{TEST_HUGE_INDEX}) {
-        plan tests => 1; 
-        ok( 1, "no test" );
-        print STDERR "$0: not running huge index test, set TEST_HUGE_INDEX=1 to enable\n";
-        exit(0);
+
+SKIP: {
+    my $numtests = 9;
+    if( $ENV{TEST_LARGE_INDEX} ) {
+        plan tests => $numtests;
+    } else {
+        plan skip_all => "not running large index test, set TEST_LARGE_INDEX=1 to enable";
     }
-    plan tests => 9;
+
     use File::Path qw(mkpath);
     mkpath( ["blib/index"], 0, 0755);
     my $base = "T050-$$";  # test 050
-    #unless (-e "blib/index/$base.index" ) {
-        #warn "base is $base\n";
-        my (%out) = BuildIndex::build_index_from_external_program( 
+       
+    #skip $why, $how_many unless $have_some_feature;
+    #skip ("not running large index test, set TEST_LARGE_INDEX=1 to enable", $numtests)
+        #unless $ENV{TEST_LARGE_INDEX};
 
-            # index sizes shown are for 2.4 branch on 32bit arch
-                
-            #"./make_collection -min_words=1000    -max_words=1000    -num_files=100", 
-            #      # this makes 920K of data, 2.33MB index, 476k propfile
-            
-            #"./make_collection -min_words=10000   -max_words=10000   -num_files=1000", 
-            #       # this makes 38M index, 40MB prop 
-            
-            #"./make_collection -min_words=100000  -max_words=100000  -num_files=1000", 
-            #       # this makes 325MB index, 392MB props
-            
-            "./make_collection -min_words=100000  -max_words=100000  -num_files=10000", 
-             # this makes: 3.84G    blib/index/T050-28400.index.prop
-             #             3.16G    blib/index/T050-28400.index
-             #      10K files x 100K words x ~5 chars/word = ~5GB of output
-             
-            "blib/index/$base.index",
-            "",                     # default config
-            "-e" # economy option 
-        );
+    my (%out) = BuildIndex::build_index_from_external_program( 
 
-        # the first real test here is if you get an error indexing above :)
+        # index sizes shown are for 2.4 branch on 32bit arch
+            
+        #"./make_collection -min_words=1000    -max_words=1000    -num_files=100", 
+        #      # this makes 920K of data, 2.33MB index, 476k propfile
         
-        print STDERR "$0: DUMPING data for debug: " . Dumper( \%out );   
+        #"./make_collection -min_words=10000   -max_words=10000   -num_files=1000", 
+        #       # this makes 38M index, 40MB prop 
+        
+        #"./make_collection -min_words=100000  -max_words=100000  -num_files=1000", 
+        #       # this makes 325MB index, 392MB props
+        
+        "./make_collection -min_words=100000  -max_words=100000  -num_files=10000", 
+         # this makes: 3.84G    blib/index/T050-28400.index.prop
+         #             3.16G    blib/index/T050-28400.index
+         #      10K files x 100K words x ~5 chars/word = ~5GB of output
+         
+        "blib/index/$base.index",
+        "",                     # default config
+        "-e" # economy option 
+    );
+
+    # the first real test here is if you get an error indexing above :)
     
-        cmp_ok( scalar(keys(%out)), '>',          2, "Indexing output" ); 
-        #}
+    print STDERR "$0: DUMPING data for debug: " . Dumper( \%out );   
+
+    cmp_ok( scalar(keys(%out)), '>',          2, "Indexing output" ); 
 
     cmp_ok( $out{unique},     '==',    45_398, 'unique words indexed' );
     cmp_ok( $out{properties}, '==',         5, 'num properties' );
@@ -72,4 +75,13 @@ BEGIN {
     cmp_ok(scalar(@rows), '>', 2, "num results from 'swishe OR test'") 
 };
 
+
+
+__END__
+SKIP: {
+    skip $why, $how_many unless $have_some_feature;
+
+    ok( foo(),       $test_name );
+    is( foo(42), 23, $test_name );
+};
 
