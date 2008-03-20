@@ -23,30 +23,25 @@ BEGIN {
     my $max_words = MinMax::min(1_000_000, ($ENV{MAX_INDEX_FILES} || 1_000_000));
     # predict number of tests based on number of files in dictionaries and number of index types
 
-    # ONE ORDER
-    my @dicts = qw( data/C020-words-txt/words-linux-fc1.txt data/C020-words-txt/words-osx-10_3.txt);
+    #my @dicts = qw( data/C020-words-txt/words-linux-fc1.txt data/C020-words-txt/words-osx-10_3.txt);
+    #my @dicts = qw( data/C020-words-txt/words-osx-10_3.txt);    # skip smaller linux words list
+    my @dicts = qw( data/C020-words-txt/words-linux-fc1.txt );  # skip larger osx words list
 
-    # THE OTHER ORDER
-    #my @dicts = qw( data/C020-words-txt/words-osx-10_3.txt data/C020-words-txt/words-linux-fc1.txt );
 
     my @dictwordcounts = map { `wc -l $_ | awk '{print \$1}' ` } @dicts;
     chomp(@dictwordcounts);
     my $numdictwords = sum( @dictwordcounts );
-    #my @filetypes = qw(html xml txt);
-    my @filetypes = qw(txt xml html);
+
+    my @filetypes = qw(txt xml html);   # simpler to more complex
     my $numdicts = scalar(@dicts);
     my $numfiletypes = scalar(@filetypes);
     my $totalnumtests = $numfiletypes * $numdictwords + scalar(@dicts) * scalar(@filetypes) * 3;
-    # three tests plus one for each word, for each dictionary and filetype.
-    #plan tests => ($numdicts * $numfiletypes * (3 + $max_words ));
     plan tests => $totalnumtests;
     mkpath( ["blib/index"], 0, 0755);
     my $base = "C030";
     for my $dict (@dicts) {
+        ( my $dictname = $dict ) =~ s/^.*-(([^.]|-)+)\.txt$/$1/;
         for my $filetype ( @filetypes ) {
-            ( my $dictname = $dict ) =~ s/^.*-(([^.]|-)+)\.txt$/$1/;
-            #( my $dictname = $dict ) =~ s/\.txt$//;    # this doesn't work
-            #$dictname =~ s![^/]*/!!;   # this doesn't work
 
             my $index = "blib/index/${base}_${dictname}_${filetype}.index";
             my ($words, $word_count) = GetDictionaryWords::get_dictionary_words( $dict, 0, $max_words);
@@ -71,7 +66,7 @@ BEGIN {
                 #my ($num_expected_rows) = (     # look up the count unless it's AND, OR, or NOT
                 #    ($word =~ /^\s*(and|or|not|near)\s*$/i) ? 0 : ($word_count->{lc($word)} || 1));
                 my $num_expected_rows = $word_count->{lc($word)};
-                cmp_ok(scalar(@rows), "==", $num_expected_rows, "search '$word' ($filetype index from $dict)");
+                cmp_ok(scalar(@rows), "==", $num_expected_rows, "'$word' ($filetype/$dictname)");
             }
             DoSearch::close_index($index);
             $words = undef;
