@@ -73,6 +73,8 @@ sub main {
         print STDERR "$prog: set num_files to $num_files\n" if $verbose;
     }
 
+    print STDERR "$0: Outputting $num_files files...\n" if $ENV{TEST_VERBOSE};
+
     my $wordcounter = 0;
     print "Creating files...\n" if $verbose;
     for(my $i = 0; $i < $num_files; $i++) {
