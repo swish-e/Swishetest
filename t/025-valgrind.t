@@ -25,18 +25,13 @@ sub main {
     SKIP: {
 
         my $numtests = scalar(@docs);
-        if ($ENV{TEST_VALGRIND}) {
+        my $valgrind = mywhich( "valgrind" );
+        if ($ENV{TEST_VALGRIND} && $valgrind) {
             plan tests => $numtests;
         } else {
-            plan skip_all => "not running valgrind test, set TEST_VALGRIND=1 to enable";
+            plan skip_all => "not running valgrind test, install valgrind and set env TEST_VALGRIND=1 to enable";
         }
         
-        my $valgrind = mywhich( "valgrind" );
-        unless( $valgrind ) {
-            plan tests => 1;
-            ok( 1, "skipping, valgrind not found" );
-            exit(0);
-        }
         for my $doc (@docs) {
             #my $valgrind_options = "--show-below-main=yes --leak-check=full --show-reachable=yes -v";
             my $valgrind_options = "--show-below-main=yes --leak-check=full --show-reachable=yes";  # -v removed
