@@ -8,6 +8,9 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use XML::Simple; # for $xmlsimple->escape_value()
+
+
 use GetDictionaryWords;
 use NotRand qw(not_rand);
 
@@ -29,6 +32,7 @@ my $verbose = 0;
 my $progress = 0;
 my $progress_seconds = 60;
 my $lastprogresstime = 0;
+my $xmlsimple = new XML::Simple();  # used for $xmlsimple->escape_value()
 
 sub Usage {
     return "make_collection: [--dict=words.txt] [--base_dir=/your/location]\n" .
@@ -90,8 +94,8 @@ sub main {
         my $toCap = 1;  # should we Capitalize the coming word?
         for(my $j = 0; $j < $this_file_words; $j++, $wordcounter++)
         {
+            # choose the next word, either (not) randomly, or sequentially
             my $toadd = $randommode ? $$words[ not_rand( scalar(@$words) ) ] : $$words[$wordcounter % scalar(@$words)];
-            # choose the next word, either randomly, or sequentially
 
             if ($englishify && $toCap) { $toadd = "\u$toadd"; $toCap = 0; }
             if (!defined($toadd)) { next; } 
@@ -129,8 +133,11 @@ sub main {
 # one block of text in xml
 sub simple_xmlify {
     # we should test with other encodings. This tests with ISO-8859-1
+    
+    # handle ampersands and other chars that need to be escaped
     return qq{<?xml version="1.0" encoding="ISO-8859-1"?>\n<swishdefault>\n} . 
-        $_[0] . "\n</swishdefault>\n\n"; 
+       $xmlsimple->escape_value( $_[0] ) . 
+        "\n</swishdefault>\n\n"; 
 }
 
 # one block of text in txt
@@ -185,7 +192,7 @@ sub extract_title {
     for(my $i=0; $i < scalar(@w) && length($title)+length($w[$i]) <= $maxtitlelen; $i++) {
         $title .= "$w[$i] ";
     }
-    chop($title);   # remove the ' ', sloppy and simple
+    chop($title);   # remove the last ' ', sloppy and simple
     return $title;
 }
 
