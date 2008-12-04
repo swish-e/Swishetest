@@ -1,0 +1,7 @@
+This folder contains the contents of /usr/(share/)?dict/words from various
+OS'es. For use by make_collection.
+
+words-linux-f10.txt     fedora 10
+words-linux-fc1.txt     fedora core 1
+words-osx-10_3.txt      darwin on mac osx 10.3
+
