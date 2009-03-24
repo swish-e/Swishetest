@@ -35,6 +35,7 @@ BEGIN {
     #            community.html commute.html empty.html
 
     my @searches = (
+        #  search   =>  expected number of rows
         [ "communication" => 5 ],
         [ "communicator*" => 5 ],   # should be 1?
         [ "communicato*"  => 0 ],   # should be 1?
