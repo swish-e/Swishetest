@@ -7,7 +7,7 @@ use warnings;
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 7;
+use Test::More tests => 20;
 use Swishetest;
 
 BEGIN { 
