@@ -16,7 +16,11 @@ BEGIN {
     use File::Path qw(mkpath);
     mkpath( ["blib/index"], 0, 0755);
     my $base = "C014";
-    my (%out) = BuildIndex::build_index_from_directory( "data/$base-communication-html", "blib/index/$base.index" );
+    my (%out) = BuildIndex::build_index_from_directory( 
+        "data/$base-communication-html", 
+        "blib/index/$base.index",  
+        #"conf/stemming-libxml2.conf",   # use the basic stemming configuration
+    );
 
     cmp_ok( scalar(keys(%out)),     '>',    2, "Indexing output" ); 
     cmp_ok( $out{unique},     '==',   6, 'unique words indexed' );
