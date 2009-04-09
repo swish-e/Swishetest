@@ -52,6 +52,9 @@ sub do_search {
                 $swish->return_raw_rank(0);
             }
         }
+        if ($options_hashref->{rank_scheme}) {
+            $swish->rank_scheme( $options_hashref->{rank_scheme} );
+        }
 
         #print STDERR "Searching for $query\n" if $ENV{TEST_VERBOSE};
         my $results = $swish->Query( $query );
