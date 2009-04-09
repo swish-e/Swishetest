@@ -1,0 +1,14 @@
+README for Swishetest/data directory.
+
+#Files in this dir are named like:
+#
+# CollectionNumber - subject - type:
+#
+# IE,
+#    C010-trivial-txt/          # collection 10, trivial, .txt files
+#    C011-trivial-html/         # collection 11, trivial, .html files
+#    C012-trivial-xml/          # collection 12, trivial, .xml files
+#    C014-communication-html/   # variations of the word 'communicate' and similar
+#    C020-words-txt/            # /usr/dict/words from various machines. Used to assemble random indexes.
+#    C040-swishedocs-html/      # one-time swish-e docs for indexing.
+
