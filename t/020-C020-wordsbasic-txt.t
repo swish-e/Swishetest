@@ -2,12 +2,13 @@
 # `make test'. 
 use strict;
 use warnings;
+#use Data::Dumper;
 
 #########################
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Swishetest;
 
 BEGIN { 
@@ -24,8 +25,15 @@ BEGIN {
     cmp_ok( $out{words},      '==',    806480, 'total words indexed' );
 
     DoSearch::open_index( "blib/index/$base.index" );
+
     my @rows = DoSearch::do_search( "blib/index/$base.index", "swishe OR test");
+    cmp_ok(scalar(@rows), '==', 3, "num results from 'swishe OR test'");
+
+    @rows = DoSearch::do_search( "blib/index/$base.index", "swishe OR test", { raw_ranks => 1 } );
+    cmp_ok(scalar(@rows), '==', 3, "num results from 'swishe OR test' with raw ranks");
+
+    #print Dumper(\@rows);
+
     DoSearch::close_index( "blib/index/$base.index" );
-    cmp_ok(scalar(@rows), '==', 3, "num results from 'swishe OR test'") 
 };
 
