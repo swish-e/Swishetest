@@ -1,0 +1,11 @@
+# Explanation of file naming in Swishetest/t :
+
+# many testfiles are named like;
+#  test number - collection number used - subject - filetype .t
+#
+# IE, 
+#
+#    014-C014-communication-html.t             # test 14, html files about 'communication'
+#    015-C014-communication-stemming-html.t    # test 15, same but with stemming enabled
+#
+# other testfiles are obviously more traditionally named. 
