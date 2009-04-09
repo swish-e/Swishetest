@@ -1,6 +1,7 @@
 package DoSearch;
 
 use SWISH::API;
+use Test::More; # for can_ok() to test if an object provides a method
 use strict;
 use warnings;
 
@@ -28,8 +29,9 @@ sub close_index {
         die "$0: index $index was not open.\n";
     }
 }
+
 sub do_search {
-    my ($index, $query) = @_;   
+    my ($index, $query, $options_hashref) = @_;   
     my @r = ();
     #return @r unless $query;
     my $swish;
@@ -37,30 +39,42 @@ sub do_search {
         if (exists($swishes{$index})) {
             $swish = $swishes{$index};
         } else { 
-            #$swish = $swishes{$index} = SWISH::API->new( $index );
             die "$0: index $index was not opened.\n";
         }
+
+        # test if swish has the return_raw_rank method
+        if ($swish->can( "return_raw_rank" )) {
+            if ($options_hashref->{raw_ranks})  {
+                #warn "$0: enabling raw ranks\n";
+                $swish->return_raw_rank(1);
+            } else {
+                #warn "$0: disabling raw ranks\n";
+                $swish->return_raw_rank(0);
+            }
+        }
+
         #print STDERR "Searching for $query\n" if $ENV{TEST_VERBOSE};
         my $results = $swish->Query( $query );
         my @props = map { $_->Name } ($swish->PropertyList( $index ) );
         if ($swish->Error()) {
-            #print STDERR "$0: Error searching for $query: " . $swish->ErrorString();
             return @r;
         }
 
         while ( my $result = $results->NextResult() ) {
             my %h;
-            #for my $p (@props) { $h{$p} = $result->Property($p); }
-            for my $p (@props) { if($p eq "swishdocpath") { $h{$p} = $result->Property($p);}  }
+            #for my $p (@props) { $h{$p} = $result->Property($p); } # once we fetched everything
+            $h{swishdocpath} = $result->Property("swishdocpath"); # get just the swishdocpath...
+            $h{swishrank}         = $result->Property("swishrank");        # and the rank
             push(@r, \%h);
-            #push( @r, {swishdocpath=>$result->Property( "swishdocpath" );
         }
     };  # end eval{}
     if ($@) {
         my $str = "$0: test failed: $@";
         if ($swish && $swish->Error()) {
             $str .= " (" . $swish->ErrorString() . ")";
+            # wither $str?
         }
+        warn "$0: Error in DoSearch::do_search(): $str\n";
     }
     return @r;
 }
@@ -84,7 +98,7 @@ some data about the index (from 'swish-e -v 1 ...') in a hash. It takes four par
 
  my %opts = build_index( $input_dir, $index, [$configfile], [$extraswisheoptions] );
  open_index( $index );
- my @r = do_search( $index, $query );
+ my @r = do_search( $index, $query, $search_options_hashref );
  close_index( $index );
 
 do_search() returns a list of hashrefs of the rows returned from the search.
@@ -99,7 +113,7 @@ Josh Rabinowitz, E<lt>joshrE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2004-2007 by Josh Rabinowitz
+Copyright 2004-2009 by Josh Rabinowitz
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
