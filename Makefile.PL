@@ -7,6 +7,7 @@ WriteMakefile(
     VERSION_FROM      => 'Swishetest.pm', # finds $VERSION
     PREREQ_PM         => {
 		#SWISH::API => 0.0,	# won't work on swish-e 2.4.4, gets "Can't locate auto/SWISH/API/VERSION.al"
+        XML::Simple => 0.0,     # escape_value() used in make_collection
 	}, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'Swishetest.pm', # retrieve abstract from module
