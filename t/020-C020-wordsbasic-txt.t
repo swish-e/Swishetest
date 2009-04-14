@@ -42,7 +42,7 @@ BEGIN {
 
     @rows = DoSearch::do_search( "blib/index/$base.index", "swishe OR test", { raw_ranks => 1, rank_scheme => 1 } );
     cmp_ok(scalar(@rows), '==', 3, "num results from 'swishe OR test' with raw ranks and rankscheme 1");
-    cmp_ok($rows[0]->{swishrank}, ">", 1000, "First row's raw rank over 1000" );
+    cmp_ok($rows[0]->{swishrank}, "!=", 1000, "First row's raw rank not 1000" );
     #print Dumper(\@rows);
 
     DoSearch::close_index( "blib/index/$base.index" );
