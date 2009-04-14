@@ -14,7 +14,20 @@ use warnings;
 
 use Swishetest;
 
-BEGIN { 
+############################################
+main();
+
+############################################
+sub main {
+#BEGIN { 
+    unless ($ENV{TEST_HUGE_INDEX} || $ENV{TEST_MEDIUM_INDEX}) {
+        plan tests => 1;
+        ok( 1, "no test" );
+        print STDERR "$0: not running medium index test, set TEST_[HUGE|MEDIUM]_INDEX=1 to enable\n";
+        exit(0);
+    }
+
+
     use MinMax;
     use File::Path qw(mkpath);
     use List::Util qw(sum);    # sum sums up digits in a list
