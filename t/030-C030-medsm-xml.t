@@ -12,6 +12,7 @@
 use strict;
 use warnings;
 
+use Test::More;# qw(no_plan);
 use Swishetest;
 
 ############################################
@@ -32,7 +33,6 @@ sub main {
     use File::Path qw(mkpath);
     use List::Util qw(sum);    # sum sums up digits in a list
     use GetDictionaryWords;
-    use Test::More;# qw(no_plan);
     my $max_words = MinMax::min(1_000_000, ($ENV{MAX_INDEX_FILES} || 1_000_000));
     # predict number of tests based on number of files in dictionaries and number of index types
 
