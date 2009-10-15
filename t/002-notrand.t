@@ -28,7 +28,7 @@ sub test_notrand {
     my $numrands = max( 1_000, $input * 20 );
     for(0 .. $numrands) {
         my $r = NotRand::not_rand( $input );     # should be between 0 .. $input-1
-        print "$0: got $r for not_rand($input)\n";
+        # print "$0: got $r for not_rand($input)\n";
         $stored[ $r ]++;
     }
     for my $i (0 .. $input-1) {
