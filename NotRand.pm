@@ -2,7 +2,8 @@ package NotRand;
 require Exporter;
 
 use Math::PRSG;
-use Digest::MD5 qw(md5);
+#use Digest::MD5 qw(md5);
+use Digest::SHA qw(sha1);
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(not_rand);  # symbols to export on request
@@ -14,7 +15,7 @@ my $prsg = new PRSG $seed;
 use vars qw( $last $prsg);
 sub not_rand {
     my $max = $_[0] || 2;   # if no value is passed, we return '0' or '1'
-    if (0) {
+    if (1) {
         # *repeatable* semi-random-ish integer number generator
         # we deal with overflow by truncating to 30 bits , so this never returns an int
         # larger than about 2**30
@@ -33,7 +34,7 @@ sub not_rand {
     } else {
         # this should be pretty 'random'. 
         my $val = $prsg->clock( );   # the raw "20-byte string" from the prsg (160 bits)
-        $val = md5( $val );          # the md5 digest of it, which is 16 bytes (128 bits) long
+        $val = sha1( $val );          # the sha1 digest of it, which is 160 bits long too
         my $fourbytes = substr( $val, 4, 4 );   # bytes 4-8
         my $long = unpack( "L", $fourbytes );   # L is "unsigned long"
         my $ret =  $long % $max;
