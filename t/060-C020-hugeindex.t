@@ -15,7 +15,7 @@ use Data::Dumper;
 
 
 SKIP: {
-    my $numtests = 9;
+    my $numtests = 8;
     if( $ENV{TEST_HUGE_INDEX} ) {
         plan tests => $numtests;
     } else {
@@ -187,7 +187,7 @@ SKIP: {
     my @rows = DoSearch::do_search( "blib/index/$base.index", "dog OR test");
     cmp_ok( scalar(@rows), '>', 0, "searched for 'dog OR test'" );
     DoSearch::close_index( "blib/index/$base.index" );
-    cmp_ok(scalar(@rows), '>', 2, "num results from 'swishe OR test'") 
+    #cmp_ok(scalar(@rows), '>', 2, "num results from 'swishe OR test'") 
 };
 
 
