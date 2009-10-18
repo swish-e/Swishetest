@@ -4,8 +4,10 @@ use strict;
 use warnings;
 
 # WARNING- this test takes a long time.
-# originally run on a Intel Core2 Duo CPU E8400 3.00GHz, with 6M L2 cache, and 3G RAM. 
+# originally run witproperty compression enabled
+#   on a Intel Core2 Duo CPU E8400 3.00GHz, with 6M L2 cache, and 3G RAM. 
 # -- on which it's expected to take about 2.5-3 hours.
+# now running on dual core xeon at 2.4ghz and 20gb ram - runtime unknown
 
 #########################
 
@@ -28,13 +30,13 @@ SKIP: {
        
     my (%out) = BuildIndex::build_index_from_external_program( 
 
+         # on 2.4 with compression enabled this makes 7.0GB total index files:
         #"./make_collection -min_words=100000  -max_words=100000  -num_files=10000", 
          #      10K files x 100K words x ~5 chars/word = ~5GB of output   --> SUCCEEDS
-         # on 2.4, this makes 7.0GB total index files:
          #  3.84G    blib/index/T050-28400.index.prop
          #  3.16G    blib/index/T050-28400.index
          #
-         # on 2.6 as of 20081204, this makes 7.2gb total: 
+         # on 2.6 as of 20081204, the same run makes 7.2gb total: 
          # 3.84G    blib/index/T050-25014.index.prop
          # 3.30G    blib/index/T050-25014.index.wdata
          # 1.83M    blib/index/T050-25014.index.btree
@@ -54,7 +56,7 @@ SKIP: {
          #      11K files x 110K words x ~5 chars/word = ~6.05GB of output. 
         # fails as per below
 
-        # with F10 dictionary, returns:
+        # with F10 dictionary with 2.6 and compressone enabled, returns:
         #Couldn't get data from swish-e index build, got unique = {454683}
         #(output was Indexing Data Source: "External-Program"
         #Indexing "stdin"
@@ -111,52 +113,6 @@ SKIP: {
         #4K blib/index/T050-25181.index.head.temp
         #                                                  
 
-        ############################################
-         # With FC1 dictionary:
-         #      12K files x 120K words x ~5 chars/word = ~7GB of output.  --> FAILS with ERROR1 below
-         #      Trying to make index and prop files over 4GB.
-         #      Expected to take over two hours on xl4, our fastest machine.
-        # This yields:
-        # ERROR1:
-        #
-        #Couldn't get data from swish-e index build, got unique = {45398}
-        #(output was Indexing Data Source: "External-Program"
-        #Indexing "stdin"
-        #Removing very common words...
-        #no words removed.
-        #Writing main index...
-        #Sorting words ...
-        #Sorting 45398 words alphabetically
-        #Writing header ...
-        #Writing index entries ...
-        #  Writing word text: ...
-        #  Writing word data:   9%
-        #  Writing word data:  19%
-        #  Writing word data:  29%
-        #  Writing word data:  39%
-        #  Writing word data:  49%
-        #  Writing word data:  59%
-        #  Writing word data:  69%
-        #  Writing word data:  79%
-        #  Writing word data:  89%
-        #  Writing word data:  99%
-        #  Writing word text: Complete
-        #45398 unique words indexed.
-        #Sorting property: swishdocpath                            
-        #Warning: Failed to uncompress Property. zlib uncompress returned: -3. uncompressed size: 9045 buf_len: 21 
-        #Warning: Failed to uncompress Property. zlib uncompress returned: -3. uncompressed size: 13617 buf_len: 24
-        #err: Ran out of memory (could not allocate 1905279536 more bytes)
-        #
-        # at which point the indexes were like this:
-        # 4.22G ../blib/index/T050-13610.index.prop.temp
-        # 3.47G ../blib/index/T050-13610.index.wdata.temp
-        # 1.82M ../blib/index/T050-13610.index.btree.temp
-        # 200K  ../blib/index/T050-13610.index.propidx.temp
-        # 40K   ../blib/index/T050-13610.index.totwords.temp
-        # 40K   ../blib/index/T050-13610.index.file.temp
-        # 4K    ../blib/index/T050-13610.index.psort.temp
-        # 4K    ../blib/index/T050-13610.index.head.temp
-        #
          
 
         "blib/index/$base.index",
@@ -191,12 +147,4 @@ SKIP: {
 };
 
 
-
-__END__
-SKIP: {
-    skip $why, $how_many unless $have_some_feature;
-
-    ok( foo(),       $test_name );
-    is( foo(42), 23, $test_name );
-};
 
