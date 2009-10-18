@@ -21,10 +21,10 @@ main();
 ############################################
 sub main {
 #BEGIN { 
-    unless ($ENV{TEST_HUGE_INDEX} || $ENV{TEST_MEDIUM_INDEX}) {
+    unless ($ENV{TEST_MEDIUM_INDEX}) {
         plan tests => 1;
         ok( 1, "no test" );
-        print STDERR "$0: not running medium index test, set TEST_[HUGE|MEDIUM]_INDEX=1 to enable\n";
+        print STDERR "$0: not running medium index test, set TEST_MEDIUM_INDEX=1 to enable\n";
         exit(0);
     }
 
