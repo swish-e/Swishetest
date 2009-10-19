@@ -62,7 +62,7 @@ sub main {
             die "Couldn't get words from $dict" unless @$words;
             
             # make a collection from dict, one word per document
-            my $cmd = "./make_collection --dict=$dict --norand --noenglishify " .
+            my $cmd = "./make_collection --dict=$dict --norand " .
                         "--filetype=$filetype --min_words=1 --max_words=1 --num_files=" . scalar(@$words);
             print STDERR "Using $cmd\n" if $ENV{TEST_VERBOSE};
 
