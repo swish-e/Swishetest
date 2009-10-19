@@ -40,7 +40,7 @@ SKIP: {
          # SEE http://dev.swish-e.org/ticket/8   AND
          #     http://dev.swish-e.org/ticket/10
          
-         # this test is basically the LARGE test, but ~32% larger (and with optional compression)
+         # this test is basically the LARGE test, but ~21% larger (and with optional compression)
         "./make_collection -min_words=110000  -max_words=110000  -num_files=11000", 
         "blib/index/$base.index",
         $use_compression ? "conf/compressed-libxml2.conf" : "",     # choose conf file for compression or not
