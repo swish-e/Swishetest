@@ -19,6 +19,7 @@ my $prog = basename( $0 );
 
 # Dict file with words. One word per line.
 my $dict='data/C020-words-txt/words-linux-fc1.txt';     # 45,000 word dictionary (408K)
+                                                        # note that F10 and OSX dictionaries are much larger
 
 my $min_words_per_file=100;
 my $max_words_per_file=100;
@@ -62,7 +63,7 @@ sub main {
         warn "$prog: Warning: No --base_dir option, running as swish-e external program\n" unless $base_dir;
     }
 
-    my $parser = choose_parser($filetype);
+    my $parser = choose_parser($filetype);  # XML2, HTML2 or TXT
 
     if ($max_words_per_file < $min_words_per_file) {
         die "$prog: max_words_per_file must be larger than min_words_per_file";
@@ -100,9 +101,9 @@ sub main {
             $doc .= ($j+1) % 7 ? " " : "\n";
         }
             
-        if ($filetype =~ /^xml$/i) {
+        if ($parser =~ /^XML2?$/) {
             $doc = simple_xmlify( $doc );
-        } elsif ($filetype =~ /^html$/i) {
+        } elsif ($parser =~ /^HTML2?$/) {
             $doc = simple_htmlify( extract_title($doc), $doc ); # title, content
         } else {
             $doc = simple_txtify( $doc );
@@ -158,8 +159,7 @@ EOF
 
 sub simple_swishe_progify {
     #my ($parser, $path, $content, $lasttime) = @_; 
-    # we dont use named here, based on the (probably misguided) 
-    #thinking that it may be faster.
+    # we dont use named params here.
     my $length = length($_[2]);
     my $header= <<EOF;
 Content-Length: $length
@@ -187,6 +187,7 @@ sub extract_title {
 }
 
 # given an extension, choose a parser
+#   returns XML2, HTML2 or TXT
 sub choose_parser {
     my $ext = $_[0];
     if ($ext =~ /^xml$/i) {
