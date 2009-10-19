@@ -9,12 +9,13 @@ use warnings;
 
 use Getopt::Long;
 use XML::Simple; # for $xmlsimple->escape_value()
+use File::Basename;
 
 
 use GetDictionaryWords;
 use NotRand qw(not_rand);
 
-my $prog = "make_collection";
+my $prog = basename( $0 );
 
 # Dict file with words. One word per line.
 my $dict='data/C020-words-txt/words-linux-fc1.txt';     # 45,000 word dictionary (408K)
@@ -26,7 +27,6 @@ my $num_words;      # should be scalar(@words)
 my $base_dir = "";  # empty base_dir means be an -S prog external program
 my $randommode = 1; 
     # in randommode, words are randomly chosen, otherwise words are sequential from the dict
-my $englishify = 0; # insert commas, periods, and caps?
 my $filetype = "xml";   # type of file to create. can also be 'html' or 'txt'
 my $verbose = 0;
 my $progress = 0;
@@ -37,7 +37,7 @@ my $xmlsimple = new XML::Simple();  # used for $xmlsimple->escape_value()
 sub Usage {
     return "make_collection: [--dict=words.txt] [--base_dir=/your/location]\n" .
            "  [--min_words_per_file=$min_words_per_file] [--max_words_per_file=$max_words_per_file] [--num_files=$num_files]\n" .
-           "  [--verbose] [--englishify] [--filetype=(txt|html|xml)] [--(no)randommode]:\n" .
+           "  [--verbose] [--filetype=(txt|html|xml)] [--(no)randommode]:\n" .
            "   Makes a set of (possibly random) xml, html, or txt files based on a dict.\n" . 
            "   If you dont set a --base_dir, then it outputs data like a swish-e prog.\n";
 }
@@ -51,7 +51,6 @@ sub main {
         "num_files=i" => \$num_files,
         "base_dir=s" => \$base_dir,
         "dict=s" => \$dict,
-        "englishify!" => \$englishify,
         "randommode!" => \$randommode,
         "filetype=s" => \$filetype,
         "verbose!"    => \$verbose
@@ -80,7 +79,7 @@ sub main {
     print STDERR "$0: Outputting $num_files files...\n" if $ENV{TEST_VERBOSE};
 
     my $wordcounter = 0;
-    print "Creating files...\n" if $verbose;
+    print "$prog: Creating files...\n" if $verbose;
     for(my $i = 0; $i < $num_files; $i++) {
         if ($i && $progress && time() - $lastprogresstime >= $progress_seconds) {
             my $percent = sprintf("%1.1f", $i / $num_files * 100);
@@ -91,23 +90,14 @@ sub main {
         my $this_file_words =   # choose how many words will be in the file
             int( not_rand( $max_words_per_file - $min_words_per_file + 1 ) ) + $min_words_per_file;
         my $doc ="";
-        my $toCap = 1;  # should we Capitalize the coming word?
         for(my $j = 0; $j < $this_file_words; $j++, $wordcounter++)
         {
             # choose the next word, either (not) randomly, or sequentially
             my $toadd = $randommode ? $$words[ not_rand( scalar(@$words) ) ] : $$words[$wordcounter % scalar(@$words)];
 
-            if ($englishify && $toCap) { $toadd = "\u$toadd"; $toCap = 0; }
             if (!defined($toadd)) { next; } 
             $doc .= $toadd;
-            if ($englishify) {
-                my $r = int(not_rand(10000));   # random number we use to plop in punctuation & line breaks
-                if ($j == $this_file_words-1 || $r % 9 == 0) { $doc .= ". "; $toCap = 1; }
-                elsif ($r % 7 == 0) { $doc .= ","; }
-                if (($j+$i+$r+1) % 5) { $doc  .= " "; } else { $doc .= "\n"; }
-            } else {
-                $doc .= ($j+1) % 7 ? " " : "\n";
-            }
+            $doc .= ($j+1) % 7 ? " " : "\n";
         }
             
         if ($filetype =~ /^xml$/i) {
