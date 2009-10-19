@@ -23,9 +23,9 @@ SKIP: {
     my $use_no_compression = $ENV{TEST_HUGE_INDEX};
 
     die "Can't use TEST_HUGE_COMPRESSED_INDEX and TEST_HUGE_INDEX env vars at once\n"
-        if ($use_compression && $use_no_compression)
+        if ($use_compression && $use_no_compression);
 
-    if( $use_compression || $use_no_compression) {
+    if( $use_compression || $use_no_compression ) {
         plan tests => $numtests;
     } else {
         plan skip_all => "not running, set TEST_HUGE_INDEX or TEST_HUGE_COMPRESSED_INDEX to test";
