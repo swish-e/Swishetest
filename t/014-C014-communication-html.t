@@ -19,7 +19,7 @@ BEGIN {
     my (%out) = BuildIndex::build_index_from_directory( 
         "data/$base-communication-html", 
         "blib/index/$base.index",  
-        #"conf/stemming-libxml2.conf",   # use the basic stemming configuration
+        #"conf/stemming-libxml2.conf",   # use the default config, which has no stemming
     );
 
     cmp_ok( scalar(keys(%out)),     '>',    2, "Indexing output" ); 
@@ -31,14 +31,18 @@ BEGIN {
     
 
     DoSearch::open_index( "blib/index/$base.index" );
-    # files are: commune.html communication.html communications.html communicator.html 
-    #            community.html commute.html empty.html
+    # The index used fot the tests here covers 7 files,
+    # each containing one word which matches the filename. The files are: 
+    #    commune.html    communication.html  communications.html  communicator.html 
+    #    community.html  commute.html        empty.html  (that's empty)
+    #
 
     my @searches = (
+        [ "communications"=> 1 ],
         [ "communication" => 1 ],
         [ "communicator*" => 1 ],
         [ "communicato*"  => 1 ],
-        [ "communicate*"  => 0 ],
+        [ "communicate*"  => 0 ],   
         [ "communicat*"   => 3 ],
         [ "communica*"    => 3 ],
         [ "communic*"     => 3 ],
@@ -53,7 +57,7 @@ BEGIN {
     for (@searches) {
         my ($search, $expected) = @$_;
         my @rows = DoSearch::do_search( "blib/index/$base.index", $search );
-        cmp_ok(scalar(@rows), '==', $expected, "num results from '$search" );
+        cmp_ok(scalar(@rows), '==', $expected, "$expected results from '$search" );
     }
 
     DoSearch::close_index( "blib/index/$base.index" ); 
