@@ -31,10 +31,12 @@ BEGIN {
     
 
     DoSearch::open_index( "blib/index/$base.index" );
-    # this index covers 7 files, each containing one word which matches the filename, are: 
+    # The index used for the tests here covers 7 files, 
+    # each containing one word which matches the filename. The files are: 
     #    commune.html    communication.html  communications.html  communicator.html 
     #    community.html  commute.html        empty.html  (that's empty)
     #
+
 
     # these searches highlight some strange interactions between stemming and wildcard searches
     # we doctored the expected number of rows to match observations on <<< tests.
