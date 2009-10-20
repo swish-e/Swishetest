@@ -31,31 +31,35 @@ BEGIN {
     
 
     DoSearch::open_index( "blib/index/$base.index" );
-    # files are: commune.html communication.html communications.html communicator.html 
-    #            community.html commute.html empty.html
+    # this index covers 7 files, each containing one word which matches the filename, are: 
+    #    commune.html    communication.html  communications.html  communicator.html 
+    #    community.html  commute.html        empty.html  (that's empty)
+    #
 
+    # these searches highlight some strange interactions between stemming and wildcard searches
+    # we doctored the expected number of rows to match observations on <<< tests.
     my @searches = (
         #  search   =>  expected number of rows
-        [ "communication" => 5 ],
-        [ "communicator*" => 5 ],   # should be 1?
-        [ "communicato*"  => 0 ],   # should be 1?
-        [ "communicate*"  => 5 ],
-        [ "communicat*"   => 0 ],   # should be 5?
-        [ "communica*"    => 0 ],   # should be 5?
-        [ "communic*"     => 5 ],
-        [ "communi*"      => 0 ],   # should be 5?
-        [ "commun*"       => 5 ],
-        [ "commu*"        => 6 ],
-        [ "commut*"       => 1 ],
-        [ "comm*"         => 6 ],
-        [ "com*"          => 6 ],
-        [ "co*"           => 6 ],
+        [ "communication" => 5 ],   # ok - stems to 'communicat'
+        [ "communicator*" => 5 ],   # ok - same
+        [ "communicato*"  => 0 ],   # ??? should be at least one -- 'communicator' <<<
+        [ "communicate*"  => 5 ],   # ok - stems to 'communicat'
+        [ "communicat*"   => 0 ],   # should be 5?  this should match _something_ <<<
+        [ "communica*"    => 0 ],   # should be 5?  this should match _something_ <<<
+        [ "communic*"     => 5 ],   # ok 
+        [ "communi*"      => 0 ],   # should be 5?  this should match _something_ <<<
+        [ "commun*"       => 5 ],   # ok
+        [ "commu*"        => 6 ],   # ok
+        [ "commut*"       => 1 ],   # ok
+        [ "comm*"         => 6 ],   # ok
+        [ "com*"          => 6 ],   # ok
+        [ "co*"           => 6 ],   # ok
     );
 
     for (@searches) {
         my ($search, $expected) = @$_;
         my @rows = DoSearch::do_search( "blib/index/$base.index", $search );
-        cmp_ok(scalar(@rows), '==', $expected, "num results from '$search" );
+        cmp_ok(scalar(@rows), '==', $expected, "num results ($expected) from '$search" );
     }
 
     DoSearch::close_index( "blib/index/$base.index" ); 
