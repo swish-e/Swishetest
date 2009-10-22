@@ -16,7 +16,12 @@ BEGIN {
     use File::Path qw(mkpath);
     mkpath( ["blib/index"], 0, 0755);
     my $base = "C013";
-    my (%out) = BuildIndex::build_index_from_directory( "data/$base-singleletters-txt", "blib/index/$base.index" );
+    my (%out) = BuildIndex::build_index_from_directory( 
+        "data/$base-singleletters-txt", 
+        "blib/index/$base.index",
+        #"conf/stemming-libxml2.conf",   # use the basic stemming configuration
+        "conf/compressed-libxml2.conf",   # use the basic stemming configuration
+    );
 
     cmp_ok( scalar(keys(%out)),     '>',    2, "Indexing output" ); 
     cmp_ok( $out{unique},     '==',   26, 'unique words indexed' );
@@ -43,6 +48,10 @@ BEGIN {
         my $else_search = "$letter AND " .join( " AND ", map { "(not $_)" } grep { !/$letter/ } @letters);
         my @else_rows = DoSearch::do_search( "blib/index/$base.index", "$else_search" );
         cmp_ok(scalar(@else_rows), '==', 1, "num results from '$else_search'" );
+
+        my $else_search2 = "$letter AND (" .join( " AND ", map { "not $_ " } grep { !/$letter/ } @letters) . ")";
+        my @else_rows2 = DoSearch::do_search( "blib/index/$base.index", "$else_search2" );
+        cmp_ok(scalar(@else_rows2), '==', 1, "num results from '$else_search2'" );
 
     }
 
