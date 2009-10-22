@@ -38,7 +38,8 @@ BEGIN {
     my (%out) = BuildIndex::build_index_from_directory( 
         "data/$base-singleletters-txt", 
         "blib/index/$base.index",
-        "conf/stemming-libxml2.conf",   # use the basic stemming configuration
+        #"conf/stemming-libxml2.conf",   # use the basic stemming configuration
+        "conf/stemming-idf-libxml2.conf",   # use the basic stemming configuration
         #"conf/compressed-libxml2.conf",   # use the basic compression configuration
     );
 
