@@ -26,7 +26,7 @@ use warnings;
 #
 #  we get 0 results back, as expected.
 
-use Test::More tests => 137;
+use Test::More tests => 57;
 use Swishetest;
 
 BEGIN { 
