@@ -15,3 +15,5 @@ BEGIN { use_ok('SWISH::API') };
 # Insert your test code below, the Test::More module is use()ed here so read
 # its man page ( perldoc Test::More ) for help writing this test script.
 
+diag("using SWISH::API $SWISH::API::VERSION at $INC{'SWISH/API.pm'}");
+

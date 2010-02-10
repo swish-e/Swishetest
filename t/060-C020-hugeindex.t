@@ -39,6 +39,8 @@ SKIP: {
 
          # SEE http://dev.swish-e.org/ticket/8   AND
          #     http://dev.swish-e.org/ticket/10
+
+        "$^X " .  # use same perl that invoked this test
          
          # this test is basically the LARGE test, but ~21% larger (and with optional compression)
         "./make_collection -min_words=110000  -max_words=110000  -num_files=11000", 

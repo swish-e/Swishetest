@@ -47,6 +47,8 @@ SKIP: {
 
     my (%out) = BuildIndex::build_index_from_external_program( 
 
+        "$^X " .  # use same perl that invoked this test
+
         # index sizes shown are for 2.4 branch on 32bit arch
             
         #"./make_collection -min_words=1000    -max_words=1000    -num_files=100", 
