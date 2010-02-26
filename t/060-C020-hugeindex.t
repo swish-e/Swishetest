@@ -57,7 +57,8 @@ SKIP: {
 
     # the number of unique words depends on the dictionary we use
     #cmp_ok( $out{unique},     '==',   479_827, 'unique words indexed' );   # F10 dictionary
-    cmp_ok( $out{unique},     '==',   45_427, 'unique words indexed' ); # FC1 dictionary. has 45398 unique words once you discard words with apostrophes
+    #cmp_ok( $out{unique},     '==',   45_427, 'unique words indexed' ); # FC1 dictionary. has 45398 unique words once you discard words with apostrophes
+    cmp_ok( $out{unique},     '==',   45_398, 'unique words indexed' ); # FC1 dictionary has 45_427 unique words, but 45398 unique words once you discard words with apostrophes
 
     cmp_ok( $out{properties}, '==',         5, 'num properties' );
     cmp_ok( $out{files},      '==',    11_000, 'files indexed' );
