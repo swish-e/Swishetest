@@ -110,9 +110,9 @@ sub main {
         }
         if ($base_dir) {
             my $path = "$base_dir/$i.$filetype";
-            open(OUTFILE, ">", $path) || die "$prog: Couldn't open $path";
-            print OUTFILE $doc;
-            close(OUTFILE) || die "$prog: Couldn't close $path";
+            open(my $outfile, ">", $path) || die "$prog: Couldn't open $path";
+            print $outfile $doc;
+            close($outfile) || die "$prog: Couldn't close $path";
             print STDERR "$prog: created $path...\n" if ($verbose && $i % 1000 == 0);
         } else {
             # act like a swish-e external program. This prints directly to stdout.
