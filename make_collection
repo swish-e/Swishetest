@@ -31,6 +31,7 @@ my $randommode = 1;
 my $filetype = "xml";   # type of file to create. can also be 'html' or 'txt'
 my $verbose = 0;
 my $progress = 0;
+my $misspell_fraction = 0;
 my $progress_seconds = 60;
 my $lastprogresstime = 0;
 my $xmlsimple = new XML::Simple();  # used for $xmlsimple->escape_value()
@@ -38,6 +39,7 @@ my $xmlsimple = new XML::Simple();  # used for $xmlsimple->escape_value()
 sub Usage {
     return "make_collection: [--dict=words.txt] [--base_dir=/your/location]\n" .
            "  [--min_words_per_file=$min_words_per_file] [--max_words_per_file=$max_words_per_file] [--num_files=$num_files]\n" .
+           "  [--misspell-fraction=0.1]\n" .
            "  [--verbose] [--filetype=(txt|html|xml)] [--(no)randommode]:\n" .
            "   Makes a set of (possibly random) xml, html, or txt files based on a dict.\n" . 
            "   If you dont set a --base_dir, then it outputs data like a swish-e prog.\n";
@@ -54,7 +56,8 @@ sub main {
         "dict=s" => \$dict,
         "randommode!" => \$randommode,
         "filetype=s" => \$filetype,
-        "verbose!"    => \$verbose
+        "verbose!"    => \$verbose,
+        "misspell-fraction=f" => \$misspell_fraction,
     ) || die Usage();
 
 
@@ -97,6 +100,9 @@ sub main {
             my $toadd = $randommode ? $$words[ not_rand( scalar(@$words) ) ] : $$words[$wordcounter % scalar(@$words)];
 
             if (!defined($toadd)) { next; } 
+            if ($misspell_fraction && not_rand(10_000) / 10_000 < $misspell_fraction) {
+                $toadd = misspell( $toadd );
+            }
             $doc .= $toadd;
             $doc .= ($j+1) % 7 ? " " : "\n";
         }
@@ -184,6 +190,23 @@ sub extract_title {
     }
     chop($title);   # remove the last ' ', sloppy and simple
     return $title;
+}
+
+sub misspell {
+    my $w = shift;
+    my $L = length($w);
+    if ($L > 1 && (not_rand(2) == 1)) {  # equal to one
+        # remove a random char
+        my $toremove = not_rand( $L );
+        substr($w, $toremove, 1) = "";
+        $w .= "_";
+    } else { #equal to 0    # add a random char at a random place
+        my $insertat = rand( $L + 1 );
+        my $toinsert = chr( ord('a') + not_rand( 26 ) );
+        substr($w, $insertat, 0) = $toinsert;   #insert the random char
+        $w .= "+";
+    }
+    return $w;
 }
 
 # given an extension, choose a parser
