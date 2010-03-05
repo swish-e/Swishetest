@@ -1,6 +1,8 @@
 package NotRand;
 require Exporter;
 
+use integer;    # on 5.10.1 on macos/xeon  shaves runtime: 8.9->8.2s, approx 10%
+
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(not_rand);  # symbols to export on request
 
