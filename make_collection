@@ -122,7 +122,8 @@ sub main {
             print STDERR "$prog: created $path...\n" if ($verbose && $i % 1000 == 0);
         } else {
             # act like a swish-e external program. This prints directly to stdout.
-            simple_swishe_progify($parser, "$i.$filetype", $doc, scalar(localtime(time())));
+            #simple_swishe_progify($parser, "$i.$filetype", $doc, scalar(localtime(time())));
+            simple_swishe_progify($parser, "$i.$filetype", $doc, time() );
         }
     }
 }
@@ -193,8 +194,9 @@ sub extract_title {
 }
 
 # add or remove a random char
-# if it's one letter, we add
+# if it's one letter, we add (and append +)
 # if it's more than one, we either add or remove with 50% chance of each
+#  if we remove a letter, we append _
 sub misspell {
     my $w = shift;
     my $L = length($w);
@@ -204,7 +206,8 @@ sub misspell {
         $w .= "_";
     } else { #equal to 0    # add a random char at a random place
         my $insertat = rand( $L + 1 );
-        my $toinsert = chr( ord('a') + not_rand( 26 ) );
+        my $toinsert = chr( ord('a') + not_rand( 26 ) );    
+        #die "$prog: not an lc: $toinsert\n" unless $toinsert =~ /^[a-z]$/;
         substr($w, $insertat, 0) = $toinsert;   #insert the random char
         $w .= "+";
     }
