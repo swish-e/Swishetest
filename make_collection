@@ -192,11 +192,13 @@ sub extract_title {
     return $title;
 }
 
+# add or remove a random char
+# if it's one letter, we add
+# if it's more than one, we either add or remove with 50% chance of each
 sub misspell {
     my $w = shift;
     my $L = length($w);
     if ($L > 1 && (not_rand(2) == 1)) {  # equal to one
-        # remove a random char
         my $toremove = not_rand( $L );
         substr($w, $toremove, 1) = "";
         $w .= "_";
