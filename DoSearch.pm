@@ -30,6 +30,7 @@ sub close_index {
     }
 }
 
+# returns a list of hashrefs of the rows returned from the search.
 sub do_search {
     my ($index, $query, $options_hashref) = @_;   
     my @r = ();
