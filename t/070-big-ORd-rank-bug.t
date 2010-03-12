@@ -12,7 +12,7 @@ BEGIN {
     require Carp;
     $SIG{__WARN__} = sub { Carp::confess $_[0] };
     use File::Path qw(mkpath);
-    use Data::Dump qw( dump );
+    #use Data::Dump qw( dump );
     mkpath( ["blib/index"], 0, 0755 );
     my $index   = "blib/index/bigORrankbug.index";
     my $n_files = 10000;
