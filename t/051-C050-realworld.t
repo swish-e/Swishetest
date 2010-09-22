@@ -35,7 +35,7 @@ BEGIN {
     #my $query = join( ' OR ', @words[ 0 .. 100 ] );
     my $query = "link or web";
 
-    print STDERR "query is $query\n";
+    #print STDERR "query is $query\n";
 
     DoSearch::open_index($index);
     my @rows = DoSearch::do_search( $index, $query );   # 
